@@ -1,0 +1,83 @@
+name: update
+on:
+  push:
+    paths-ignore:
+      - qr-code-iOS.svg
+      - qr-code-android.svg
+
+jobs:
+  update:
+    name: EAS Update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: npm
+
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        name: List the state of node modules
+        continue-on-error: true
+        run: npm list
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Publish update
+        id: publish
+        run: |
+          out=$(eas update --auto --json --non-interactive)
+          echo $out
+          ios=$(echo $out | jq '.[] | select(.platform == "ios") | .id')
+          echo "ios=$ios" >> $GITHUB_OUTPUT
+          android=$(echo $out | jq '.[] | select(.platform == "android") | .id')
+          echo "android=$android" >> $GITHUB_OUTPUT
+
+      - name: iOS QR Code
+        run: node qr.mjs ${{ steps.publish.outputs.ios }}
+
+      - name: Android QR Code
+        run: node qr.mjs ${{ steps.publish.outputs.android }}
+
+      - name: Update README
+        run: |
+          npx --no qrcode exp://u.expo.dev/update/${{ steps.publish.outputs.ios }} -o qr-code-iOS.svg
+          npx --no qrcode exp://u.expo.dev/update/${{ steps.publish.outputs.android }} -o qr-code-android.svg
+
+          git config user.name "🤖 ${{ env.CI_COMMIT_AUTHOR }}"
+          git config user.email "🤖 ${{ env.CI_COMMIT_EMAIL }}"
+          git add qr-code-iOS.svg qr-code-android.svg
+          git commit -m "🤖: Update QR Codes"
+          git push
