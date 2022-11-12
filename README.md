@@ -9,3 +9,9 @@ hackernews-client is a simple client for the Hacker News API.
 ## QR Code for Android
 
 <img src="./qr-code-android.svg" width="200" />
+
+## TODO
+
+[] https://hn.algolia.com/api
+	[] https://news.ycombinator.com/item?id=32541609
+

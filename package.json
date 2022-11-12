@@ -9,15 +9,22 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.15.0",
+    "@types/react": "~18.0.0",
+    "@types/react-native": "~0.69.1",
     "expo": "~46.0.16",
     "expo-status-bar": "~1.4.0",
-    "expo-updates": "~0.14.6",
+    "expo-updates": "^0.14.7",
     "react": "18.0.0",
-    "react-native": "0.69.6"
+    "react-native": "0.69.6",
+    "typescript": "^4.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
-    "qrcode": "^1.5.1"
+    "@types/react": "~18.0.14",
+    "@types/react-native": "~0.69.1",
+    "qrcode": "^1.5.1",
+    "typescript": "^4.6.3"
   },
   "private": true
 }
