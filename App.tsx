@@ -69,14 +69,14 @@ const List = () => {
   }));
 
   return (
-    <ScrollView style={styles.listView}>
+    <View style={styles.listView}>
       {/* <JSONStringify style={styles.jsonView}>{query}</JSONStringify> */}
       <FlashList
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
-    </ScrollView>
+    </View>
   );
 };
 
@@ -84,8 +84,10 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaView style={styles.container}>
-        <Header />
-        <List />
+        <ScrollView>
+          <Header />
+          <List />
+        </ScrollView>
         <StatusBar style="auto" />
       </SafeAreaView>
     </QueryClientProvider>
@@ -142,6 +144,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     lineHeight: 22,
+    fontWeight: '',
     // fontFamily: 'System',
   },
   jsonView: {
