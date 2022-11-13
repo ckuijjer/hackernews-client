@@ -25,6 +25,10 @@ const Header = () => {
   );
 };
 
+const UnreadIcon = () => {
+  return <View style={styles.unreadIcon} />;
+};
+
 const JSONStringify = ({ children, style }) => {
   return (
     <ScrollView style={style}>
@@ -34,8 +38,13 @@ const JSONStringify = ({ children, style }) => {
 };
 
 const Item = ({ title }) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
+  <View style={styles.itemContainer}>
+    <View style={styles.unreadContainer}>
+      <UnreadIcon />
+    </View>
+    <View style={styles.item}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
   </View>
 );
 
@@ -93,7 +102,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     height: 54,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 28,
   },
   header: {
     fontSize: 34,
@@ -113,14 +122,22 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#8e8e93',
   },
-  item: {
+  itemContainer: {
     backgroundColor: '#fff',
-    paddingVertical: 8,
-    marginLeft: 20,
-    paddingRight: 20,
+    minHeight: 60,
+    flexDirection: 'row',
+  },
+  unreadContainer: {
+    paddingTop: 15, // Figma showed 13?
+    paddingHorizontal: 8,
+  },
+  item: {
+    flex: 1,
+    // backgroundColor: '#ff9',
     borderTopWidth: 1,
     borderTopColor: '#e5e5ea',
-    minHeight: 60,
+    paddingVertical: 8,
+    paddingRight: 20,
   },
   title: {
     fontSize: 17,
@@ -131,5 +148,11 @@ const styles = StyleSheet.create({
     height: 100,
     paddingHorizontal: 20,
     backgroundColor: '#fbfbfb',
+  },
+  unreadIcon: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#477aff',
   },
 });
