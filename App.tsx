@@ -37,13 +37,20 @@ const JSONStringify = ({ children, style }) => {
   );
 };
 
-const Item = ({ title }) => (
+const Item = ({ title, points, numberOfComments, createdAt }) => (
   <View style={styles.itemContainer}>
     <View style={styles.unreadContainer}>
       <UnreadIcon />
     </View>
     <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
+      <View style={styles.itemTitleContainer}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
+      <View style={styles.metadataContainer}>
+        <Text style={styles.metadata}>Yesterday</Text>
+        <Text style={styles.metadata}>{points}</Text>
+        <Text style={styles.metadata}>{numberOfComments}</Text>
+      </View>
     </View>
   </View>
 );
@@ -59,13 +66,15 @@ const List = () => {
     );
   }
 
-  const renderItem = ({ item }) => <Item title={item.title} />;
+  const renderItem = ({ item }) => <Item {...item} />;
 
   const data = query.data.hits.map((item) => ({
     url: item.url,
     title: item.title,
     numberOfComments: item.num_comments,
     id: item.objectID,
+    createdAt: new Date(item.created_at_i * 1000),
+    points: item.points,
   }));
 
   return (
@@ -84,7 +93,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaView style={styles.container}>
-        <ScrollView>
+        <ScrollView style={styles.scrollView}>
           <Header />
           <List />
         </ScrollView>
@@ -100,6 +109,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     // alignItems: 'center',
     // justifyContent: 'center',
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
   headerContainer: {
     height: 54,
@@ -133,18 +146,31 @@ const styles = StyleSheet.create({
     paddingTop: 15, // Figma showed 13?
     paddingHorizontal: 8,
   },
+  metadataContainer: {
+    paddingRight: 8,
+    alignItems: 'flex-end',
+    // width: 32,
+  },
+  metadata: {
+    color: '#3C3C4399',
+    fontSize: 15,
+    lineHeight: 20,
+  },
   item: {
+    flexDirection: 'row',
     flex: 1,
     // backgroundColor: '#ff9',
     borderTopWidth: 1,
     borderTopColor: '#e5e5ea',
     paddingVertical: 8,
-    paddingRight: 20,
+  },
+  itemTitleContainer: {
+    flex: 1,
   },
   title: {
     fontSize: 17,
     lineHeight: 22,
-    fontWeight: '',
+    fontWeight: '500',
     // fontFamily: 'System',
   },
   jsonView: {
