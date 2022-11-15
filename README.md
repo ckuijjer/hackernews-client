@@ -13,5 +13,4 @@ hackernews-client is a simple client for the Hacker News API.
 ## TODO
 
 [] https://hn.algolia.com/api
-	[] https://news.ycombinator.com/item?id=32541609
-
+[] https://news.ycombinator.com/item?id=32541609
