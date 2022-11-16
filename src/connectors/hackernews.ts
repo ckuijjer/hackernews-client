@@ -1,30 +1,11 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, get } from 'firebase/database';
+import { Story, Comment } from '../types';
 
 const app = initializeApp({
   databaseURL: 'https://hacker-news.firebaseio.com',
 });
 const db = getDatabase(app);
-
-export type Story = {
-  id: number;
-  user: string;
-  title: string;
-  text?: string;
-  url: string;
-  createdAt: Date;
-  score: number;
-  numberOfComments: number;
-  comments?: Comment[];
-};
-
-export type Comment = {
-  id: number;
-  user: string;
-  text?: string;
-  createdAt: Date;
-  comments: Comment[];
-};
 
 type Item = {
   id: number;
@@ -46,7 +27,6 @@ type Item = {
 
 const unixTimeToDate = (time: number) => new Date(time * 1000);
 
-// no error handling etc at all
 const getValue = async (path: string) => (await get(ref(db, path))).val();
 
 export const getFrontPage = async () => {
@@ -78,10 +58,7 @@ const mapStory = (item: Item, comments?: Comment[]): Story => {
   return story;
 };
 
-// wouldn't work for job, poll I think
 export const getStory = async (id: number) => {
-  console.log('getStory', id);
-
   const item: Item = await getValue(`v0/item/${id}`);
   const comments = await Promise.all((item.kids ?? []).map(getComment));
 
@@ -89,7 +66,7 @@ export const getStory = async (id: number) => {
 };
 
 const getComment = async (id: number): Promise<Comment> => {
-  console.log('getComment', id);
+  // console.log('getComment', id);
 
   const item: Item = await getValue(`v0/item/${id}`);
   const children = await Promise.all((item.kids ?? []).map(getComment));
