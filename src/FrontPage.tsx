@@ -8,9 +8,16 @@ import {
   PlatformColor,
   RefreshControl,
 } from 'react-native';
-import { useState, useCallback } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useState, useCallback, useEffect } from 'react';
 import { FlashList } from '@shopify/flash-list';
+
+import { getFrontPage, getStory, Story, Comment } from './hackernewsConnector';
+
+getFrontPage().then((data) => {
+  getStory(data[0].id).then((story) => {
+    console.log(story);
+  });
+});
 
 const fetchFrontPage = async () => {
   const response = await fetch(
@@ -40,25 +47,31 @@ const JSONStringify = ({ children, style }) => {
   );
 };
 
-const Item = ({ title, points, numberOfComments, createdAt }) => (
+const Item = (story: Story) => (
   <View style={styles.itemContainer}>
     <View style={styles.unreadContainer}>
       <UnreadIcon />
     </View>
     <View style={styles.item}>
       <View style={styles.itemTitleContainer}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{story.title}</Text>
       </View>
       <View style={styles.metadataContainer}>
         <Text style={styles.metadata}>Yesterday</Text>
-        <Text style={styles.metadata}>{points}</Text>
-        <Text style={styles.metadata}>{numberOfComments}</Text>
+        <Text style={styles.metadata}>{story.score}</Text>
+        <Text style={styles.metadata}>{story.numberOfComments}</Text>
       </View>
     </View>
   </View>
 );
 
-const List = ({ data, isLoading }) => {
+const List = ({
+  data,
+  isLoading,
+}: {
+  data: Story[] | undefined;
+  isLoading: boolean;
+}) => {
   if (isLoading) {
     return (
       <View style={styles.listViewLoading}>
@@ -67,39 +80,40 @@ const List = ({ data, isLoading }) => {
     );
   }
 
-  const renderItem = ({ item }) => <Item {...item} />;
-
-  const items = data.hits.map((item) => ({
-    url: item.url,
-    title: item.title,
-    numberOfComments: item.num_comments,
-    id: item.objectID,
-    createdAt: new Date(item.created_at_i * 1000),
-    points: item.points,
-  }));
+  const renderItem = ({ item }: { item: Story }) => <Item {...item} />;
 
   return (
     <View style={styles.listView}>
       {/* <JSONStringify style={styles.jsonView}>{query}</JSONStringify> */}
       <FlashList
-        data={items}
+        data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => '' + item.id}
       />
     </View>
   );
 };
 
 export default function FrontPage() {
-  const query = useQuery({ queryKey: ['front_page'], queryFn: fetchFrontPage });
-
   const [refreshing, setRefreshing] = useState(false);
+  const [frontPage, setFrontPage] = useState<{
+    data: Story[] | undefined;
+    isLoading: boolean;
+  }>({ data: undefined, isLoading: true });
+
+  useEffect(() => {
+    getFrontPage().then((stories) => {
+      setFrontPage({ data: stories, isLoading: false });
+    });
+  }, []);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await query.refetch();
+    getFrontPage().then((stories) => {
+      setFrontPage({ data: stories, isLoading: false });
+    });
     setRefreshing(false);
-  }, [query, setRefreshing]);
+  }, [frontPage, setRefreshing]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -111,7 +125,7 @@ export default function FrontPage() {
         }
       >
         <Header />
-        <List data={query.data} isLoading={query.isLoading} />
+        <List data={frontPage.data} isLoading={frontPage.isLoading} />
       </ScrollView>
       <StatusBar style="auto" />
     </SafeAreaView>
