@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 
 import { Story } from './types';
@@ -7,9 +7,11 @@ import { UnreadIcon } from './UnreadIcon';
 export const StoriesList = ({
   stories,
   isLoading,
+  navigation,
 }: {
   stories: Story[] | undefined;
   isLoading: boolean;
+  navigation: any; // TODO: replace
 }) => {
   if (isLoading) {
     return (
@@ -19,7 +21,14 @@ export const StoriesList = ({
     );
   }
 
-  const renderItem = ({ item }: { item: Story }) => <Item {...item} />;
+  const renderItem = ({ item }: { item: Story }) => (
+    <Item
+      story={item}
+      onPress={() =>
+        navigation.navigate('story', { id: item.id, title: item.title })
+      }
+    />
+  );
 
   return (
     <View style={styles.listView}>
@@ -32,8 +41,14 @@ export const StoriesList = ({
   );
 };
 
-const Item = (story: Story) => (
-  <View style={styles.itemContainer}>
+const Item = ({
+  story,
+  onPress,
+}: {
+  story: Story;
+  onPress: any; // TODO: typing
+}) => (
+  <Pressable style={styles.itemContainer} onPress={onPress}>
     <View style={styles.unreadContainer}>
       <UnreadIcon />
     </View>
@@ -47,7 +62,7 @@ const Item = (story: Story) => (
         <Text style={styles.metadata}>{story.numberOfComments}</Text>
       </View>
     </View>
-  </View>
+  </Pressable>
 );
 
 const styles = StyleSheet.create({

@@ -11,24 +11,29 @@ import { StatusBar } from 'expo-status-bar';
 import { useFrontPage } from './hooks';
 import { StoriesList } from './StoriesList';
 
-export default function FrontPage() {
+export const FrontPageScreen = ({ navigation }) => {
   const { stories, isLoading, isRefreshing, onRefresh } = useFrontPage();
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
+        contentContainerStyle={styles.container}
         style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
       >
         <Header>Front Page</Header>
-        <StoriesList stories={stories} isLoading={isLoading} />
+        <StoriesList
+          stories={stories}
+          isLoading={isLoading}
+          navigation={navigation}
+        />
       </ScrollView>
       <StatusBar style="auto" />
     </SafeAreaView>
   );
-}
+};
 
 const Header = ({ children }) => {
   return (

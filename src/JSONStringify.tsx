@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { ScrollView, Text, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
 
 export const JSONStringify = ({ children }) => {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text>{JSON.stringify(children, null, 2)}</Text>
-    </View>
+    </ScrollView>
   );
 };
