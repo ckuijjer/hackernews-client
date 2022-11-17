@@ -5,19 +5,26 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FrontPageScreen } from './src/FrontPageScreen';
 import { StoryScreen } from './src/StoryScreen';
 
-const Stack = createNativeStackNavigator();
+import type { Story } from './src/types';
+
+export type StackParamList = {
+  FrontPage: undefined;
+  Story: Pick<Story, 'id' | 'title'>;
+};
+
+const Stack = createNativeStackNavigator<StackParamList>();
 
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="frontpage"
+          name="FrontPage"
           component={FrontPageScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="story"
+          name="Story"
           component={StoryScreen}
           options={{ title: '' }}
         />

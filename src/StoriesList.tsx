@@ -25,7 +25,10 @@ export const StoriesList = ({
     <Item
       story={item}
       onPress={() =>
-        navigation.navigate('story', { id: item.id, title: item.title })
+        navigation.navigate('Story', {
+          id: item.id,
+          title: item.title,
+        })
       }
     />
   );

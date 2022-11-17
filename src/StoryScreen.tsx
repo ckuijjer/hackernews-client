@@ -10,8 +10,10 @@ import { StatusBar } from 'expo-status-bar';
 import RenderHtml from 'react-native-render-html';
 import * as WebBrowser from 'expo-web-browser';
 
+import type { StackParamList } from '../App';
 import { useStory } from './hooks';
 import { Comment as CommentType, Story as StoryType } from './types';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 const onPressA = (event: any, href: string) => {
   openInBrowser(href);
@@ -60,7 +62,9 @@ const Comment = ({
   );
 };
 
-export const StoryScreen = ({ route, navigation }) => {
+type Props = NativeStackScreenProps<StackParamList, 'Story'>;
+
+export const StoryScreen = ({ route, navigation }: Props) => {
   const { width } = useWindowDimensions();
   const { id, title } = route.params;
   const { story, isLoading, isRefreshing, onRefresh } = useStory(id);

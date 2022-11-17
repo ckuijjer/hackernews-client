@@ -7,11 +7,15 @@ import {
   RefreshControl,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { StackParamList } from '../App';
 
 import { useFrontPage } from './hooks';
 import { StoriesList } from './StoriesList';
 
-export const FrontPageScreen = ({ navigation }) => {
+type Props = NativeStackScreenProps<StackParamList, 'FrontPage'>;
+
+export const FrontPageScreen = ({ navigation }: Props) => {
   const { stories, isLoading, isRefreshing, onRefresh } = useFrontPage();
 
   return (
