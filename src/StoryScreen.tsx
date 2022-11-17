@@ -1,4 +1,4 @@
-import { useWindowDimensions } from 'react-native';
+import { Pressable, useWindowDimensions } from 'react-native';
 import {
   StyleSheet,
   View,
@@ -8,9 +8,26 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import RenderHtml from 'react-native-render-html';
+import * as WebBrowser from 'expo-web-browser';
 
 import { useStory } from './hooks';
 import { Comment as CommentType, Story as StoryType } from './types';
+
+const onPressA = (event: any, href: string) => {
+  openInBrowser(href);
+};
+
+const openInBrowser = (url: string) => {
+  WebBrowser.openBrowserAsync(url, {
+    presentationStyle: WebBrowser.WebBrowserPresentationStyle.FULL_SCREEN,
+  });
+};
+
+const renderersProps = {
+  a: {
+    onPress: onPressA,
+  },
+};
 
 const Comment = ({
   comment,
@@ -23,11 +40,12 @@ const Comment = ({
 
   return (
     <>
-      <View style={[styles.commentContainer, { paddingLeft: 20 + level * 4 }]}>
+      <View style={[styles.commentContainer, { paddingLeft: 20 + level * 8 }]}>
         <View style={styles.commentInnerContainer}>
           <RenderHtml
             contentWidth={width}
             source={{ html: comment.text ?? '' }}
+            renderersProps={renderersProps}
           />
         </View>
       </View>
@@ -49,20 +67,26 @@ export const StoryScreen = ({ route, navigation }) => {
 
   // navigation.setOptions({ title: story?.title ?? title });
 
+  const onPressStoryTitle = () => {
+    openInBrowser(story?.url ?? '');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.scrollViewContainer}
         style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
       >
-        <Header>{story?.title ?? title ?? ''}</Header>
+        <Pressable onPress={onPressStoryTitle}>
+          <Header>{story?.title ?? title ?? ''}</Header>
+        </Pressable>
         <View style={styles.storyTextContainer}>
           <RenderHtml
             contentWidth={width}
             source={{ html: story?.text ?? '' }}
+            renderersProps={renderersProps}
           />
         </View>
         {story?.comments?.map((comment) => (
@@ -119,6 +143,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderTopWidth: 1,
     borderTopColor: '#e5e5ea',
+    // backgroundColor: '#f99',
   },
   commentText: {
     fontSize: 17,
