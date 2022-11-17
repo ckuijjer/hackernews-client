@@ -53,9 +53,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   headerContainer: {
-    height: 54,
     justifyContent: 'center',
-    paddingHorizontal: 28,
+    paddingHorizontal: 20,
+    paddingTop: 28,
+    paddingBottom: 12,
   },
   header: {
     fontSize: 34,
