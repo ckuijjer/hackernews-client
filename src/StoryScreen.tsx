@@ -1,5 +1,8 @@
-import { Pressable, useWindowDimensions } from 'react-native';
+import { useState } from 'react';
 import {
+  useWindowDimensions,
+  Pressable,
+  Text,
   StyleSheet,
   View,
   ScrollView,
@@ -31,34 +34,97 @@ const renderersProps = {
   },
 };
 
+const baseStyle = {
+  fontSize: 17,
+  lineHeight: 24,
+};
+
+const tagStyles = {
+  p: {
+    // backgroundColor: '#9f9',
+  },
+};
+
 const Comment = ({
   comment,
   level = 0,
+  isFirst = false,
+  isLast = false,
 }: {
   comment: CommentType;
   level: number;
+  isFirst: boolean;
+  isLast: boolean;
 }) => {
   const { width } = useWindowDimensions();
+  const [renderHtml, setRenderHtml] = useState(true);
 
   return (
     <>
-      <View style={[styles.commentContainer, { paddingLeft: 20 + level * 8 }]}>
+      <View style={styles.commentContainer}>
+        <LevelIndicator
+          level={level}
+          isFirst={isFirst}
+          isLast={isLast}
+          hasChildren={comment.comments.length > 0}
+        />
         <View style={styles.commentInnerContainer}>
-          <RenderHtml
-            contentWidth={width}
-            source={{ html: comment.text ?? '' }}
-            renderersProps={renderersProps}
-          />
+          <Pressable onPress={() => setRenderHtml(!renderHtml)}>
+            {renderHtml ? (
+              <RenderHtml
+                contentWidth={width}
+                source={{ html: comment.text ?? '' }}
+                renderersProps={renderersProps}
+                tagsStyles={tagStyles}
+                baseStyle={baseStyle}
+                enableExperimentalMarginCollapsing
+              />
+            ) : (
+              <Text style={styles.commentText}>{comment.text}</Text>
+            )}
+          </Pressable>
         </View>
       </View>
-      {comment.comments.map((childComment) => (
+      {comment.comments.map((childComment, i, children) => (
         <Comment
           comment={childComment}
           level={level + 1}
           key={childComment.id}
+          isFirst={i === 0}
+          isLast={i === children.length - 1}
         />
       ))}
     </>
+  );
+};
+
+// unreadable and has issues still
+const LevelIndicator = ({
+  level,
+  isFirst,
+  isLast,
+  hasChildren,
+}: {
+  level: number;
+  isFirst: boolean;
+  isLast: boolean;
+  hasChildren: boolean;
+}) => {
+  return (
+    <View style={styles.levelIndicator}>
+      {Array.from({ length: level })
+        .fill(0)
+        .map((_, index) => {
+          const isLastLevel = index === level - 1;
+          const styling = {
+            marginTop: isLastLevel && isFirst ? 8 : 0,
+            marginBottom: isLastLevel && isLast && !hasChildren ? 8 : 0,
+          };
+          return (
+            <View key={index} style={[styles.levelIndicatorLine, styling]} />
+          );
+        })}
+    </View>
   );
 };
 
@@ -84,7 +150,7 @@ export const StoryScreen = ({ route, navigation }: Props) => {
         }
       >
         <Pressable onPress={onPressStoryTitle}>
-          <Header>{story?.title ?? title ?? ''}</Header>
+          <Header>{story?.title ?? ''}</Header>
         </Pressable>
         <View style={styles.storyTextContainer}>
           <RenderHtml
@@ -105,9 +171,19 @@ export const StoryScreen = ({ route, navigation }: Props) => {
 const Header = ({ children }: { children: string }) => {
   const { width } = useWindowDimensions();
 
+  const baseStyle = {
+    fontSize: 34,
+    fontWeight: 'bold',
+  };
+
   return (
     <View style={styles.headerContainer}>
-      <RenderHtml contentWidth={width} source={{ html: children }} />
+      <Text style={styles.header}>{children}</Text>
+      <RenderHtml
+        contentWidth={width}
+        source={{ html: children }}
+        baseStyle={baseStyle}
+      />
     </View>
   );
 };
@@ -142,6 +218,7 @@ const styles = StyleSheet.create({
   },
   commentContainer: {
     paddingHorizontal: 20,
+    flexDirection: 'row',
   },
   commentInnerContainer: {
     paddingVertical: 4,
@@ -154,5 +231,13 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 22,
     letterSpacing: -0.40799999237060547,
+  },
+  levelIndicator: {
+    flexDirection: 'row',
+  },
+  levelIndicatorLine: {
+    width: 8,
+    borderLeftWidth: 2,
+    borderLeftColor: '#e5e5ea',
   },
 });
