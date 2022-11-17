@@ -43,6 +43,12 @@ const tagStyles = {
   p: {
     // backgroundColor: '#9f9',
   },
+  pre: {
+    backgroundColor: '#f99',
+  },
+  code: {
+    backgroundColor: '#eee',
+  },
 };
 
 const Comment = ({
@@ -157,10 +163,19 @@ export const StoryScreen = ({ route, navigation }: Props) => {
             contentWidth={width}
             source={{ html: story?.text ?? '' }}
             renderersProps={renderersProps}
+            tagsStyles={tagStyles}
+            baseStyle={baseStyle}
+            enableExperimentalMarginCollapsing
           />
         </View>
-        {story?.comments?.map((comment) => (
-          <Comment comment={comment} level={0} key={comment.id} />
+        {story?.comments?.map((comment, i, children) => (
+          <Comment
+            comment={comment}
+            level={0}
+            key={comment.id}
+            isFirst={i === 0}
+            isLast={i === children.length - 1}
+          />
         ))}
       </ScrollView>
       <StatusBar style="auto" />
@@ -178,7 +193,6 @@ const Header = ({ children }: { children: string }) => {
 
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.header}>{children}</Text>
       <RenderHtml
         contentWidth={width}
         source={{ html: children }}
