@@ -64,7 +64,7 @@ const Comment = ({
   isFirst: boolean;
   isLast: boolean;
 }) => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const { width } = useWindowDimensions();
 
   // TODO: so magic!
@@ -90,7 +90,7 @@ const Comment = ({
                 {timeAgo.format(comment.createdAt, 'mini')}
               </Text>
             </View>
-            {isCollapsed ? (
+            {!isCollapsed && (
               <RenderHtml
                 source={{ html: comment.text ?? '' }}
                 renderersProps={renderersProps}
@@ -99,19 +99,20 @@ const Comment = ({
                 enableExperimentalMarginCollapsing
                 contentWidth={commentTextWidth}
               />
-            ) : null}
+            )}
           </Pressable>
         </View>
       </View>
-      {comment.comments.map((childComment, i, children) => (
-        <Comment
-          comment={childComment}
-          level={level + 1}
-          key={childComment.id}
-          isFirst={i === 0}
-          isLast={i === children.length - 1}
-        />
-      ))}
+      {!isCollapsed &&
+        comment.comments.map((childComment, i, children) => (
+          <Comment
+            comment={childComment}
+            level={level + 1}
+            key={childComment.id}
+            isFirst={i === 0}
+            isLast={i === children.length - 1}
+          />
+        ))}
     </>
   );
 };
