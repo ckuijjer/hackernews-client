@@ -63,7 +63,7 @@ const Comment = ({
   isFirst: boolean;
   isLast: boolean;
 }) => {
-  const [renderHtml, setRenderHtml] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const { width } = useWindowDimensions();
 
   // TODO: so magic!
@@ -81,14 +81,14 @@ const Comment = ({
         <View
           style={[styles.commentInnerContainer, { width: commentTextWidth }]}
         >
-          <Pressable onPress={() => setRenderHtml(!renderHtml)}>
+          <Pressable onPress={() => setIsCollapsed(!isCollapsed)}>
             <View style={styles.metadataContainer}>
               <Text style={styles.metadata}>{comment.user}</Text>
               <Text style={styles.metadata}>
                 {timeAgo.format(comment.createdAt, 'mini')}
               </Text>
             </View>
-            {renderHtml ? (
+            {isCollapsed ? (
               <RenderHtml
                 source={{ html: comment.text ?? '' }}
                 renderersProps={renderersProps}
@@ -97,9 +97,7 @@ const Comment = ({
                 enableExperimentalMarginCollapsing
                 contentWidth={commentTextWidth}
               />
-            ) : (
-              <Text style={styles.commentText}>{comment.text}</Text>
-            )}
+            ) : null}
           </Pressable>
         </View>
       </View>
