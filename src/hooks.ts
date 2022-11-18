@@ -11,9 +11,12 @@ export const useFrontPage = () => {
     isLoading: boolean;
   }>({ stories: undefined, isLoading: true });
 
-  useEffect(async () => {
-    const stories = await getFrontPage();
-    setData({ stories, isLoading: false });
+  useEffect(() => {
+    async function fetchFrontPage() {
+      const stories = await getFrontPage();
+      setData({ stories, isLoading: false });
+    }
+    fetchFrontPage();
   }, []);
 
   const onRefresh = useCallback(async () => {
@@ -35,9 +38,12 @@ export const useStory = (id: number) => {
     isLoading: boolean;
   }>({ story: undefined, isLoading: true });
 
-  useEffect(async () => {
-    const story = await getStory(id);
-    setData({ story, isLoading: false });
+  useEffect(() => {
+    async function fetchStory() {
+      const story = await getStory(id);
+      setData({ story, isLoading: false });
+    }
+    fetchStory();
   }, []);
 
   const onRefresh = useCallback(async () => {
