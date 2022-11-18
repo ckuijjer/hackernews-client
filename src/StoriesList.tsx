@@ -2,11 +2,15 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import TimeAgo from 'javascript-time-ago';
-
-const timeAgo = new TimeAgo('en-US');
+import en from 'javascript-time-ago/locale/en';
 
 import { Story } from './types';
 import { UnreadIcon } from './UnreadIcon';
+
+TimeAgo.setDefaultLocale(en.locale);
+TimeAgo.addLocale(en);
+
+const timeAgo = new TimeAgo('en-US');
 
 export const StoriesList = ({
   stories,
