@@ -1,5 +1,9 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
+import { Ionicons } from '@expo/vector-icons';
+import TimeAgo from 'javascript-time-ago';
+
+const timeAgo = new TimeAgo('en-US');
 
 import { Story } from './types';
 import { UnreadIcon } from './UnreadIcon';
@@ -60,9 +64,18 @@ const Item = ({
         <Text style={styles.title}>{story.title}</Text>
       </View>
       <View style={styles.metadataContainer}>
-        <Text style={styles.metadata}>Yesterday</Text>
-        <Text style={styles.metadata}>{story.score}</Text>
-        <Text style={styles.metadata}>{story.numberOfComments}</Text>
+        <Text style={styles.metadata}>
+          <Ionicons name="time-outline" size={15} color="#3C3C4399" />{' '}
+          {timeAgo.format(story.createdAt, 'mini')}
+        </Text>
+        <Text style={styles.metadata}>
+          <Ionicons name="arrow-up-sharp" size={15} color="#3C3C4399" />{' '}
+          {story.score}
+        </Text>
+        <Text style={styles.metadata}>
+          <Ionicons name="chatbubble-outline" size={15} color="#3C3C4399" />{' '}
+          {story.numberOfComments}
+        </Text>
       </View>
     </View>
   </Pressable>
@@ -93,9 +106,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   metadataContainer: {
-    paddingRight: 8,
+    paddingHorizontal: 8,
     alignItems: 'flex-end',
-    // width: 32,
   },
   metadata: {
     color: '#3C3C4399',
