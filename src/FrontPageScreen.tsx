@@ -21,7 +21,7 @@ export const FrontPageScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.container}
+        contentContainerStyle={styles.contentContainer}
         style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
@@ -52,9 +52,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  contentContainer: {
+    minHeight: '100%',
+  },
   scrollView: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   headerContainer: {
     justifyContent: 'center',

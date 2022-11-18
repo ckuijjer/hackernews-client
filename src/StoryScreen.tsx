@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  useWindowDimensions,
   Pressable,
   Text,
   StyleSheet,
@@ -8,15 +7,17 @@ import {
   ScrollView,
   SafeAreaView,
   RefreshControl,
+  useWindowDimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import RenderHtml from 'react-native-render-html';
+import RenderHtml, { MixedStyleDeclaration } from 'react-native-render-html';
 import * as WebBrowser from 'expo-web-browser';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { StackParamList } from '../App';
 import { useStory } from './hooks';
 import { Comment as CommentType, Story as StoryType } from './types';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { timeAgo } from './timeAgo';
 
 const onPressA = (event: any, href: string) => {
   openInBrowser(href);
@@ -34,7 +35,7 @@ const renderersProps = {
   },
 };
 
-const baseStyle = {
+const baseStyle: MixedStyleDeclaration = {
   fontSize: 17,
   lineHeight: 24,
 };
@@ -62,8 +63,11 @@ const Comment = ({
   isFirst: boolean;
   isLast: boolean;
 }) => {
-  const { width } = useWindowDimensions();
   const [renderHtml, setRenderHtml] = useState(true);
+  const { width } = useWindowDimensions();
+
+  // TODO: so magic!
+  const commentTextWidth = width - 20 * 2 - level * 8;
 
   return (
     <>
@@ -74,16 +78,24 @@ const Comment = ({
           isLast={isLast}
           hasChildren={comment.comments.length > 0}
         />
-        <View style={styles.commentInnerContainer}>
+        <View
+          style={[styles.commentInnerContainer, { width: commentTextWidth }]}
+        >
           <Pressable onPress={() => setRenderHtml(!renderHtml)}>
+            <View style={styles.metadataContainer}>
+              <Text style={styles.metadata}>{comment.user}</Text>
+              <Text style={styles.metadata}>
+                {timeAgo.format(comment.createdAt, 'mini')}
+              </Text>
+            </View>
             {renderHtml ? (
               <RenderHtml
-                contentWidth={width}
                 source={{ html: comment.text ?? '' }}
                 renderersProps={renderersProps}
                 tagsStyles={tagStyles}
                 baseStyle={baseStyle}
                 enableExperimentalMarginCollapsing
+                contentWidth={commentTextWidth}
               />
             ) : (
               <Text style={styles.commentText}>{comment.text}</Text>
@@ -137,9 +149,10 @@ const LevelIndicator = ({
 type Props = NativeStackScreenProps<StackParamList, 'Story'>;
 
 export const StoryScreen = ({ route, navigation }: Props) => {
-  const { width } = useWindowDimensions();
   const { id, title } = route.params;
   const { story, isLoading, isRefreshing, onRefresh } = useStory(id);
+
+  const { width } = useWindowDimensions();
 
   // navigation.setOptions({ title: story?.title ?? title });
 
@@ -160,12 +173,12 @@ export const StoryScreen = ({ route, navigation }: Props) => {
         </Pressable>
         <View style={styles.storyTextContainer}>
           <RenderHtml
-            contentWidth={width}
             source={{ html: story?.text ?? '' }}
             renderersProps={renderersProps}
             tagsStyles={tagStyles}
             baseStyle={baseStyle}
             enableExperimentalMarginCollapsing
+            contentWidth={width}
           />
         </View>
         {story?.comments?.map((comment, i, children) => (
@@ -186,7 +199,7 @@ export const StoryScreen = ({ route, navigation }: Props) => {
 const Header = ({ children }: { children: string }) => {
   const { width } = useWindowDimensions();
 
-  const baseStyle = {
+  const baseStyle: MixedStyleDeclaration = {
     fontSize: 34,
     fontWeight: 'bold',
   };
@@ -194,9 +207,9 @@ const Header = ({ children }: { children: string }) => {
   return (
     <View style={styles.headerContainer}>
       <RenderHtml
-        contentWidth={width}
         source={{ html: children }}
         baseStyle={baseStyle}
+        contentWidth={width}
       />
     </View>
   );
@@ -233,12 +246,12 @@ const styles = StyleSheet.create({
   commentContainer: {
     paddingHorizontal: 20,
     flexDirection: 'row',
+    // backgroundColor: '#9f9',
+    width: '100%',
   },
   commentInnerContainer: {
-    paddingVertical: 4,
-    borderTopWidth: 1,
-    borderTopColor: '#e5e5ea',
     // backgroundColor: '#f99',
+    paddingVertical: 8,
   },
   commentText: {
     fontSize: 17,
@@ -253,5 +266,15 @@ const styles = StyleSheet.create({
     width: 8,
     borderLeftWidth: 2,
     borderLeftColor: '#e5e5ea',
+  },
+  metadataContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  metadata: {
+    color: '#3C3C4399',
+    fontSize: 15,
+    lineHeight: 20,
   },
 });
