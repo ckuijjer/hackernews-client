@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Pressable,
   Text,
@@ -13,6 +13,7 @@ import { StatusBar } from 'expo-status-bar';
 import RenderHtml, { MixedStyleDeclaration } from 'react-native-render-html';
 import * as WebBrowser from 'expo-web-browser';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 
 import type { StackParamList } from '../App';
 import { useStory } from './hooks';
@@ -85,6 +86,7 @@ const Comment = ({
             <View style={styles.metadataContainer}>
               <Text style={styles.metadata}>{comment.user}</Text>
               <Text style={styles.metadata}>
+                <Ionicons name="time-outline" size={15} color="#3C3C4399" />{' '}
                 {timeAgo.format(comment.createdAt, 'mini')}
               </Text>
             </View>
