@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Pressable,
-  Text,
   StyleSheet,
   View,
   ScrollView,
@@ -11,122 +10,20 @@ import {
   PlatformColor,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import RenderHtml, { MixedStyleDeclaration } from 'react-native-render-html';
 import * as WebBrowser from 'expo-web-browser';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Ionicons } from '@expo/vector-icons';
-
-import type { StackParamList } from '../App';
-import { useStory } from './hooks';
-import { Comment as CommentType, Story as StoryType } from './types';
-import { timeAgo } from './timeAgo';
 import { FlashList } from '@shopify/flash-list';
 
-const onPressA = (event: any, href: string) => {
-  openInBrowser(href);
-};
+import { RenderHtml } from './RenderHtml';
+import type { StackParamList } from '../App';
+import { useStory } from './hooks';
+import { Comment } from './Comment';
+import { MixedStyleDeclaration } from 'react-native-render-html';
 
 const openInBrowser = (url: string) => {
   WebBrowser.openBrowserAsync(url, {
     presentationStyle: WebBrowser.WebBrowserPresentationStyle.FULL_SCREEN,
   });
-};
-
-const renderersProps = {
-  a: {
-    onPress: onPressA,
-  },
-};
-
-const baseStyle: MixedStyleDeclaration = {
-  fontSize: 17,
-  lineHeight: 24,
-  color: PlatformColor('label'),
-};
-
-const tagStyles = {
-  a: {
-    color: PlatformColor('link'),
-  },
-  p: {
-    // backgroundColor: '#9f9',
-  },
-  pre: {
-    backgroundColor: PlatformColor('secondarySystemBackground'),
-  },
-  code: {
-    // backgroundColor: '#eee',
-  },
-};
-
-const Comment = ({
-  comment,
-  level = 0,
-  hidden = false,
-}: {
-  comment: CommentType;
-  level: number;
-  hidden?: boolean;
-}) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const { width } = useWindowDimensions();
-
-  // TODO: so magic!
-  const commentTextWidth = width - 20 * 2 - level * 8;
-
-  return (
-    <>
-      {hidden ? null : (
-        <View style={styles.commentContainer}>
-          <LevelIndicator level={level} />
-          <View
-            style={[styles.commentInnerContainer, { width: commentTextWidth }]}
-          >
-            <Pressable onPress={() => setIsCollapsed(!isCollapsed)}>
-              <View style={styles.metadataContainer}>
-                <Text style={styles.metadata}>{comment.user}</Text>
-                <Text style={styles.metadata}>
-                  <Ionicons name="time-outline" size={15} color="#3C3C4399" />{' '}
-                  {timeAgo.format(comment.createdAt, 'mini')}
-                </Text>
-              </View>
-              {!isCollapsed && (
-                <RenderHtml
-                  source={{ html: comment.text ?? '' }}
-                  renderersProps={renderersProps}
-                  tagsStyles={tagStyles}
-                  baseStyle={baseStyle}
-                  enableExperimentalMarginCollapsing
-                  contentWidth={commentTextWidth}
-                />
-              )}
-            </Pressable>
-          </View>
-        </View>
-      )}
-      {comment.comments.map((childComment, i, children) => (
-        <Comment
-          comment={childComment}
-          level={level + 1}
-          key={childComment.id}
-          hidden={isCollapsed || hidden}
-        />
-      ))}
-    </>
-  );
-};
-
-// unreadable and has issues still
-const LevelIndicator = ({ level }: { level: number }) => {
-  return (
-    <View style={styles.levelIndicator}>
-      {Array.from({ length: level })
-        .fill(0)
-        .map((_, index) => {
-          return <View key={index} style={styles.levelIndicatorLine} />;
-        })}
-    </View>
-  );
 };
 
 type Props = NativeStackScreenProps<StackParamList, 'Story'>;
@@ -162,10 +59,6 @@ export const StoryScreen = ({ route, navigation }: Props) => {
         <View style={styles.storyTextContainer}>
           <RenderHtml
             source={{ html: story?.text ?? '' }}
-            renderersProps={renderersProps}
-            tagsStyles={tagStyles}
-            baseStyle={baseStyle}
-            enableExperimentalMarginCollapsing
             contentWidth={width}
           />
         </View>
@@ -224,46 +117,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   storyText: {
-    // fontFamily: 'SF Pro Text',
     fontSize: 17,
     fontWeight: '400',
     lineHeight: 22,
     letterSpacing: -0.40799999237060547,
     color: PlatformColor('label'),
-  },
-  commentContainer: {
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    // backgroundColor: '#9f9',
-    width: '100%',
-  },
-  commentInnerContainer: {
-    // backgroundColor: '#f99',
-    paddingVertical: 8,
-  },
-  commentText: {
-    fontSize: 17,
-    fontWeight: '400',
-    lineHeight: 22,
-    letterSpacing: -0.40799999237060547,
-    color: PlatformColor('label'),
-  },
-  levelIndicator: {
-    flexDirection: 'row',
-  },
-  levelIndicatorLine: {
-    width: 8,
-    borderLeftWidth: 2,
-    borderLeftColor: PlatformColor('separator'),
-  },
-  metadataContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 4,
-  },
-  metadata: {
-    color: PlatformColor('secondaryLabel'),
-    fontSize: 15,
-    lineHeight: 20,
   },
 });

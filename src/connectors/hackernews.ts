@@ -66,8 +66,6 @@ export const getStory = async (id: number) => {
 };
 
 const getComment = async (id: number): Promise<Comment> => {
-  // console.log('getComment', id);
-
   const item: Item = await getValue(`v0/item/${id}`);
   const children = await Promise.all((item.kids ?? []).map(getComment));
 
