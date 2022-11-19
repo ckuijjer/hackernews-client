@@ -63,15 +63,27 @@ const Item = ({
       </View>
       <View style={styles.metadataContainer}>
         <Text style={styles.metadata}>
-          <Ionicons name="time-outline" size={15} color="#3C3C4399" />{' '}
+          <Ionicons
+            name="time-outline"
+            size={15}
+            color={PlatformColor('secondaryLabel')}
+          />{' '}
           {timeAgo.format(story.createdAt, 'mini')}
         </Text>
         <Text style={styles.metadata}>
-          <Ionicons name="arrow-up-sharp" size={15} color="#3C3C4399" />{' '}
+          <Ionicons
+            name="arrow-up-sharp"
+            size={15}
+            color={PlatformColor('secondaryLabel')}
+          />{' '}
           {story.score}
         </Text>
         <Text style={styles.metadata}>
-          <Ionicons name="chatbubble-outline" size={15} color="#3C3C4399" />{' '}
+          <Ionicons
+            name="chatbubble-outline"
+            size={15}
+            color={PlatformColor('secondaryLabel')}
+          />{' '}
           {story.numberOfComments}
         </Text>
       </View>
