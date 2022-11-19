@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, PlatformColor } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -82,20 +82,20 @@ const Item = ({
 const styles = StyleSheet.create({
   listView: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: PlatformColor('systemBackground'),
   },
   listViewLoading: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#f4f4f7',
+    backgroundColor: PlatformColor('secondarySystemBackground'),
     paddingTop: 2 * 44,
   },
   listViewLoadingText: {
     fontSize: 15,
-    color: '#8e8e93',
+    color: PlatformColor('secondaryLabel'),
   },
   itemContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: PlatformColor('systemBackground'),
     minHeight: 60,
     flexDirection: 'row',
   },
@@ -108,15 +108,15 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   metadata: {
-    color: '#3C3C4399',
+    color: PlatformColor('secondaryLabel'),
     fontSize: 15,
     lineHeight: 20,
   },
   item: {
     flexDirection: 'row',
     flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: '#e5e5ea',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: PlatformColor('separator'),
     paddingVertical: 8,
   },
   itemTitleContainer: {
@@ -126,5 +126,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 22,
     fontWeight: '500',
+    color: PlatformColor('label'),
   },
 });

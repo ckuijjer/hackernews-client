@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   ScrollView,
   RefreshControl,
+  PlatformColor,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -50,7 +51,7 @@ const Header = ({ children }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: PlatformColor('systemBackground'),
   },
   contentContainer: {
     minHeight: '100%',
@@ -67,5 +68,6 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 34,
     fontWeight: 'bold',
+    color: PlatformColor('label'),
   },
 });

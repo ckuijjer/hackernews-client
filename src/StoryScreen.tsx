@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   RefreshControl,
   useWindowDimensions,
+  PlatformColor,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import RenderHtml, { MixedStyleDeclaration } from 'react-native-render-html';
@@ -19,6 +20,7 @@ import type { StackParamList } from '../App';
 import { useStory } from './hooks';
 import { Comment as CommentType, Story as StoryType } from './types';
 import { timeAgo } from './timeAgo';
+import { FlashList } from '@shopify/flash-list';
 
 const onPressA = (event: any, href: string) => {
   openInBrowser(href);
@@ -39,6 +41,7 @@ const renderersProps = {
 const baseStyle: MixedStyleDeclaration = {
   fontSize: 17,
   lineHeight: 24,
+  color: PlatformColor('label'),
 };
 
 const tagStyles = {
@@ -46,23 +49,19 @@ const tagStyles = {
     // backgroundColor: '#9f9',
   },
   pre: {
-    backgroundColor: '#f99',
+    backgroundColor: PlatformColor('secondarySystemBackground'),
   },
   code: {
-    backgroundColor: '#eee',
+    // backgroundColor: '#eee',
   },
 };
 
 const Comment = ({
   comment,
   level = 0,
-  isFirst = false,
-  isLast = false,
 }: {
   comment: CommentType;
   level: number;
-  isFirst: boolean;
-  isLast: boolean;
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { width } = useWindowDimensions();
@@ -75,8 +74,6 @@ const Comment = ({
       <View style={styles.commentContainer}>
         <LevelIndicator
           level={level}
-          isFirst={isFirst}
-          isLast={isLast}
           hasChildren={comment.comments.length > 0}
         />
         <View
@@ -109,8 +106,6 @@ const Comment = ({
             comment={childComment}
             level={level + 1}
             key={childComment.id}
-            isFirst={i === 0}
-            isLast={i === children.length - 1}
           />
         ))}
     </>
@@ -118,30 +113,13 @@ const Comment = ({
 };
 
 // unreadable and has issues still
-const LevelIndicator = ({
-  level,
-  isFirst,
-  isLast,
-  hasChildren,
-}: {
-  level: number;
-  isFirst: boolean;
-  isLast: boolean;
-  hasChildren: boolean;
-}) => {
+const LevelIndicator = ({ level }: { level: number }) => {
   return (
     <View style={styles.levelIndicator}>
       {Array.from({ length: level })
         .fill(0)
         .map((_, index) => {
-          const isLastLevel = index === level - 1;
-          const styling = {
-            marginTop: isLastLevel && isFirst ? 8 : 0,
-            marginBottom: isLastLevel && isLast && !hasChildren ? 8 : 0,
-          };
-          return (
-            <View key={index} style={[styles.levelIndicatorLine, styling]} />
-          );
+          return <View key={index} style={styles.levelIndicatorLine} />;
         })}
     </View>
   );
@@ -161,6 +139,11 @@ export const StoryScreen = ({ route, navigation }: Props) => {
     openInBrowser(story?.url ?? '');
   };
 
+  //   <FlashList
+  //   data={stories}
+  //   renderItem={renderItem}
+  //   keyExtractor={(item) => '' + item.id}
+  // />
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -182,15 +165,13 @@ export const StoryScreen = ({ route, navigation }: Props) => {
             contentWidth={width}
           />
         </View>
-        {story?.comments?.map((comment, i, children) => (
-          <Comment
-            comment={comment}
-            level={0}
-            key={comment.id}
-            isFirst={i === 0}
-            isLast={i === children.length - 1}
-          />
-        ))}
+        <FlashList
+          data={story?.comments}
+          renderItem={({ item }) => (
+            <Comment comment={item} level={0} key={item.id} />
+          )}
+          keyExtractor={(comment) => '' + comment.id}
+        />
       </ScrollView>
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -203,6 +184,7 @@ const Header = ({ children }: { children: string }) => {
   const baseStyle: MixedStyleDeclaration = {
     fontSize: 34,
     fontWeight: 'bold',
+    color: PlatformColor('label'),
   };
 
   return (
@@ -219,7 +201,7 @@ const Header = ({ children }: { children: string }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: PlatformColor('systemBackground'),
   },
   scrollView: {
     flex: 1,
@@ -243,6 +225,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 22,
     letterSpacing: -0.40799999237060547,
+    color: PlatformColor('label'),
   },
   commentContainer: {
     paddingHorizontal: 20,
@@ -259,6 +242,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 22,
     letterSpacing: -0.40799999237060547,
+    color: PlatformColor('label'),
   },
   levelIndicator: {
     flexDirection: 'row',
@@ -266,7 +250,7 @@ const styles = StyleSheet.create({
   levelIndicatorLine: {
     width: 8,
     borderLeftWidth: 2,
-    borderLeftColor: '#e5e5ea',
+    borderLeftColor: PlatformColor('separator'),
   },
   metadataContainer: {
     flexDirection: 'row',
@@ -274,7 +258,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   metadata: {
-    color: '#3C3C4399',
+    color: PlatformColor('secondaryLabel'),
     fontSize: 15,
     lineHeight: 20,
   },
