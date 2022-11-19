@@ -62,9 +62,11 @@ const tagStyles = {
 const Comment = ({
   comment,
   level = 0,
+  hidden = false,
 }: {
   comment: CommentType;
   level: number;
+  hidden?: boolean;
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { width } = useWindowDimensions();
@@ -74,43 +76,42 @@ const Comment = ({
 
   return (
     <>
-      <View style={styles.commentContainer}>
-        <LevelIndicator
-          level={level}
-          hasChildren={comment.comments.length > 0}
-        />
-        <View
-          style={[styles.commentInnerContainer, { width: commentTextWidth }]}
-        >
-          <Pressable onPress={() => setIsCollapsed(!isCollapsed)}>
-            <View style={styles.metadataContainer}>
-              <Text style={styles.metadata}>{comment.user}</Text>
-              <Text style={styles.metadata}>
-                <Ionicons name="time-outline" size={15} color="#3C3C4399" />{' '}
-                {timeAgo.format(comment.createdAt, 'mini')}
-              </Text>
-            </View>
-            {!isCollapsed && (
-              <RenderHtml
-                source={{ html: comment.text ?? '' }}
-                renderersProps={renderersProps}
-                tagsStyles={tagStyles}
-                baseStyle={baseStyle}
-                enableExperimentalMarginCollapsing
-                contentWidth={commentTextWidth}
-              />
-            )}
-          </Pressable>
+      {hidden ? null : (
+        <View style={styles.commentContainer}>
+          <LevelIndicator level={level} />
+          <View
+            style={[styles.commentInnerContainer, { width: commentTextWidth }]}
+          >
+            <Pressable onPress={() => setIsCollapsed(!isCollapsed)}>
+              <View style={styles.metadataContainer}>
+                <Text style={styles.metadata}>{comment.user}</Text>
+                <Text style={styles.metadata}>
+                  <Ionicons name="time-outline" size={15} color="#3C3C4399" />{' '}
+                  {timeAgo.format(comment.createdAt, 'mini')}
+                </Text>
+              </View>
+              {!isCollapsed && (
+                <RenderHtml
+                  source={{ html: comment.text ?? '' }}
+                  renderersProps={renderersProps}
+                  tagsStyles={tagStyles}
+                  baseStyle={baseStyle}
+                  enableExperimentalMarginCollapsing
+                  contentWidth={commentTextWidth}
+                />
+              )}
+            </Pressable>
+          </View>
         </View>
-      </View>
-      {!isCollapsed &&
-        comment.comments.map((childComment, i, children) => (
-          <Comment
-            comment={childComment}
-            level={level + 1}
-            key={childComment.id}
-          />
-        ))}
+      )}
+      {comment.comments.map((childComment, i, children) => (
+        <Comment
+          comment={childComment}
+          level={level + 1}
+          key={childComment.id}
+          hidden={isCollapsed || hidden}
+        />
+      ))}
     </>
   );
 };
