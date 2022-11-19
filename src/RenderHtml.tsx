@@ -30,6 +30,7 @@ const baseStyle: MixedStyleDeclaration = {
 const tagStyles = {
   a: {
     color: PlatformColor('link'),
+    textDecorationLine: 'none',
   },
   p: {
     // backgroundColor: '#9f9',
