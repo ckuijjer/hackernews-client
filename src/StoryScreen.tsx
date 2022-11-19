@@ -3,6 +3,7 @@ import {
   Pressable,
   StyleSheet,
   View,
+  Text,
   ScrollView,
   SafeAreaView,
   RefreshControl,
@@ -57,6 +58,21 @@ export const StoryScreen = ({ route, navigation }: Props) => {
           <Header>{story?.title ?? ''}</Header>
         </Pressable>
         <View style={styles.storyTextContainer}>
+          <View style={styles.metadataContainer}>
+            <Text style={styles.metadata}>
+              by {story?.user ?? ''} on{' '}
+              {story?.createdAt.toLocaleDateString('en-US', {
+                dateStyle: 'long',
+              })}{' '}
+              at{' '}
+              {story?.createdAt.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+              })}
+            </Text>
+          </View>
+
           <RenderHtml
             source={{ html: story?.text ?? '' }}
             contentWidth={width}
@@ -114,13 +130,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   storyTextContainer: {
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: PlatformColor('separator'),
+    paddingBottom: 4,
+    marginBottom: 8,
   },
-  storyText: {
-    fontSize: 17,
-    fontWeight: '400',
-    lineHeight: 22,
-    letterSpacing: -0.40799999237060547,
-    color: PlatformColor('label'),
+  metadataContainer: {
+    marginBottom: 4,
+  },
+  metadata: {
+    color: PlatformColor('secondaryLabel'),
+    fontSize: 15,
+    lineHeight: 20,
   },
 });
