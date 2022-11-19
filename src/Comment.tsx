@@ -14,6 +14,9 @@ import { Comment as CommentType } from './types';
 import { timeAgo } from './timeAgo';
 import { LevelIndicator } from './LevelIndicator';
 
+const getNumberOfChildren = (comment: CommentType): number =>
+  comment.comments.map(getNumberOfChildren).reduce((acc, cur) => acc + cur, 1);
+
 export const Comment = ({
   comment,
   level = 0,
@@ -28,6 +31,7 @@ export const Comment = ({
 
   // TODO: so magic!
   const commentTextWidth = width - 20 * 2 - level * 8;
+  const numberOfChildren = getNumberOfChildren(comment);
 
   return (
     <>
@@ -39,8 +43,27 @@ export const Comment = ({
               <View style={styles.metadataContainer}>
                 <Text style={styles.metadata}>{comment.user}</Text>
                 <Text style={styles.metadata}>
-                  <Ionicons name="time-outline" size={15} color="#3C3C4399" />{' '}
-                  {timeAgo.format(comment.createdAt, 'mini')}
+                  {isCollapsed ? (
+                    <>
+                      <Ionicons
+                        name="chatbubble-outline"
+                        // name="chatbubbles-outline"
+                        size={15}
+                        color={PlatformColor('secondaryLabel')}
+                      />
+                      {' +'}
+                      {numberOfChildren}
+                    </>
+                  ) : (
+                    <>
+                      <Ionicons
+                        name="time-outline"
+                        size={15}
+                        color={PlatformColor('secondaryLabel')}
+                      />{' '}
+                      {timeAgo.format(comment.createdAt, 'mini')}
+                    </>
+                  )}
                 </Text>
               </View>
               {!isCollapsed && (
