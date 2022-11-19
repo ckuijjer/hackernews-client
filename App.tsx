@@ -1,5 +1,5 @@
 import React from 'react';
-import { useColorScheme } from 'react-native';
+import { useColorScheme, useWindowDimensions } from 'react-native';
 import {
   NavigationContainer,
   DefaultTheme,
@@ -22,10 +22,11 @@ const Stack = createNativeStackNavigator<StackParamList>();
 const App = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
+  const { width } = useWindowDimensions();
 
   return (
     <NavigationContainer theme={theme}>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ fullScreenGestureEnabled: true }}>
         <Stack.Screen
           name="FrontPage"
           component={FrontPageScreen}
