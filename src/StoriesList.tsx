@@ -92,7 +92,8 @@ export const StoriesList = ({
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
         leftOpenValue={75}
-        rightOpenValue={-75}
+        // leftActivationValue={150}
+        disableLeftSwipe
         keyExtractor={(item) => '' + item.id}
       />
     </View>
