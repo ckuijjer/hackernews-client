@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   ScrollView,
   RefreshControl,
   PlatformColor,
@@ -10,6 +9,7 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@tanstack/react-query';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import type { StackParamList } from '../App';
 import { getFrontPage } from './connectors/hackernews';
@@ -24,7 +24,7 @@ export const FrontPageScreen = ({ navigation }: Props) => {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <ScrollView
         contentContainerStyle={styles.contentContainer}
         style={styles.scrollView}

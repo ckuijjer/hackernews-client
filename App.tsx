@@ -7,6 +7,7 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { FrontPageScreen } from './src/FrontPageScreen';
 import { StoryScreen } from './src/StoryScreen';
@@ -29,20 +30,22 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer theme={theme}>
-        <Stack.Navigator screenOptions={{ fullScreenGestureEnabled: true }}>
-          <Stack.Screen
-            name="FrontPage"
-            component={FrontPageScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Story"
-            component={StoryScreen}
-            options={{ title: '' }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer theme={theme}>
+          <Stack.Navigator screenOptions={{ fullScreenGestureEnabled: true }}>
+            <Stack.Screen
+              name="FrontPage"
+              component={FrontPageScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Story"
+              component={StoryScreen}
+              options={{ title: '' }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
     </QueryClientProvider>
   );
 };

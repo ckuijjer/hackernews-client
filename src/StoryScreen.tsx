@@ -5,7 +5,6 @@ import {
   View,
   Text,
   ScrollView,
-  SafeAreaView,
   RefreshControl,
   useWindowDimensions,
   PlatformColor,
@@ -52,7 +51,7 @@ export const StoryScreen = ({ route, navigation }: Props) => {
   //   keyExtractor={(item) => '' + item.id}
   // />
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView
         style={styles.scrollView}
         refreshControl={
@@ -79,7 +78,6 @@ export const StoryScreen = ({ route, navigation }: Props) => {
               </Text>
             )}
           </View>
-
           <RenderHtml
             source={{ html: data?.text ?? '' }}
             contentWidth={width}
@@ -94,7 +92,7 @@ export const StoryScreen = ({ route, navigation }: Props) => {
         />
       </ScrollView>
       <StatusBar style="auto" />
-    </SafeAreaView>
+    </View>
   );
 };
 
