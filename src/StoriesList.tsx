@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Pressable, PlatformColor } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Story } from './types';
@@ -35,11 +35,64 @@ export const StoriesList = ({
     />
   );
 
+  const renderHiddenItem = ({ item }: { item: Story }) => (
+    <View style={{ backgroundColor: PlatformColor('systemBlue'), flex: 1 }}>
+      <View
+        style={{
+          alignSelf: 'flex-start',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+          width: 75,
+        }}
+      >
+        {false ? (
+          <>
+            <Ionicons
+              name="mail-unread-outline"
+              size={20}
+              color={PlatformColor('systemGray6')}
+            />
+            <Text
+              style={{
+                color: PlatformColor('systemGray6'),
+                fontSize: 15,
+                lineHeight: 20,
+              }}
+            >
+              Unread
+            </Text>
+          </>
+        ) : (
+          <>
+            <Ionicons
+              name="mail-open-outline"
+              size={20}
+              color={PlatformColor('systemGray6')}
+            />
+            <Text
+              style={{
+                color: PlatformColor('systemGray6'),
+                fontSize: 15,
+                lineHeight: 20,
+              }}
+            >
+              Read
+            </Text>
+          </>
+        )}
+      </View>
+    </View>
+  );
+
   return (
     <View style={styles.listView}>
-      <FlashList
+      <SwipeListView
         data={stories}
         renderItem={renderItem}
+        renderHiddenItem={renderHiddenItem}
+        leftOpenValue={75}
+        rightOpenValue={-75}
         keyExtractor={(item) => '' + item.id}
       />
     </View>
