@@ -64,18 +64,20 @@ export const StoryScreen = ({ route, navigation }: Props) => {
         </Pressable>
         <View style={styles.storyTextContainer}>
           <View style={styles.metadataContainer}>
-            <Text style={styles.metadata}>
-              by {data?.user ?? ''} on{' '}
-              {data?.createdAt.toLocaleDateString('en-US', {
-                dateStyle: 'long',
-              })}{' '}
-              at{' '}
-              {data?.createdAt.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false,
-              })}
-            </Text>
+            {data?.user && data?.createdAt && (
+              <Text style={styles.metadata}>
+                by {data.user} on{' '}
+                {data.createdAt.toLocaleDateString('en-US', {
+                  dateStyle: 'medium',
+                })}{' '}
+                at{' '}
+                {data.createdAt.toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false,
+                })}
+              </Text>
+            )}
           </View>
 
           <RenderHtml
