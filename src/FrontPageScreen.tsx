@@ -9,15 +9,19 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import type { StackParamList } from '../App';
+import { useQuery } from '@tanstack/react-query';
 
-import { useFrontPage } from './hooks';
+import type { StackParamList } from '../App';
+import { getFrontPage } from './connectors/hackernews';
 import { StoriesList } from './StoriesList';
 
 type Props = NativeStackScreenProps<StackParamList, 'FrontPage'>;
 
 export const FrontPageScreen = ({ navigation }: Props) => {
-  const { stories, isLoading, isRefreshing, onRefresh } = useFrontPage();
+  const { data, isLoading, isRefetching, refetch } = useQuery({
+    queryKey: ['topstories'],
+    queryFn: getFrontPage,
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -25,12 +29,12 @@ export const FrontPageScreen = ({ navigation }: Props) => {
         contentContainerStyle={styles.contentContainer}
         style={styles.scrollView}
         refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
         }
       >
         <Header>Front Page</Header>
         <StoriesList
-          stories={stories}
+          stories={data}
           isLoading={isLoading}
           navigation={navigation}
         />

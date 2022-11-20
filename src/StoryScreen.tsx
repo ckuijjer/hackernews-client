@@ -17,9 +17,10 @@ import { FlashList } from '@shopify/flash-list';
 
 import { RenderHtml } from './RenderHtml';
 import type { StackParamList } from '../App';
-import { useStory } from './hooks';
 import { Comment } from './Comment';
 import { MixedStyleDeclaration } from 'react-native-render-html';
+import { getStory } from './connectors/hackernews';
+import { useQuery } from '@tanstack/react-query';
 
 const openInBrowser = (url: string) => {
   WebBrowser.openBrowserAsync(url, {
@@ -31,14 +32,18 @@ type Props = NativeStackScreenProps<StackParamList, 'Story'>;
 
 export const StoryScreen = ({ route, navigation }: Props) => {
   const { id, title } = route.params;
-  const { story, isLoading, isRefreshing, onRefresh } = useStory(id);
+
+  const { data, isLoading, isRefetching, refetch } = useQuery({
+    queryKey: ['item', id],
+    queryFn: () => getStory(id),
+  });
 
   const { width } = useWindowDimensions();
 
   // navigation.setOptions({ title: story?.title ?? title });
 
   const onPressStoryTitle = () => {
-    openInBrowser(story?.url ?? '');
+    openInBrowser(data?.url ?? '');
   };
 
   //   <FlashList
@@ -51,21 +56,21 @@ export const StoryScreen = ({ route, navigation }: Props) => {
       <ScrollView
         style={styles.scrollView}
         refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
         }
       >
         <Pressable onPress={onPressStoryTitle}>
-          <Header>{story?.title ?? ''}</Header>
+          <Header>{data?.title ?? ''}</Header>
         </Pressable>
         <View style={styles.storyTextContainer}>
           <View style={styles.metadataContainer}>
             <Text style={styles.metadata}>
-              by {story?.user ?? ''} on{' '}
-              {story?.createdAt.toLocaleDateString('en-US', {
+              by {data?.user ?? ''} on{' '}
+              {data?.createdAt.toLocaleDateString('en-US', {
                 dateStyle: 'long',
               })}{' '}
               at{' '}
-              {story?.createdAt.toLocaleTimeString('en-US', {
+              {data?.createdAt.toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit',
                 hour12: false,
@@ -74,12 +79,12 @@ export const StoryScreen = ({ route, navigation }: Props) => {
           </View>
 
           <RenderHtml
-            source={{ html: story?.text ?? '' }}
+            source={{ html: data?.text ?? '' }}
             contentWidth={width}
           />
         </View>
         <FlashList
-          data={story?.comments}
+          data={data?.comments}
           renderItem={({ item }) => (
             <Comment comment={item} level={0} key={item.id} />
           )}

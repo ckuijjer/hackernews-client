@@ -6,6 +6,7 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { FrontPageScreen } from './src/FrontPageScreen';
 import { StoryScreen } from './src/StoryScreen';
@@ -19,26 +20,30 @@ export type StackParamList = {
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
+const queryClient = new QueryClient();
+
 const App = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
   const { width } = useWindowDimensions();
 
   return (
-    <NavigationContainer theme={theme}>
-      <Stack.Navigator screenOptions={{ fullScreenGestureEnabled: true }}>
-        <Stack.Screen
-          name="FrontPage"
-          component={FrontPageScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Story"
-          component={StoryScreen}
-          options={{ title: '' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer theme={theme}>
+        <Stack.Navigator screenOptions={{ fullScreenGestureEnabled: true }}>
+          <Stack.Screen
+            name="FrontPage"
+            component={FrontPageScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Story"
+            component={StoryScreen}
+            options={{ title: '' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 };
 
