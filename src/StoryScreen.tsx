@@ -45,11 +45,6 @@ export const StoryScreen = ({ route, navigation }: Props) => {
     openInBrowser(data?.url ?? '');
   };
 
-  //   <FlashList
-  //   data={stories}
-  //   renderItem={renderItem}
-  //   keyExtractor={(item) => '' + item.id}
-  // />
   return (
     <View style={styles.container}>
       <ScrollView
