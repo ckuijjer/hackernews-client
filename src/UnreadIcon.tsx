@@ -10,6 +10,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export const UnreadIcon = () => {
-  return <View style={styles.icon} />;
+export const UnreadIcon = ({ hidden = false }: { hidden?: boolean }) => {
+  return (
+    <View style={[styles.icon, hidden && { backgroundColor: 'transparent' }]} />
+  );
 };
