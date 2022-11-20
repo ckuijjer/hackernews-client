@@ -48,14 +48,10 @@ export const StoriesList = ({
       >
         {false ? (
           <>
-            <Ionicons
-              name="mail-unread-outline"
-              size={20}
-              color={PlatformColor('systemGray6')}
-            />
+            <Ionicons name="mail-unread" size={24} color="#fff" />
             <Text
               style={{
-                color: PlatformColor('systemGray6'),
+                color: '#fff',
                 fontSize: 15,
                 lineHeight: 20,
               }}
@@ -65,14 +61,10 @@ export const StoriesList = ({
           </>
         ) : (
           <>
-            <Ionicons
-              name="mail-open-outline"
-              size={20}
-              color={PlatformColor('systemGray6')}
-            />
+            <Ionicons name="mail-open" size={24} color="#fff" />
             <Text
               style={{
-                color: PlatformColor('systemGray6'),
+                color: '#fff',
                 fontSize: 15,
                 lineHeight: 20,
               }}
