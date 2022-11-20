@@ -37,9 +37,12 @@ const tagStyles = {
   },
   pre: {
     backgroundColor: PlatformColor('secondarySystemBackground'),
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
   },
   code: {
-    // backgroundColor: '#eee',
+    fontSize: 15,
   },
 };
 
