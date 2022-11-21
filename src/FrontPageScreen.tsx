@@ -9,7 +9,10 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@tanstack/react-query';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import type { StackParamList } from '../App';
 import { getFrontPage } from './connectors/hackernews';
@@ -38,10 +41,16 @@ export const FrontPageScreen = ({ navigation }: Props) => {
           isLoading={isLoading}
           navigation={navigation}
         />
+        <SafeBottomView />
       </ScrollView>
       <StatusBar style="auto" />
     </SafeAreaView>
   );
+};
+
+const SafeBottomView = () => {
+  const insets = useSafeAreaInsets();
+  return <View style={{ paddingBottom: insets.bottom }} />;
 };
 
 const Header = ({ children }) => {
