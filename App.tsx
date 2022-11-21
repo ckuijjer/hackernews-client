@@ -13,6 +13,7 @@ import { FrontPageScreen } from './src/FrontPageScreen';
 import { StoryScreen } from './src/StoryScreen';
 
 import type { Story } from './src/types';
+import { StatusBar } from 'expo-status-bar';
 
 export type StackParamList = {
   FrontPage: undefined;
@@ -26,7 +27,6 @@ const queryClient = new QueryClient();
 const App = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
-  const { width } = useWindowDimensions();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -46,6 +46,7 @@ const App = () => {
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
+      <StatusBar
     </QueryClientProvider>
   );
 };

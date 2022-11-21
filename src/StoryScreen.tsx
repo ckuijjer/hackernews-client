@@ -9,7 +9,6 @@ import {
   useWindowDimensions,
   PlatformColor,
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import * as WebBrowser from 'expo-web-browser';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
@@ -20,6 +19,7 @@ import { Comment } from './Comment';
 import { MixedStyleDeclaration } from 'react-native-render-html';
 import { getStory } from './connectors/hackernews';
 import { useQuery } from '@tanstack/react-query';
+import { SafeBottomView } from './SafeBottomView';
 
 const openInBrowser = (url: string) => {
   WebBrowser.openBrowserAsync(url, {
@@ -85,8 +85,8 @@ export const StoryScreen = ({ route, navigation }: Props) => {
           )}
           keyExtractor={(comment) => '' + comment.id}
         />
+        <SafeBottomView />
       </ScrollView>
-      <StatusBar style="auto" />
     </View>
   );
 };
