@@ -27,7 +27,7 @@ const baseStyle: MixedStyleDeclaration = {
   color: PlatformColor('label'),
 };
 
-const tagStyles = {
+const tagStyles: Record<string, MixedStyleDeclaration> = {
   a: {
     color: PlatformColor('link'),
     textDecorationLine: 'none',
