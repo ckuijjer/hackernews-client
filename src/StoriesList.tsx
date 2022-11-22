@@ -5,11 +5,14 @@ import {
   Pressable,
   PlatformColor,
   FlatList,
+  GestureResponderEvent,
 } from 'react-native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Story } from './types';
 import { timeAgo } from './timeAgo';
 import { Icon } from './Icon';
+import { StackParamList } from '../App';
 
 export const StoriesList = ({
   stories,
@@ -18,7 +21,7 @@ export const StoriesList = ({
 }: {
   stories: Story[] | undefined;
   isLoading: boolean;
-  navigation: any; // TODO: replace
+  navigation: NativeStackNavigationProp<StackParamList, 'Story'>;
 }) => {
   if (isLoading) {
     return (
@@ -51,13 +54,12 @@ export const StoriesList = ({
   );
 };
 
-const Item = ({
-  story,
-  onPress,
-}: {
+type ItemProps = {
   story: Story;
-  onPress: any; // TODO: typing
-}) => {
+  onPress: (event: GestureResponderEvent) => void;
+};
+
+const Item = ({ story, onPress }: ItemProps) => {
   return (
     <Pressable style={styles.itemContainer} onPress={onPress}>
       <View style={styles.item}>
