@@ -46,7 +46,7 @@ const App = () => {
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
-      <StatusBar
+      <StatusBar />
     </QueryClientProvider>
   );
 };

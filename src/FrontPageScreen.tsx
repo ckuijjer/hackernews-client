@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import type { StackParamList } from '../App';
 import { getFrontPage } from './connectors/hackernews';
 import { StoriesList } from './StoriesList';
-import { SafeBottomView } from './SafeBottomView';
+import { SafeAreaPaddingBottom } from './SafeAreaPaddingBottom';
 
 type Props = NativeStackScreenProps<StackParamList, 'FrontPage'>;
 
@@ -38,7 +38,7 @@ export const FrontPageScreen = ({ navigation }: Props) => {
           isLoading={isLoading}
           navigation={navigation}
         />
-        <SafeBottomView />
+        <SafeAreaPaddingBottom />
       </ScrollView>
     </SafeAreaView>
   );
@@ -65,8 +65,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     justifyContent: 'center',
-    paddingRight: 20,
-    paddingLeft: 28,
+    paddingHorizontal: 20,
     paddingTop: 28,
     paddingBottom: 12,
   },

@@ -39,6 +39,20 @@ export const getFrontPage = async () => {
   return items.map((item) => mapStory(item));
 };
 
+export const getStory = async (id: number) => {
+  const item: Item = await getValue(`v0/item/${id}`);
+  const comments = await Promise.all((item.kids ?? []).map(getComment));
+
+  return mapStory(item, comments);
+};
+
+const getComment = async (id: number): Promise<Comment> => {
+  const item: Item = await getValue(`v0/item/${id}`);
+  const children = await Promise.all((item.kids ?? []).map(getComment));
+
+  return mapComment(item, children);
+};
+
 const mapStory = (item: Item, comments?: Comment[]): Story => {
   const story: Story = {
     id: item.id,
@@ -56,20 +70,6 @@ const mapStory = (item: Item, comments?: Comment[]): Story => {
   }
 
   return story;
-};
-
-export const getStory = async (id: number) => {
-  const item: Item = await getValue(`v0/item/${id}`);
-  const comments = await Promise.all((item.kids ?? []).map(getComment));
-
-  return mapStory(item, comments);
-};
-
-const getComment = async (id: number): Promise<Comment> => {
-  const item: Item = await getValue(`v0/item/${id}`);
-  const children = await Promise.all((item.kids ?? []).map(getComment));
-
-  return mapComment(item, children);
 };
 
 const mapComment = (item: Item, comments: Comment[]): Comment => {

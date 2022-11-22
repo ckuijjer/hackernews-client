@@ -32,9 +32,6 @@ const tagStyles: Record<string, MixedStyleDeclaration> = {
     color: PlatformColor('link'),
     textDecorationLine: 'none',
   },
-  p: {
-    // backgroundColor: '#9f9',
-  },
   pre: {
     backgroundColor: PlatformColor('secondarySystemBackground'),
     paddingHorizontal: 8,

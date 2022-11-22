@@ -8,10 +8,10 @@ import {
   RefreshControl,
   useWindowDimensions,
   PlatformColor,
+  FlatList,
 } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { FlashList } from '@shopify/flash-list';
 
 import { RenderHtml } from './RenderHtml';
 import type { StackParamList } from '../App';
@@ -19,7 +19,7 @@ import { Comment } from './Comment';
 import { MixedStyleDeclaration } from 'react-native-render-html';
 import { getStory } from './connectors/hackernews';
 import { useQuery } from '@tanstack/react-query';
-import { SafeBottomView } from './SafeBottomView';
+import { SafeAreaPaddingBottom } from './SafeAreaPaddingBottom';
 
 const openInBrowser = (url: string) => {
   WebBrowser.openBrowserAsync(url, {
@@ -38,8 +38,6 @@ export const StoryScreen = ({ route, navigation }: Props) => {
   });
 
   const { width } = useWindowDimensions();
-
-  // navigation.setOptions({ title: story?.title ?? title });
 
   const onPressStoryTitle = () => {
     openInBrowser(data?.url ?? '');
@@ -78,14 +76,14 @@ export const StoryScreen = ({ route, navigation }: Props) => {
             contentWidth={width}
           />
         </View>
-        <FlashList
+        <FlatList
           data={data?.comments}
           renderItem={({ item }) => (
             <Comment comment={item} level={0} key={item.id} />
           )}
           keyExtractor={(comment) => '' + comment.id}
         />
-        <SafeBottomView />
+        <SafeAreaPaddingBottom />
       </ScrollView>
     </View>
   );

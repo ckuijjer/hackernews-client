@@ -7,12 +7,15 @@ import {
   useWindowDimensions,
   PlatformColor,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { RenderHtml } from './RenderHtml';
 import { Comment as CommentType } from './types';
 import { timeAgo } from './timeAgo';
 import { LevelIndicator } from './LevelIndicator';
+import { Icon } from './Icon';
+
+const PADDING_HORIZONTAL = 20;
+const LEVEL_WIDTH = 8;
 
 const getNumberOfChildren = (comment: CommentType): number =>
   comment.comments.map(getNumberOfChildren).reduce((acc, cur) => acc + cur, 1);
@@ -29,8 +32,7 @@ export const Comment = ({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { width } = useWindowDimensions();
 
-  // TODO: so magic!
-  const commentTextWidth = width - 20 * 2 - level * 8;
+  const commentTextWidth = width - 2 * PADDING_HORIZONTAL - level * LEVEL_WIDTH;
   const numberOfChildren = getNumberOfChildren(comment);
 
   return (
@@ -44,25 +46,11 @@ export const Comment = ({
                 <Text style={styles.metadata}>{comment.user}</Text>
                 <Text style={styles.metadata}>
                   {isCollapsed ? (
-                    <>
-                      <Ionicons
-                        name="chatbubble-outline"
-                        // name="chatbubbles-outline"
-                        size={15}
-                        color={PlatformColor('secondaryLabel')}
-                      />
-                      {' +'}
-                      {numberOfChildren}
-                    </>
+                    <Icon name="chatbubble-outline">+{numberOfChildren}</Icon>
                   ) : (
-                    <>
-                      <Ionicons
-                        name="time-outline"
-                        size={15}
-                        color={PlatformColor('secondaryLabel')}
-                      />{' '}
+                    <Icon name="time-outline">
                       {timeAgo.format(comment.createdAt, 'mini')}
-                    </>
+                    </Icon>
                   )}
                 </Text>
               </View>
@@ -76,7 +64,7 @@ export const Comment = ({
           </View>
         </View>
       )}
-      {comment.comments.map((childComment, i, children) => (
+      {comment.comments.map((childComment) => (
         <Comment
           comment={childComment}
           level={level + 1}
@@ -90,13 +78,11 @@ export const Comment = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
+    paddingHorizontal: PADDING_HORIZONTAL,
     flexDirection: 'row',
-    // backgroundColor: '#9f9',
     width: '100%',
   },
   innerContainer: {
-    // backgroundColor: '#f99',
     paddingVertical: 8,
   },
   text: {
