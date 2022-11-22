@@ -1,7 +1,8 @@
 import { Text, StyleSheet, PlatformColor } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
 
-type IconProps = React.PropsWithChildren<{ name: string }>;
+type IconProps = { name: string; children?: React.ReactNode };
 
 export const Icon = ({ name, children }: IconProps) => {
   return (

@@ -44,7 +44,9 @@ export const FrontPageScreen = ({ navigation }: Props) => {
   );
 };
 
-const Header = ({ children }) => {
+type HeaderProps = React.PropsWithChildren<{}>;
+
+const Header = ({ children }: HeaderProps) => {
   return (
     <View style={styles.headerContainer}>
       <Text style={styles.header}>{children}</Text>

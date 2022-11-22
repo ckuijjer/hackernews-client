@@ -21,7 +21,7 @@ export const StoriesList = ({
 }: {
   stories: Story[] | undefined;
   isLoading: boolean;
-  navigation: NativeStackNavigationProp<StackParamList, 'Story'>;
+  navigation: NativeStackNavigationProp<StackParamList, 'FrontPage'>;
 }) => {
   if (isLoading) {
     return (
