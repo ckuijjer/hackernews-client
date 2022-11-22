@@ -9,8 +9,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { FrontPageScreen } from './src/FrontPageScreen';
-import { StoryScreen } from './src/StoryScreen';
+import { FrontPageScreen } from './src/screens/FrontPageScreen';
+import { StoryScreen } from './src/screens/StoryScreen';
 
 import type { Story } from './src/types';
 import { StatusBar } from 'expo-status-bar';

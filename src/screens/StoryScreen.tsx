@@ -13,13 +13,13 @@ import {
 import * as WebBrowser from 'expo-web-browser';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { RenderHtml } from './RenderHtml';
-import type { StackParamList } from '../App';
-import { Comment } from './Comment';
+import { RenderHtml } from '../RenderHtml';
+import type { StackParamList } from '../../App';
+import { Comment } from '../Comment';
 import { MixedStyleDeclaration } from 'react-native-render-html';
-import { getStory } from './connectors/hackernews';
+import { getStory } from '../connectors/hackernews';
 import { useQuery } from '@tanstack/react-query';
-import { SafeAreaPaddingBottom } from './SafeAreaPaddingBottom';
+import { SafeAreaPaddingBottom } from '../SafeAreaPaddingBottom';
 
 const openInBrowser = (url: string) => {
   WebBrowser.openBrowserAsync(url, {
@@ -122,10 +122,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 28,
     paddingBottom: 12,
-  },
-  header: {
-    fontSize: 34,
-    fontWeight: 'bold',
   },
   storyTextContainer: {
     marginHorizontal: 20,

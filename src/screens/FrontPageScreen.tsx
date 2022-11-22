@@ -10,10 +10,10 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@tanstack/react-query';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import type { StackParamList } from '../App';
-import { getFrontPage } from './connectors/hackernews';
-import { StoriesList } from './StoriesList';
-import { SafeAreaPaddingBottom } from './SafeAreaPaddingBottom';
+import type { StackParamList } from '../../App';
+import { getFrontPage } from '../connectors/hackernews';
+import { StoriesList } from '../StoriesList';
+import { SafeAreaPaddingBottom } from '../SafeAreaPaddingBottom';
 
 type Props = NativeStackScreenProps<StackParamList, 'FrontPage'>;
 
