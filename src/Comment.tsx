@@ -11,7 +11,7 @@ import {
 import { RenderHtml } from './RenderHtml';
 import { Comment as CommentType } from './types';
 import { timeAgo } from './timeAgo';
-import { LevelIndicator } from './LevelIndicator';
+import { CommentLevelIndicator } from './CommentLevelIndicator';
 import { Icon } from './Icon';
 
 const PADDING_HORIZONTAL = 20;
@@ -20,15 +20,17 @@ const LEVEL_WIDTH = 8;
 const getNumberOfChildren = (comment: CommentType): number =>
   comment.comments.map(getNumberOfChildren).reduce((acc, cur) => acc + cur, 1);
 
+type CommentProps = {
+  comment: CommentType;
+  level: number;
+  hidden: boolean;
+};
+
 export const Comment = ({
   comment,
   level = 0,
   hidden = false,
-}: {
-  comment: CommentType;
-  level: number;
-  hidden?: boolean;
-}) => {
+}: CommentProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { width } = useWindowDimensions();
 
@@ -38,21 +40,17 @@ export const Comment = ({
   return (
     <>
       {hidden ? null : (
-        <View style={styles.container}>
-          <LevelIndicator level={level} />
-          <View style={[styles.innerContainer, { width: commentTextWidth }]}>
-            <Pressable onPress={() => setIsCollapsed(!isCollapsed)}>
+        <Pressable onPress={() => setIsCollapsed(!isCollapsed)}>
+          <View style={styles.container}>
+            <CommentLevelIndicator level={level} />
+            <View style={[styles.innerContainer, { width: commentTextWidth }]}>
               <View style={styles.metadataContainer}>
                 <Text style={styles.metadata}>{comment.user}</Text>
-                <Text style={styles.metadata}>
-                  {isCollapsed ? (
-                    <Icon name="chatbubble-outline">+{numberOfChildren}</Icon>
-                  ) : (
-                    <Icon name="time-outline">
-                      {timeAgo(comment.createdAt)}
-                    </Icon>
-                  )}
-                </Text>
+                {isCollapsed ? (
+                  <Icon name="chatbubble-outline">+{numberOfChildren}</Icon>
+                ) : (
+                  <Icon name="time-outline">{timeAgo(comment.createdAt)}</Icon>
+                )}
               </View>
               {!isCollapsed && (
                 <RenderHtml
@@ -60,9 +58,9 @@ export const Comment = ({
                   contentWidth={commentTextWidth}
                 />
               )}
-            </Pressable>
+            </View>
           </View>
-        </View>
+        </Pressable>
       )}
       {comment.comments.map((childComment) => (
         <Comment
@@ -84,13 +82,6 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     paddingVertical: 8,
-  },
-  text: {
-    fontSize: 17,
-    fontWeight: '400',
-    lineHeight: 22,
-    letterSpacing: -0.40799999237060547,
-    color: PlatformColor('label'),
   },
   metadataContainer: {
     flexDirection: 'row',

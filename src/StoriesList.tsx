@@ -14,15 +14,17 @@ import { timeAgo } from './timeAgo';
 import { Icon } from './Icon';
 import { StackParamList } from '../App';
 
+type StoriesListProps = {
+  stories: Story[] | undefined;
+  isLoading: boolean;
+  navigation: NativeStackNavigationProp<StackParamList, 'FrontPage'>;
+};
+
 export const StoriesList = ({
   stories,
   isLoading,
   navigation,
-}: {
-  stories: Story[] | undefined;
-  isLoading: boolean;
-  navigation: NativeStackNavigationProp<StackParamList, 'FrontPage'>;
-}) => {
+}: StoriesListProps) => {
   if (isLoading) {
     return (
       <View style={styles.listViewLoading}>

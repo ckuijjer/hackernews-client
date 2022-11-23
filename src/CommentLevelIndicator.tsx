@@ -1,7 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, PlatformColor } from 'react-native';
 
-export const LevelIndicator = ({ level }: { level: number }) => {
+type CommentLevelIndicatorProps = {
+  level: number;
+};
+
+export const CommentLevelIndicator = ({
+  level,
+}: CommentLevelIndicatorProps) => {
   return (
     <View style={styles.container}>
       {Array.from({ length: level })
