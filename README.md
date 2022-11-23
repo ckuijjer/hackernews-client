@@ -18,3 +18,22 @@ Install [Expo Go](https://expo.dev/client) on your phone and afterwards use the 
 ### QR Code for Android
 
 <img src="./qr-code-android.svg" width="200" />
+
+## How to get a development environment running
+
+The easiest way is to use [Expo Go](https://expo.dev/client) on your phone to open the app running on your laptop. This way you can see the changes you make in the code immediately on your phone.
+
+1. Install [Node.js](https://nodejs.org/en/)
+1. Clone the git repository
+1. Run `npm install` in the root directory of the project
+1. Run `npx expo start`
+1. Use the camera of your phone to scan the QR code in the terminal
+
+You should now see the app running on your phone, try making some changes to the code and see the changes immediately on your phone. You could for example change _src/screens/FrontPageScreen.tsx_ and change the `<Header>` to say _Hacker News_ instead of _Front Page_.
+
+It's also possible to run the app in the [iOS Simulator](https://docs.expo.dev/workflow/ios-simulator/) on macOS or the [Android Emulator](https://docs.expo.dev/workflow/android-studio-emulator/) on Windows or macOS.
+
+## Example Hacker News API responses
+
+See [example-hackernews-api-requests.http](./example-hackernews-api-requests.http) for example responses from the Hacker News API. You can use the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension for Visual Studio Code to run the requests.
+

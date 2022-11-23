@@ -1,0 +1,10 @@
+### Get the stories on the Front Page 
+GET https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty
+
+
+### Get the content of a Story
+GET https://hacker-news.firebaseio.com/v0/item/33716201.json?print=pretty
+
+
+### Get the contents of an example Comment
+GET https://hacker-news.firebaseio.com/v0/item/33716517.json?print=pretty
