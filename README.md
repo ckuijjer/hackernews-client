@@ -1,6 +1,6 @@
 # hackernews-client
 
-hackernews-client is a simple client for the Hacker News API.
+hackernews-client is a simple client for the [Hacker News API](https://github.com/HackerNews/API).
 
 ## How to get the App running on your phone
 
