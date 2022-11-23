@@ -5,7 +5,7 @@
 hackernews-client is a simple client for [Hacker News](https://news.ycombinator.com/).
 
 * It's build in [React Native](https://reactnative.dev/) using [Expo](https://expo.dev).
-* It uses [TanStack Query](https://tanstack.com/query/v4) and the [Firebase JavaScript SDK](https://firebase.google.com/docs/web/setup#add-sdk-and-initialize) to get data from the official [Hacker News API](https://github.com/HackerNews/API).
+* It uses [TanStack Query](https://tanstack.com/query/v4) and the [Firebase JavaScript SDK](https://firebase.google.com/docs/web/setup#add-sdk-and-initialize) to get the front page, stories, and comments from the official [Hacker News API](https://github.com/HackerNews/API).
 
 ## How to get the App running on your phone
 
