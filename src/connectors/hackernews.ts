@@ -27,27 +27,28 @@ type Item = {
 
 const unixTimeToDate = (time: number) => new Date(time * 1000);
 
-const getValue = async (path: string) => (await get(ref(db, path))).val();
+const getValue = async <T>(path: string): Promise<T> =>
+  (await get(ref(db, path))).val();
 
 export const getFrontPage = async () => {
-  const ids: number[] = await getValue('v0/topstories');
+  const ids = await getValue<number[]>('v0/topstories');
 
-  const items: Item[] = await Promise.all(
-    ids.map((id: number) => getValue(`v0/item/${id}`)),
+  const items = await Promise.all(
+    ids.map((id) => getValue<Item>(`v0/item/${id}`)),
   );
 
   return items.map((item) => mapStory(item));
 };
 
 export const getStory = async (id: number) => {
-  const item: Item = await getValue(`v0/item/${id}`);
+  const item = await getValue<Item>(`v0/item/${id}`);
   const comments = await Promise.all((item.kids ?? []).map(getComment));
 
   return mapStory(item, comments);
 };
 
 const getComment = async (id: number): Promise<Comment> => {
-  const item: Item = await getValue(`v0/item/${id}`);
+  const item = await getValue<Item>(`v0/item/${id}`);
   const children = await Promise.all((item.kids ?? []).map(getComment));
 
   return mapComment(item, children);
