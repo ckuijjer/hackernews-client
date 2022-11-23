@@ -1,7 +1,5 @@
 import {
   StyleSheet,
-  Text,
-  View,
   ScrollView,
   RefreshControl,
   PlatformColor,
@@ -14,6 +12,7 @@ import type { StackParamList } from '../../App';
 import { getFrontPage } from '../connectors/hackernews';
 import { StoriesList } from '../StoriesList';
 import { SafeAreaPaddingBottom } from '../SafeAreaPaddingBottom';
+import { Header } from '../Header';
 
 type Props = NativeStackScreenProps<StackParamList, 'FrontPage'>;
 
@@ -44,16 +43,6 @@ export const FrontPageScreen = ({ navigation }: Props) => {
   );
 };
 
-type HeaderProps = React.PropsWithChildren<{}>;
-
-const Header = ({ children }: HeaderProps) => {
-  return (
-    <View style={styles.headerContainer}>
-      <Text style={styles.header}>{children}</Text>
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -64,16 +53,5 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  headerContainer: {
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 28,
-    paddingBottom: 12,
-  },
-  header: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: PlatformColor('label'),
   },
 });
