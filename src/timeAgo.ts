@@ -4,4 +4,6 @@ import en from 'javascript-time-ago/locale/en';
 TimeAgo.setDefaultLocale(en.locale);
 TimeAgo.addLocale(en);
 
-export const timeAgo = new TimeAgo('en-US');
+const t = new TimeAgo('en-US');
+
+export const timeAgo = (date: Date) => t.format(date, 'mini');

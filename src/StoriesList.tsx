@@ -67,9 +67,7 @@ const Item = ({ story, onPress }: ItemProps) => {
           <Text style={styles.title}>{story.title}</Text>
         </View>
         <View style={styles.metadataContainer}>
-          <Icon name="ios-time-outline">
-            {timeAgo.format(story.createdAt, 'mini')}
-          </Icon>
+          <Icon name="ios-time-outline">{timeAgo(story.createdAt)}</Icon>
           <Icon name="arrow-up-sharp">{story.score}</Icon>
           <Icon name="chatbubble-outline">{story.numberOfComments}</Icon>
         </View>

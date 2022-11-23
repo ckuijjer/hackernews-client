@@ -49,7 +49,7 @@ export const Comment = ({
                     <Icon name="chatbubble-outline">+{numberOfChildren}</Icon>
                   ) : (
                     <Icon name="time-outline">
-                      {timeAgo.format(comment.createdAt, 'mini')}
+                      {timeAgo(comment.createdAt)}
                     </Icon>
                   )}
                 </Text>
