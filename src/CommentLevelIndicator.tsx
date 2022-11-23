@@ -26,6 +26,6 @@ const styles = StyleSheet.create({
   line: {
     width: 8,
     borderLeftWidth: 2,
-    borderLeftColor: PlatformColor('separator'),
+    borderLeftColor: PlatformColor('systemFill'),
   },
 });
