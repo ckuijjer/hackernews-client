@@ -4,8 +4,6 @@ import {
   StyleSheet,
   View,
   Text,
-  ScrollView,
-  RefreshControl,
   useWindowDimensions,
   PlatformColor,
   FlatList,
@@ -20,6 +18,7 @@ import { MixedStyleDeclaration } from 'react-native-render-html';
 import { getStory } from '../connectors/hackernews';
 import { useQuery } from '@tanstack/react-query';
 import { SafeAreaPaddingBottom } from '../SafeAreaPaddingBottom';
+import { Loading } from '../Loading';
 
 const openInBrowser = (url: string) => {
   WebBrowser.openBrowserAsync(url, {
@@ -30,61 +29,81 @@ const openInBrowser = (url: string) => {
 type Props = NativeStackScreenProps<StackParamList, 'Story'>;
 
 export const StoryScreen = ({ route, navigation }: Props) => {
-  const { id, title } = route.params;
+  const { story } = route.params;
 
   const { data, isLoading, isRefetching, refetch } = useQuery({
-    queryKey: ['item', id],
-    queryFn: () => getStory(id),
+    queryKey: ['item', story.id],
+    queryFn: () => getStory(story.id),
   });
 
+  return (
+    <FlatList
+      data={data?.comments}
+      renderItem={({ item }) => (
+        <Comment comment={item} level={0} key={item.id} hidden={false} />
+      )}
+      keyExtractor={(comment) => '' + comment.id}
+      refreshing={isRefetching}
+      onRefresh={refetch}
+      ListHeaderComponent={() => (
+        <ListHeader
+          title={data?.title ?? story.title}
+          user={data?.user ?? story.user}
+          text={data?.text ?? story.text ?? ''}
+          createdAt={data?.createdAt}
+          url={data?.url ?? story.url}
+          isLoading={isLoading}
+        />
+      )}
+      ListFooterComponent={() => (isLoading ? <SafeAreaPaddingBottom /> : null)}
+      ListEmptyComponent={() => <Loading style={styles.loadingStyle} />}
+      style={styles.container}
+    />
+  );
+};
+
+type ListHeaderProps = {
+  title: string;
+  user: string;
+  createdAt: Date;
+  text: string;
+  url: string;
+  isLoading: boolean;
+};
+const ListHeader = ({
+  title,
+  user,
+  createdAt,
+  text,
+  url,
+  isLoading,
+}: ListHeaderProps) => {
   const { width } = useWindowDimensions();
 
-  const onPressStoryTitle = () => {
-    openInBrowser(data?.url ?? '');
-  };
+  const humanReadableTimeAgo = createdAt
+    ? ` on ${createdAt.toLocaleDateString('en-US', {
+        dateStyle: 'medium',
+      })} at ${createdAt.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      })}`
+    : '';
 
   return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
-        }
-      >
-        <Pressable onPress={onPressStoryTitle}>
-          <Header>{data?.title ?? ''}</Header>
-        </Pressable>
-        <View style={styles.storyTextContainer}>
-          <View style={styles.metadataContainer}>
-            {data?.user && data?.createdAt && (
-              <Text style={styles.metadata}>
-                by {data.user} on{' '}
-                {data.createdAt.toLocaleDateString('en-US', {
-                  dateStyle: 'medium',
-                })}{' '}
-                at{' '}
-                {data.createdAt.toLocaleTimeString('en-US', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  hour12: false,
-                })}
-              </Text>
-            )}
-          </View>
-          <RenderHtml
-            source={{ html: data?.text ?? '' }}
-            contentWidth={width}
-          />
+    <View style={styles.listHeader}>
+      <Pressable onPress={() => openInBrowser(url)}>
+        <Header>{title}</Header>
+      </Pressable>
+      <View style={!isLoading && styles.storyTextContainer}>
+        <View style={styles.metadataContainer}>
+          <Text style={styles.metadata}>
+            by {user}
+            {humanReadableTimeAgo}
+          </Text>
         </View>
-        <FlatList
-          data={data?.comments}
-          renderItem={({ item }) => (
-            <Comment comment={item} level={0} key={item.id} />
-          )}
-          keyExtractor={(comment) => '' + comment.id}
-        />
-        <SafeAreaPaddingBottom />
-      </ScrollView>
+        {text && <RenderHtml source={{ html: text }} contentWidth={width} />}
+      </View>
     </View>
   );
 };
@@ -114,28 +133,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: PlatformColor('systemBackground'),
   },
-  scrollView: {
-    flex: 1,
+  listHeader: {
+    marginTop: 20,
+    marginHorizontal: 20,
+    marginBottom: 8,
   },
   headerContainer: {
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 28,
     paddingBottom: 12,
   },
   storyTextContainer: {
-    marginHorizontal: 20,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: PlatformColor('separator'),
-    paddingBottom: 4,
-    marginBottom: 8,
   },
   metadataContainer: {
-    marginBottom: 4,
+    marginBottom: 8,
   },
   metadata: {
     color: PlatformColor('secondaryLabel'),
     fontSize: 15,
     lineHeight: 20,
+  },
+  loadingStyle: {
+    backgroundColor: PlatformColor('systemBackground'),
   },
 });

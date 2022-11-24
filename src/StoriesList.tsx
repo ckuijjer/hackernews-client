@@ -13,6 +13,8 @@ import { Story } from './types';
 import { timeAgo } from './timeAgo';
 import { Icon } from './Icon';
 import { StackParamList } from '../App';
+import { SafeAreaPaddingBottom } from './SafeAreaPaddingBottom';
+import { Loading } from './Loading';
 
 type StoriesListProps = {
   stories: Story[] | undefined;
@@ -26,11 +28,7 @@ export const StoriesList = ({
   navigation,
 }: StoriesListProps) => {
   if (isLoading) {
-    return (
-      <View style={styles.listViewLoading}>
-        <Text style={styles.listViewLoadingText}>Checking for Updates...</Text>
-      </View>
-    );
+    return <Loading />;
   }
 
   const renderItem = ({ item }: { item: Story }) => (
@@ -38,8 +36,12 @@ export const StoriesList = ({
       story={item}
       onPress={() =>
         navigation.navigate('Story', {
-          id: item.id,
-          title: item.title,
+          story: {
+            id: item.id,
+            user: item.user,
+            title: item.title,
+            text: item.text,
+          },
         })
       }
     />
@@ -52,6 +54,7 @@ export const StoriesList = ({
         renderItem={renderItem}
         keyExtractor={(item) => '' + item.id}
       />
+      <SafeAreaPaddingBottom />
     </View>
   );
 };
@@ -82,16 +85,6 @@ const styles = StyleSheet.create({
   listView: {
     flex: 1,
     backgroundColor: PlatformColor('systemBackground'),
-  },
-  listViewLoading: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: PlatformColor('secondarySystemBackground'),
-    paddingTop: 2 * 44,
-  },
-  listViewLoadingText: {
-    fontSize: 15,
-    color: PlatformColor('secondaryLabel'),
   },
   itemContainer: {
     backgroundColor: PlatformColor('systemBackground'),

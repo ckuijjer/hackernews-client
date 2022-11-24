@@ -3,21 +3,12 @@ import InnerRenderHtml, {
   MixedStyleDeclaration,
   RenderHTMLProps,
 } from 'react-native-render-html';
-import * as WebBrowser from 'expo-web-browser';
 
-const onPress = (event: any, href: string) => {
-  openInBrowser(href);
-};
-
-const openInBrowser = (url: string) => {
-  WebBrowser.openBrowserAsync(url, {
-    presentationStyle: WebBrowser.WebBrowserPresentationStyle.FULL_SCREEN,
-  });
-};
+import { openInBrowser } from './openInBrowser';
 
 const renderersProps = {
   a: {
-    onPress,
+    onPress: (event: any, href: string) => openInBrowser(href),
   },
 };
 

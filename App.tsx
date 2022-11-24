@@ -17,7 +17,9 @@ import { StatusBar } from 'expo-status-bar';
 
 export type StackParamList = {
   FrontPage: undefined;
-  Story: Pick<Story, 'id' | 'title'>;
+  Story: {
+    story: Omit<Story, 'createdAt|comments'>;
+  };
 };
 
 const Stack = createNativeStackNavigator<StackParamList>();
