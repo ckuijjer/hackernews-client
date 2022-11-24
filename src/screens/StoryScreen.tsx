@@ -56,7 +56,9 @@ export const StoryScreen = ({ route, navigation }: Props) => {
         />
       )}
       ListFooterComponent={() => (isLoading ? <SafeAreaPaddingBottom /> : null)}
-      ListEmptyComponent={() => <Loading style={styles.loadingStyle} />}
+      ListEmptyComponent={() =>
+        isLoading ? <Loading style={styles.loadingStyle} /> : null
+      }
       style={styles.container}
     />
   );
@@ -95,15 +97,18 @@ const ListHeader = ({
       <Pressable onPress={() => openInBrowser(url)}>
         <Header>{title}</Header>
       </Pressable>
-      <View style={!isLoading && styles.storyTextContainer}>
-        <View style={styles.metadataContainer}>
-          <Text style={styles.metadata}>
-            by {user}
-            {humanReadableTimeAgo}
-          </Text>
-        </View>
-        {text && <RenderHtml source={{ html: text }} contentWidth={width} />}
+      <View style={styles.metadataContainer}>
+        <Text style={styles.metadata}>
+          by {user}
+          {humanReadableTimeAgo}
+        </Text>
       </View>
+      {text && (
+        <View style={styles.textContainer}>
+          <RenderHtml source={{ html: text }} contentWidth={width} />
+        </View>
+      )}
+      {!isLoading && <View style={styles.separator} />}
     </View>
   );
 };
@@ -141,9 +146,13 @@ const styles = StyleSheet.create({
   headerContainer: {
     paddingBottom: 12,
   },
-  storyTextContainer: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
+  textContainer: {
+    marginBottom: 8,
+  },
+  separator: {
     borderBottomColor: PlatformColor('separator'),
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    marginBottom: 4,
   },
   metadataContainer: {
     marginBottom: 8,
