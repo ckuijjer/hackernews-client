@@ -55,7 +55,7 @@ export const StoryScreen = ({ route, navigation }: Props) => {
           isLoading={isLoading}
         />
       )}
-      ListFooterComponent={() => (isLoading ? <SafeAreaPaddingBottom /> : null)}
+      ListFooterComponent={() => (isLoading ? null : <SafeAreaPaddingBottom />)}
       ListEmptyComponent={() =>
         isLoading ? <Loading style={styles.loadingStyle} /> : null
       }
