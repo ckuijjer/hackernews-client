@@ -1,0 +1,1754 @@
+{
+  "id": 33726816,
+  "user": "hardmaru",
+  "title": "Stable Diffusion 2.0",
+  "url": "https://stability.ai/blog/stable-diffusion-v2-release",
+  "score": 709,
+  "numberOfComments": 226,
+  "createdAt": "2022-11-24T01:28:02.000Z",
+  "comments": [
+    {
+      "id": 33727449,
+      "user": "kmeisthax",
+      "text": "Is there a good explanation of how to train this from scratch with a custom dataset[0]?<p>I&#x27;ve been looking around the documentation on Huggingface, but all I could find was either how to train unconditional U-Nets[1], or how to use the pretrained Stable Diffusion model to process image prompts (which I already know how to do). Writing a training loop for CLIP manually wound up with me banging against all sorts of strange roadblocks and missing bits of documentation, and I still don&#x27;t have it working. I&#x27;m pretty sure I also need some other trainables at some point, too.<p>[0] Specifically, Wikimedia Commons images in the PD-Art-100 category, because the images will be public domain in the US and the labels CC-BY-SA. This would rule out a lot of the complaints people have about living artists&#x27; work getting scraped into the machine; and probably satisfy Debian&#x27;s ML guidelines.<p>[1] Which actually <i>does work</i>",
+      "createdAt": "2022-11-24T03:16:08.000Z",
+      "comments": [
+        {
+          "id": 33727955,
+          "user": "__rito__",
+          "text": "Well, you can learn about generative models from MOOCs like the ones taught at UMich, Universitat Tubingen, or New York University (taught by Yann LeCun), and can gain knowledge there.<p>You can also watch the fast.ai MOOC titled Deep Learning from Scratch to Stable Diffusion [0].<p>You can also look at open source implementation of text2image models like Dall-E Mini or the works of lucid rain.<p>I worked on the Dall-E Mini project, and the technical knowhow that you need isn’t closely taught at MOOCs. You need to know, on top of Deep Learning theory, many tricks, gotchas, workarounds, etc.<p>You could follow the works of Eluther AI, follow Boris Dayma (project leader of Dall-E Mini) and Horace Ho on twitter. And any such people who have significant experience in <i>practical</i> AI and regularly share their tricks. The PyTorch forums is also a good place.<p>Learn PyTorch and&#x2F;or JAX&#x2F;Flax really well.<p>[0]: <a href=\"https:&#x2F;&#x2F;www.fast.ai&#x2F;posts&#x2F;part2-2022.html\" rel=\"nofollow\">https:&#x2F;&#x2F;www.fast.ai&#x2F;posts&#x2F;part2-2022.html</a>",
+          "createdAt": "2022-11-24T05:02:50.000Z",
+          "comments": []
+        },
+        {
+          "id": 33728036,
+          "user": "TaylorAlexander",
+          "text": "Ah I am glad to see someone else talking about using public domain images!<p>Honestly it baffles me that in all this discussion, I rarely see people discussing how to do this with appropriately licensed images. There are some pretty large datasets out there of public images, and doing so might even help encourage more people to contribute to open datasets.<p>Also if the big ML companies HAD to use open images, they would be forced to figure out sample efficiency for these models. Which is good for the ML community! They would also be motivated to encourage the creation of larger openly licensed datasets, which would be great. I still think if we got twitter and other social media sites to add image license options, then people who want to contribute to open datasets could do so in an easy and socially contagious way. Maybe this would be a good project for mastodon contributors, since that is something we actually have control over. I&#x27;d be happy to license my photography with an open license!<p>It is really a wonderful idea to try to do this with open data. Maybe it won&#x27;t work very well with current techniques, but that just becomes an engineering problem worth looking at (sample efficiency).",
+          "createdAt": "2022-11-24T05:24:39.000Z",
+          "comments": [
+            {
+              "id": 33728785,
+              "user": "acadapter",
+              "text": "Human artists derive their inspiration and styles from a large set of copyrighted works, but they are free to produce new art despite of that. Art would have developed much slower and be much poorer if, for example, Impressionism or Cubism had been entangled in long ownership confrontations in courts.<p>Then there&#x27;s the fact that humanity has been able to develop and share art and literary works for thousands of years without the modern copyright system.<p>It would be interesting to see if this technology can erode the copyright concept a bit. Maybe not remove it completely, but perhaps influence people to create wider definitions for &quot;fair use&quot;, and undo the extensions that Disney lobbyists have created.",
+              "createdAt": "2022-11-24T07:51:35.000Z",
+              "comments": []
+            },
+            {
+              "id": 33728735,
+              "user": "bowsamic",
+              "text": "No one is ever going to stop using all the available images until there is a law against it. Why would they?",
+              "createdAt": "2022-11-24T07:44:49.000Z",
+              "comments": []
+            }
+          ]
+        },
+        {
+          "id": 33727467,
+          "user": "echelon",
+          "text": "&gt; train this from scratch<p>If you&#x27;re talking about training from scratch and not fine tuning, that won&#x27;t be cheap or easy to do. You need thousands upon thousands of dollars of GPU compute [1] and a gigantic data set.<p>I trained something nowhere near the scale of Stable Diffusion on Lambda Labs, and my bill was $14,000.<p>[1] Assuming you rent GPUs hourly, because buying the hardware outright will be prohibitively expensive.",
+          "createdAt": "2022-11-24T03:20:23.000Z",
+          "comments": [
+            {
+              "id": 33727593,
+              "user": "kmeisthax",
+              "text": "I have... ~11TBs of free disk space and a 1080ti. Obviously nowhere close to being able to crunch all of Wikimedia Commons, but I&#x27;m also not trying to <i>beat</i> Stability AI at their own game. I <i>just</i> want to move the arguments people have about art generators beyond &quot;this is unethical copyright laundering&quot; and &quot;the model is taking reference just like a real human&quot;.",
+              "createdAt": "2022-11-24T03:45:05.000Z",
+              "comments": [
+                {
+                  "id": 33727633,
+                  "user": "ftufek",
+                  "text": "To put things in perspective, the dataset it&#x27;s trained on is ~240TB and Stability  has over ~4000 Nvidia A100 (which is much faster than a 1080ti). Without those ingredients, you&#x27;re highly unlikely to get a model that&#x27;s worth using (it&#x27;ll produce mostly useless outputs).<p>That argument also makes little sense when you consider that the model is a couple gigabytes itself, it <i>can&#x27;t</i> memorize 240TB of data, so it &quot;learned&quot;.<p>But if you want to create custom versions of SD, you can always try out dreambooth: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;XavierXiao&#x2F;Dreambooth-Stable-Diffusion\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;XavierXiao&#x2F;Dreambooth-Stable-Diffusion</a>, that one is actually feasible without spending millions of dollars on GPUs.",
+                  "createdAt": "2022-11-24T03:53:03.000Z",
+                  "comments": [
+                    {
+                      "id": 33728790,
+                      "user": "otabdeveloper4",
+                      "text": "&gt; when you consider that the model is a couple gigabytes itself, it can&#x27;t memorize 240TB of data, so it &quot;learned&quot;.<p>This is just lossy compression with a large and well-tuned (to the expected problem domain) dictionary.<p>Video compression codecs can achieve a 500x compression ratio, and they are general-purpose.",
+                      "createdAt": "2022-11-24T07:52:20.000Z",
+                      "comments": []
+                    },
+                    {
+                      "id": 33728607,
+                      "user": "wmwragg",
+                      "text": "Well that would be ~4000 people each with an Nvidia A100 equivalent, or more with less, this would be an open effort after all. Something similar to folding@home could be used. Obviously the software for that would need to be written, but I don&#x27;t think the idea is unlikely. The power of the commons shouldn&#x27;t be underestimated.",
+                      "createdAt": "2022-11-24T07:21:09.000Z",
+                      "comments": [
+                        {
+                          "id": 33728675,
+                          "user": "govg",
+                          "text": "It&#x27;s not super clear whether the training task can be scaled in a manner similar to protein folding. It&#x27;s a bit trickier to optimise ML workflows across computation nodes because you need more real time aggregation and decision making (for the algorithms).",
+                          "createdAt": "2022-11-24T07:32:40.000Z",
+                          "comments": []
+                        }
+                      ]
+                    },
+                    {
+                      "id": 33728242,
+                      "user": "wokwokwok",
+                      "text": "Quite right, but…<p>&gt; That argument also makes little sense when you consider that the model is a couple gigabytes itself, it can&#x27;t memorize 240TB of data, so it &quot;learned&quot;.<p>The matter is really very nuanced and trivialising it that way is unhelpful.<p>If I recompress 240TB as super low quality jpgs and manage to zip them up as single file that is <i>significantly</i> smaller than 240TB (because you can), does the fact they are not <i>pixel perfect</i> matches for the original images mean you’re not violating copyright?<p>If an AI model can generate statistically significantly similar images from the training data, with a trivial guessable prompt (“a picture by xxx” or whatever) then it’s entirely arguable that the model is similarly infringing.<p>The exact compression algorithm, be it model or jpg or zip is <i>irrelevant</i> to that point.<p>It’s entirely reasonable to say, if this is so good at learning, why don’t you train it without the art station dataset.<p>…because if it’s just learning techniques, generic public domain art should be fine right? Can’t you just engineer the prompting better so that it generates “by Greg Rutkowski“ images without being trained on actual images by Greg?<p>If not, then it’s not just learning technique, it’s copying.<p>So; tldr: there’s <i>plenty</i> of scope for trying to train a model on an ethically sourced dataset, and investigation of techniques vs copying in generative models.<p>It is <i>100%</i> not something we can just brush off.",
+                      "createdAt": "2022-11-24T06:11:24.000Z",
+                      "comments": [
+                        {
+                          "id": 33728728,
+                          "user": "pygy_",
+                          "text": "<i>&gt; Can’t you just engineer the prompting better so that it generates “by Greg Rutkowski“ images without being trained on actual images by Greg?</i><p>You couldn&#x27;t teach a human to do that without them having seen Greg&#x27;s art. There are elements of stroke, palette, lightning and composition that can&#x27;t be fully captured by natural language (short of encoding a ML model, which defeats the point).",
+                          "createdAt": "2022-11-24T07:42:11.000Z",
+                          "comments": []
+                        },
+                        {
+                          "id": 33728579,
+                          "user": "CamperBob2",
+                          "text": "<i>If I recompress 240TB as super low quality jpgs and manage to zip them up as single file that is significantly smaller than 240TB (because you can), does the fact they are not pixel perfect matches for the original images mean you’re not violating copyright?</i><p>If you compress them down to two or three bytes each, which is what the process effectively does, then yes, I would argue that we stand to lose a LOT as a technological society by enforcing existing copyright laws on IP that has undergone such an extreme transformation.",
+                          "createdAt": "2022-11-24T07:16:14.000Z",
+                          "comments": []
+                        },
+                        {
+                          "id": 33728298,
+                          "user": "visarga",
+                          "text": "&gt; The matter is really very nuanced and trivialising it that way is unhelpful.<p>Harping about copyrights in the Age of Diffusion Models is unhelpful (for artists) like protesting against a tsunami. It&#x27;s time to move up the ladder.<p>ML engineers have a similar predicament - GPT-3 like models can solve at first try, without specialised training, tasks that took a whole team a few years of work. Who dares still use LSTMs now like it&#x27;s 2017? Moving up the ladder, learning to prompt and fine-tune ready made models is the only solution for ML eng.<p>The reckoning is coming for programmers and for writers as well. Even scientific papers can be generated by LLMs now - see the Galactica scandal where some detractors said it will empower people to write fake papers. It also has the best ability to generate appropriate citations.<p>The conclusion is that we need to give up some of the human-only tasks and hop on the new train.",
+                          "createdAt": "2022-11-24T06:21:25.000Z",
+                          "comments": []
+                        }
+                      ]
+                    },
+                    {
+                      "id": 33728263,
+                      "user": "visarga",
+                      "text": "It&#x27;s &quot;keeping&quot; 1 byte worth of information from each input example. The SD models are 5GB together, and the dataset 2.3B images.",
+                      "createdAt": "2022-11-24T06:14:19.000Z",
+                      "comments": []
+                    }
+                  ]
+                },
+                {
+                  "id": 33728589,
+                  "createdAt": "2022-11-24T07:17:40.000Z",
+                  "comments": []
+                },
+                {
+                  "id": 33728028,
+                  "user": "pkdpic",
+                  "text": "I think it&#x27;s a great idea regardless of practicality &#x2F; implementation which I think is generally understood to be largely a matter of time, money and hardware. I feel like you write it up so the idea gets out there or you can pitch it to someone if the opportunity arises.<p>Oh and also I second the fast.ai suggestion, part 2 is 100% focused on implementing stable diffusion from scratch in the python standard library and it&#x27;s amazing all around. The course is still actively coming out but the first few lessons are freely available already and the rest sounds like it will be made freely available soon.",
+                  "createdAt": "2022-11-24T05:23:08.000Z",
+                  "comments": []
+                }
+              ]
+            },
+            {
+              "id": 33727638,
+              "user": "Jack000",
+              "text": "Depends on the dataset. You can probably get decent results by restricting the modality of the images (faces, cars, bedrooms etc)<p>I trained from scratch with 4x3090 and while it’s not as good as SD it’s surprisingly better with hands.",
+              "createdAt": "2022-11-24T03:53:39.000Z",
+              "comments": [
+                {
+                  "id": 33727896,
+                  "user": "hackater",
+                  "text": "Can you go into a bit more detail?\nWhat architecture did you use? Is the month training time really just training with mini batches with a constant learning rate? Or are these many failed attempts until you trained a successful model for a few days in the end?<p>I particularly interested in the image generation part (the DDPM&#x2F;SGM)",
+                  "createdAt": "2022-11-24T04:47:08.000Z",
+                  "comments": [
+                    {
+                      "id": 33727949,
+                      "user": "Jack000",
+                      "text": "Yeah I did have a few false starts. Total time is more like 3 months vs 1 month for the final model. For small scale training I found it’s necessary to use a long lr warmup period, followed by constant lr.<p>There’s code on my GitHub (glid3)<p>edit: The architecture is identical to SD except I trained on 256px images with cosine noise schedule instead of linear. Using the cosine schedule makes the unet converge faster but can overfit if overtrained.<p>edit 2: Just tried it again and my model is also pretty bad at hands actually. It does get lucky once in a while though.",
+                      "createdAt": "2022-11-24T05:02:16.000Z",
+                      "comments": []
+                    }
+                  ]
+                },
+                {
+                  "id": 33727731,
+                  "user": "svnt",
+                  "text": "How long did the training take on 4 3090s?",
+                  "createdAt": "2022-11-24T04:16:01.000Z",
+                  "comments": [
+                    {
+                      "id": 33727792,
+                      "user": "Jack000",
+                      "text": "About 1 month actual training time. It’s a smaller (650m) model and probably still undertrained. Glid3 on GitHub.",
+                      "createdAt": "2022-11-24T04:27:46.000Z",
+                      "comments": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 33727596,
+              "user": "fastball",
+              "createdAt": "2022-11-24T03:46:31.000Z",
+              "comments": [
+                {
+                  "id": 33727640,
+                  "user": "adamdusty",
+                  "text": "&quot;nowhere near&quot;",
+                  "createdAt": "2022-11-24T03:53:48.000Z",
+                  "comments": [
+                    {
+                      "id": 33727822,
+                      "user": "fastball",
+                      "text": "Yep, missed the word &quot;nowhere&quot;. My mistake.",
+                      "createdAt": "2022-11-24T04:32:19.000Z",
+                      "comments": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 33727702,
+          "user": "ShamelessC",
+          "text": "&gt;  Writing a training loop for CLIP manually wound up with me banging against all sorts of strange roadblocks and missing bits of documentation, and I still don&#x27;t have it working.<p>There is working training code for openCLIP <a href=\"https:&#x2F;&#x2F;github.com&#x2F;mlfoundations&#x2F;open_clip\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;mlfoundations&#x2F;open_clip</a><p>But training multi-modal text-to-image models is still a _very_ new thing, in terms of the software world. Given that, my experience has been that it&#x27;s never been easier to get to work on this stuff from the software POV. The hardware is the tricky bit (and preventing bandwidth issues on distributed systems).<p>That isn&#x27;t to say that there isn&#x27;t code out there for training. Just that you&#x27;re going to run into issues and learning how to solve those issues as you encounter them is going to be a highly valuable skill soon.<p>edit:<p>I&#x27;m seeing in a sibling comment that you&#x27;re hoping to train your own model from scratch on a single GPU. Currently, at least, scaling laws for transformers [0] mean that the only models that perform much of anything at all need a lot of parameters. The bigger the better - as far as we can tell.<p>Very simply - researchers start by making a model big enough to fill a single GPU. Then, they replicate the model across hundreds&#x2F;thousands of GPU&#x27;s, but feed each on a different set of the data. Model updates are then synchronized, hopefully taking advantage of some sort of pipelining to avoid bottlenecks. This is referred to as data-parallel.<p>[0] <a href=\"https:&#x2F;&#x2F;www.lesswrong.com&#x2F;tag&#x2F;scaling-laws\" rel=\"nofollow\">https:&#x2F;&#x2F;www.lesswrong.com&#x2F;tag&#x2F;scaling-laws</a>",
+          "createdAt": "2022-11-24T04:10:04.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727221,
+      "user": "LASR",
+      "text": "I am a solo dev working on a creative content creation app to leverage the latest developments in AI.<p>Demoing even the v1 of stable diffusion to the non-technical general users blows them away completely.<p>Now that v2 is here, it’s clear we’re not able to keep pace in developing products to take advantage of it.<p>The general public still is blown away by autosuggest in mobile OS keyboards. Very few really know how far AI tech has evolved.<p>Huge market opportunity for folks wanting to ride the wave here.<p>This is exciting for me personally, since I can keep plugging in newer and better versions of these models into my app and it becomes better.<p>Even some of the tech folks I demo my app to, are simply amazed how I can manage to do this solo.",
+      "createdAt": "2022-11-24T02:28:43.000Z",
+      "comments": [
+        {
+          "id": 33727365,
+          "user": "mberning",
+          "text": "I don’t know anybody that is blown away by keyboard auto suggest. It’s wrong as often as it is right. Not saying it isn’t useful, but let’s not oversell it.",
+          "createdAt": "2022-11-24T02:55:08.000Z",
+          "comments": [
+            {
+              "id": 33727415,
+              "user": "SkyPuncher",
+              "text": "Lol. Especially the AI version of keyboard auto suggest.<p>Let&#x27;s take a deterministic algorithm that predictably corrects your typos and build it on AI. It will offer you no benefits, but it will completely destroy the utility since it will never work predictably or accurately.",
+              "createdAt": "2022-11-24T03:07:05.000Z",
+              "comments": [
+                {
+                  "id": 33728616,
+                  "user": "FPGAhacker",
+                  "text": "Auto correct and auto suggest are related but different things.<p>Suggest puts up options for the next word.",
+                  "createdAt": "2022-11-24T07:22:52.000Z",
+                  "comments": []
+                }
+              ]
+            },
+            {
+              "id": 33727430,
+              "user": "hackernewds",
+              "text": "Strongly believe selection bias among the folks you&#x27;re getting this impression from. The avg user is not our circle.",
+              "createdAt": "2022-11-24T03:11:44.000Z",
+              "comments": [
+                {
+                  "id": 33727873,
+                  "user": "LASR",
+                  "text": "This is exactly it.<p>Honestly I was quite surprised at how regular people are impressed by this tech. I was also surprised by how little regular people are aware of this tech even existing.<p>We, on hackernews, on a thread about Stable Diffusion, are of course not too unimpressed.<p>But that’s not the vast majority of people.",
+                  "createdAt": "2022-11-24T04:41:15.000Z",
+                  "comments": [
+                    {
+                      "id": 33728602,
+                      "createdAt": "2022-11-24T07:20:11.000Z",
+                      "comments": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 33727691,
+              "user": "bongobingo1",
+              "text": "&gt; Impressive isn&#x27;t it!<p>&gt;&gt; Yeah! Don&#x27;t they make a trillion dollars a year? How is it so crappy?",
+              "createdAt": "2022-11-24T04:08:04.000Z",
+              "comments": [
+                {
+                  "id": 33727907,
+                  "user": "Godel_unicode",
+                  "text": "This is universally the result that I see from my nontechnical friends; Apple has literally all the money and Siri has the listening comprehension of a drunk beagle.",
+                  "createdAt": "2022-11-24T04:48:57.000Z",
+                  "comments": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 33728208,
+          "user": "prakhar897",
+          "text": "I&#x27;m in a kind of same boat. I think indie games are the way to show true potential of SD.<p>Hence, I&#x27;m working on <a href=\"http:&#x2F;&#x2F;diffudle.com&#x2F;\" rel=\"nofollow\">http:&#x2F;&#x2F;diffudle.com&#x2F;</a> which is a mix of Wheel Of Fortune + Stable Diffusion + Wordle. I Can&#x27;t figure it out but feels to me like its lacking something.",
+          "createdAt": "2022-11-24T06:04:48.000Z",
+          "comments": [
+            {
+              "id": 33728401,
+              "user": "stymaar",
+              "text": "&gt; Hence, I&#x27;m working on <a href=\"http:&#x2F;&#x2F;diffudle.com&#x2F;\" rel=\"nofollow\">http:&#x2F;&#x2F;diffudle.com&#x2F;</a> which is a mix of Wheel Of Fortune + Stable Diffusion + Wordle. I Can&#x27;t figure it out but feels to me like its lacking something.<p>That&#x27;s awesome, I love it!",
+              "createdAt": "2022-11-24T06:42:41.000Z",
+              "comments": []
+            }
+          ]
+        },
+        {
+          "id": 33728638,
+          "user": "nextlevelwizard",
+          "text": "&gt;Demoing even the v1 of stable diffusion to the non-technical general users blows them away completely.<p>What do the results have to do with &quot;non-technical&quot; people? I am blown away every time I run stable diffusion of the images I get out from it.",
+          "createdAt": "2022-11-24T07:26:58.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727243,
+          "user": "searchableguy",
+          "text": "What are you building?",
+          "createdAt": "2022-11-24T02:31:00.000Z",
+          "comments": [
+            {
+              "id": 33727800,
+              "user": "LASR",
+              "text": "It started as an AI-powered MS paint for my son. But after demoing it to a few coworkers, it morphed into a bit more than that. Now it’s more of a storybook creator that young kids can use to generate their own stories.<p>Not looking to monetize at all. But inference is expensive. So might have something to cover costs.<p>Some backstory:<p>When I was growing up in the early 90s, my dad took me into his office over the weekends when he was doing some overtime paperwork. I would be on his IBM Windows 3.1 workstation. He didn’t have any games on his work computer, so I would spend the entire day “playing” with MS Paint. I couldn’t read yet (3-4 years old), but I was able to figure it out.<p>We didn’t have a computer at home. But seeing how I was so good at it, my parents bought one. I eventually got into coding etc. All of this defined who I am today.<p>So I wanted to recreate some of this magic, for my own son. He’s 3 months old, so not quite the right age. But I have some free time on parental leave. So why not. Might be useful for parents with 3-5 year olds.",
+              "createdAt": "2022-11-24T04:28:59.000Z",
+              "comments": [
+                {
+                  "id": 33728757,
+                  "user": "M4v3R",
+                  "text": "As a father of a 1.5 year old girl this sounds incredibly awesome and I&#x27;m hoping you will release it somehow, looking forward to your Show HN post!",
+                  "createdAt": "2022-11-24T07:47:43.000Z",
+                  "comments": []
+                },
+                {
+                  "id": 33728125,
+                  "user": "ericd",
+                  "text": "I have some young kids, would love to try this out with them if you’re sharing.",
+                  "createdAt": "2022-11-24T05:44:39.000Z",
+                  "comments": [
+                    {
+                      "id": 33728416,
+                      "user": "stymaar",
+                      "text": "Same here! (And I also remember playing with MS paint on my dad&#x27;s work computer)",
+                      "createdAt": "2022-11-24T06:44:28.000Z",
+                      "comments": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 33727383,
+              "user": "KidComputer",
+              "createdAt": "2022-11-24T03:00:38.000Z",
+              "comments": [
+                {
+                  "id": 33727426,
+                  "user": "wfme",
+                  "text": "This comment pretty clearly breaks the commenting guidelines <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;newsguidelines.html\" rel=\"nofollow\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;newsguidelines.html</a><p>&gt;Be kind. Don&#x27;t be snarky. Have curious conversation; don&#x27;t cross-examine. Please don&#x27;t fulminate. Please don&#x27;t sneer, including at the rest of the community. Edit out swipes.<p>Comments should get more thoughtful and substantive, not less, as a topic gets more divisive.",
+                  "createdAt": "2022-11-24T03:10:50.000Z",
+                  "comments": [
+                    {
+                      "id": 33727723,
+                      "user": "KidComputer",
+                      "text": "no",
+                      "createdAt": "2022-11-24T04:14:24.000Z",
+                      "comments": []
+                    }
+                  ]
+                },
+                {
+                  "id": 33727435,
+                  "user": "hackernewds",
+                  "text": "This is unnecessarily presumptive and targeted, offering no practical value",
+                  "createdAt": "2022-11-24T03:12:45.000Z",
+                  "comments": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 33727760,
+          "user": "tamersalama",
+          "text": "I agree that this a big wave, but I&#x27;m still struggling to find commercial (read: large organizations) applications.",
+          "createdAt": "2022-11-24T04:20:50.000Z",
+          "comments": [
+            {
+              "id": 33728293,
+              "user": "fsloth",
+              "text": "I guess you need to look at the current TAM for visual production in general. \nThat&#x27;s the baseline (so includes visualization studios, agencies, game studios etc). Generally this potentially can help in many labour intensive parts of a creative visual process.<p>Is that a &quot;large&quot; organization market or not depends on your metric and what the market positioning of the offering is. I would see applications in both specialist content creation tools as well as &quot;stock photos and merch&quot;.<p>In terms of finding stock photos, if you add a better text api that is easier to control this probably can compete with static stock photos in the sense that people can tune their images as much as they like. For example with their corporate merch (Imagine producing a slideset at Acme co. &quot;Please give me an elephant and walrus wearing acme caps&quot;.<p>Ad agencies already love that they can train a model to quickly iterate product shot ideas extremely rapidly.<p>Then we have &quot;the usual&quot; effect automation has on market demand - automation increases the productivity of a task requiring labour, hence allowing to reduce the cost of a unit of production, which generally increases the demand. I.e. creative stuff will be cheaper to do, you won&#x27;t replace artists, but suddenly the dude or dudette who spent hours just tweaking stuff has their own art studio at finger tips to command. They can get so much more done much faster.<p>The tech is not 100% bullet proof yet but at this pace it will be good enough soon (or probably is for several applications if there was just an UX sugaring targeting specific domain workflow).",
+              "createdAt": "2022-11-24T06:20:01.000Z",
+              "comments": []
+            },
+            {
+              "id": 33727954,
+              "user": "ftufek",
+              "text": "I suspect those applications will come from specializing the model. For example, there&#x27;s people that have avatar generators or automated ad creatives. A cool application I&#x27;ve been toying with is generating icons.",
+              "createdAt": "2022-11-24T05:02:47.000Z",
+              "comments": [
+                {
+                  "id": 33728241,
+                  "user": "subbu",
+                  "text": "Train the model with <a href=\"https:&#x2F;&#x2F;lucide.dev&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;lucide.dev&#x2F;</a> and ask it to generate a few more?",
+                  "createdAt": "2022-11-24T06:11:17.000Z",
+                  "comments": []
+                }
+              ]
+            },
+            {
+              "id": 33727961,
+              "user": "wodenokoto",
+              "text": "Built a plugin for Power Point and sell it corporate wide.",
+              "createdAt": "2022-11-24T05:04:17.000Z",
+              "comments": [
+                {
+                  "id": 33728110,
+                  "user": "abeppu",
+                  "text": "Does it actually make anything in the corporate world better to use generated images in slides? When coworkers use stock photos which were presumably made by humans operating actual cameras, I don&#x27;t think it&#x27;s clear that their presentation is actually more valuable as a result.",
+                  "createdAt": "2022-11-24T05:42:39.000Z",
+                  "comments": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 33727437,
+          "user": "monero-xmr",
+          "text": "There just isn’t a lot of market opportunities where being right 99% of the time is good enough. If you are operating at scale and 1&#x2F;100 decisions are wrong, the outcome is poor and often highly off-putting to users.<p>It’s possible this time is different, but people at my company were entertained by DALLE for all of 5 minutes before no one ever mentioned it again. The value proposition is simply low.",
+          "createdAt": "2022-11-24T03:13:22.000Z",
+          "comments": [
+            {
+              "id": 33727491,
+              "user": "dougmwne",
+              "text": "Are you kidding? Many times corporate decisions are being made effectively at random. Thinking that the average company operates with a 999 batting average is a total fantasy.",
+              "createdAt": "2022-11-24T03:23:29.000Z",
+              "comments": [
+                {
+                  "id": 33727542,
+                  "user": "xnyan",
+                  "text": "When our c suite decides on an ad campaign and tells our artists to draw normal humans, those people have 3 legs or upside down teeth exactly 0% of the time. Humans have many many limitations, but with every model I’ve tested there’s a set of errors that would virtually never be made by any human.",
+                  "createdAt": "2022-11-24T03:33:29.000Z",
+                  "comments": [
+                    {
+                      "id": 33728647,
+                      "user": "kennyloginz",
+                      "text": "As an outsider, this rings true to me.     I still don’t see any reduction of hours involved in producing professional level works. Generating YouTube thumbnails, sure.",
+                      "createdAt": "2022-11-24T07:28:28.000Z",
+                      "comments": []
+                    },
+                    {
+                      "id": 33728567,
+                      "user": "iceburgcrm",
+                      "text": "In fairness ad campaigns have people who review the creative.  Now I could see a band using an image like that or something edgy",
+                      "createdAt": "2022-11-24T07:14:19.000Z",
+                      "comments": []
+                    },
+                    {
+                      "id": 33728373,
+                      "user": "fragmede",
+                      "text": "I agree. Cars break down and crash, they&#x27;ll never replace horses.",
+                      "createdAt": "2022-11-24T06:36:51.000Z",
+                      "comments": [
+                        {
+                          "id": 33728622,
+                          "user": "foobazgt",
+                          "text": "I think this analogy doesn&#x27;t hold water - horses aren&#x27;t exactly a beacon of reliability (having owned one).<p>I&#x27;ve already seen tools that support workflows where you compose art by iteratively generating a piece of it, performing some correction, and repeating. So, I think there&#x27;s room in the art world for less than perfectly generated art. That said, let&#x27;s not kid ourselves that the typical failure modality of ML today (99% correct enough, 1% disastrously incorrect) doesn&#x27;t either cause it to be entirely useless in many applications or end up wreaking havoc on end users in others.",
+                          "createdAt": "2022-11-24T07:23:41.000Z",
+                          "comments": []
+                        },
+                        {
+                          "id": 33728709,
+                          "user": "sussmannbaka",
+                          "text": "the cars we&#x27;re talking about here have a random amount of wheels and sometimes morph into cosmic horrors mid-ride.",
+                          "createdAt": "2022-11-24T07:39:15.000Z",
+                          "comments": []
+                        }
+                      ]
+                    },
+                    {
+                      "id": 33727591,
+                      "user": "wizeman",
+                      "text": "&gt; with every model I’ve tested there’s a set of errors that would virtually never be made by any human<p>I guess you&#x27;ve never seen my drawings...",
+                      "createdAt": "2022-11-24T03:44:40.000Z",
+                      "comments": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 33727298,
+          "user": "malermeister",
+          "text": "What kind of stuff does your app do that blows people away?",
+          "createdAt": "2022-11-24T02:42:23.000Z",
+          "comments": [
+            {
+              "id": 33727397,
+              "user": "butMebbe",
+              "text": "Wraps an ML model that blows people away in opinionated UX",
+              "createdAt": "2022-11-24T03:03:06.000Z",
+              "comments": [
+                {
+                  "id": 33728750,
+                  "user": "kennyloginz",
+                  "text": "That’s a little vague, so forgive me if I’m assuming too far.<p>You are making changes to a products UX based on graphical inference?<p>I could see a decent business supporting the logic problems a UX designed from AI graphics would introduce ;)",
+                  "createdAt": "2022-11-24T07:46:33.000Z",
+                  "comments": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 33727297,
+          "createdAt": "2022-11-24T02:42:19.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33726878,
+      "user": "minimaxir",
+      "text": "GitHub Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;stablediffusion\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;stablediffusion</a><p>HuggingFace Space (currently overloaded unsurprisingly): <a href=\"https:&#x2F;&#x2F;huggingface.co&#x2F;spaces&#x2F;stabilityai&#x2F;stable-diffusion\" rel=\"nofollow\">https:&#x2F;&#x2F;huggingface.co&#x2F;spaces&#x2F;stabilityai&#x2F;stable-diffusion</a><p>Doing a 2.0 release on a (US) 2-day holiday weekend is an interesting move.<p>It seems a tad more difficult to set up the model than the previous version.",
+      "createdAt": "2022-11-24T01:35:56.000Z",
+      "comments": [
+        {
+          "id": 33727064,
+          "user": "Operyl",
+          "text": "Seems like a potentially good time to launch it, lots of young people with free time.",
+          "createdAt": "2022-11-24T02:03:06.000Z",
+          "comments": [
+            {
+              "id": 33728775,
+              "user": "kennyloginz",
+              "text": "Definitely something to talk about or share with the fam.",
+              "createdAt": "2022-11-24T07:50:13.000Z",
+              "comments": []
+            },
+            {
+              "id": 33727118,
+              "user": "Gigachad",
+              "text": "Less likely journalist whingers will pick it up too.",
+              "createdAt": "2022-11-24T02:11:38.000Z",
+              "comments": []
+            }
+          ]
+        },
+        {
+          "id": 33727015,
+          "user": "gst",
+          "text": "&gt; Doing a 2.0 release on a (US) 2-day holiday weekend is an interesting move.<p>Their HQ seems to be located in London.",
+          "createdAt": "2022-11-24T01:51:47.000Z",
+          "comments": [
+            {
+              "id": 33727021,
+              "user": "minimaxir",
+              "text": "True, but it&#x27;s going to dampen the launch a bit.",
+              "createdAt": "2022-11-24T01:52:40.000Z",
+              "comments": [
+                {
+                  "id": 33727291,
+                  "user": "jehb",
+                  "text": "Is it? For me, I&#x27;m in tech but nowhere near anything for which playing with a new SD release would be relevant to my day job. Having a couple of extra days off to play with a new tech toy probably means I&#x27;ll use it more.",
+                  "createdAt": "2022-11-24T02:40:58.000Z",
+                  "comments": []
+                },
+                {
+                  "id": 33728508,
+                  "user": "smcleod",
+                  "text": "I don&#x27;t see why? The world is a whole lot bigger than the USA!",
+                  "createdAt": "2022-11-24T07:01:24.000Z",
+                  "comments": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33727358,
+      "user": "liuliu",
+      "text": "Seems the structure of UNet hasn&#x27;t changed other than the text encoder input (768 to 1024). The biggest change is on the text encoder, switched from ViT-L14 to ViT-H14 and fine-tuned based on <a href=\"https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2109.01903.pdf\" rel=\"nofollow\">https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2109.01903.pdf</a>.<p>Seems the 768-v model, if used properly, can substantially speed-up the generation, but not exactly sure yet. Seems straightforward to switch to 512-base model for my app next week.",
+      "createdAt": "2022-11-24T02:54:17.000Z",
+      "comments": [
+        {
+          "id": 33728096,
+          "user": "millimeterman",
+          "text": "I&#x27;m disappointed they didn&#x27;t push parameter count higher, but I suppose they want to maintain the ability to run on older&#x2F;lower end consumer GPUs. Unfortunately it severely limits how high-quality the output can be.",
+          "createdAt": "2022-11-24T05:39:33.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727903,
+      "user": "prawn",
+      "text": "Hopefully related: If I&#x27;m a photographer wanting to improve resolution of my content for printing, what&#x27;s my current best bet for upscaling?<p>Is it realistic to make use of this on the command line, feeding it my own images? Or has someone wrapped it in an app or online service?",
+      "createdAt": "2022-11-24T04:48:15.000Z",
+      "comments": [
+        {
+          "id": 33727917,
+          "user": "ftufek",
+          "text": "You&#x27;re probably better of using Real-ESRGAN: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;xinntao&#x2F;Real-ESRGAN\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;xinntao&#x2F;Real-ESRGAN</a>. It&#x27;s pretty solid and fast, even has portable executables you can just use as is. The upscaler that comes with stable diffusion might work for you, but I suspect it&#x27;ll probably do a better job at upscaling stable diffusion output rather than a natural images (might be wrong though).",
+          "createdAt": "2022-11-24T04:52:00.000Z",
+          "comments": [
+            {
+              "id": 33728600,
+              "user": "TaylorAlexander",
+              "text": "I tried this on one of my home images. I have a nice canon pro 100 printer that can print 13”x19” pictures, and my camera is a 20 megapixel Panasonic GH-5. The printer can print much higher resolution than my camera. So I did take one of my photos and process it with Real-ESRGAN to double the resolution (in each direction, so 4x pixels). The photo is a red barn with redwood trees behind it. It did well increasing the resolution of the barn. It made it look more crisp and bright. But there is an area with some trees in shadow behind the barn, and it lost detail there.<p>Anyway I think it would be fun to play with, just depends on the content of the image and the artists preferences. I still haven’t printed a full page of the upscaled photo but I do want to try that and see how it looks in comparison!",
+              "createdAt": "2022-11-24T07:19:29.000Z",
+              "comments": []
+            },
+            {
+              "id": 33728596,
+              "user": "sendfoods",
+              "text": "Not sure about your last claim. The example given in the blog post looks very very close to a natural image.",
+              "createdAt": "2022-11-24T07:18:40.000Z",
+              "comments": []
+            }
+          ]
+        },
+        {
+          "id": 33728111,
+          "user": "ansgri",
+          "text": "As a counter-recommendation, Topaz’s much-advertised Gigapixel AI is rarely useful. Their Denoise and Sharpen apps are good though.",
+          "createdAt": "2022-11-24T05:42:44.000Z",
+          "comments": []
+        },
+        {
+          "id": 33728039,
+          "user": "rand0mx1",
+          "text": "This thread has a useful app.\n<a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=32628761\" rel=\"nofollow\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=32628761</a>",
+          "createdAt": "2022-11-24T05:24:57.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727925,
+          "user": "fassssst",
+          "text": "Photoshop and Lightroom have had AI upscaling for awhile.",
+          "createdAt": "2022-11-24T04:54:10.000Z",
+          "comments": [
+            {
+              "id": 33727987,
+              "user": "prawn",
+              "text": "Ah - had forgotten. I&#x27;ll try them first. Thanks.",
+              "createdAt": "2022-11-24T05:10:55.000Z",
+              "comments": [
+                {
+                  "id": 33728247,
+                  "user": "osener",
+                  "text": "So does Pixelmator. You can try the free trial which comes with this feature.",
+                  "createdAt": "2022-11-24T06:12:10.000Z",
+                  "comments": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33726982,
+      "user": "rogers18445",
+      "text": "They apparently tried to combat NSFW generation by filtering the training dataset not to include any.",
+      "createdAt": "2022-11-24T01:47:24.000Z",
+      "comments": [
+        {
+          "id": 33727420,
+          "user": "bloaf",
+          "text": "They know they are going to be the next target in the war on general purpose computing.  They&#x27;re trying to stave it off for as long as possible by signalling to the authorities that they are the good guys.<p>A confrontation is inevitable, though.  Right now it costs moderate sums of money to do this level of training.  Not always will this be so.  If I were an AI-centric organization, I would be racing to position myself as a trustworthy actor in my particular corner of the AI space so that when legislators start asking questions about the explosion of bad actors, I can engage in a little bit of regulatory capture, and have the legislators legislate whatever regulations I&#x27;ve already implemented, to the disadvantage of my competitors.<p>For people who say &quot;people can make whatever images they like in photoshop,&quot; I will remind you of this:\n<a href=\"https:&#x2F;&#x2F;i.imgur.com&#x2F;5DJrd.jpg\" rel=\"nofollow\">https:&#x2F;&#x2F;i.imgur.com&#x2F;5DJrd.jpg</a>",
+          "createdAt": "2022-11-24T03:10:08.000Z",
+          "comments": [
+            {
+              "id": 33727779,
+              "user": "throwaway0x7E6",
+              "text": "appeasement never works. those who wage that war should be directly confronted.<p>and they will lose it, just like they&#x27;ve lost the war on encryption.",
+              "createdAt": "2022-11-24T04:24:29.000Z",
+              "comments": [
+                {
+                  "id": 33728527,
+                  "user": "TaylorAlexander",
+                  "text": "I doubt they care if people make porn with diffusion models. They just don’t want to be the ones providing the model to do it.",
+                  "createdAt": "2022-11-24T07:06:44.000Z",
+                  "comments": []
+                }
+              ]
+            },
+            {
+              "id": 33728007,
+              "user": "bitL",
+              "text": "Some AI startups backed by the biggest players are already hitting legal&#x2F;regulatory issues.",
+              "createdAt": "2022-11-24T05:17:24.000Z",
+              "comments": []
+            },
+            {
+              "id": 33727446,
+              "user": "hackernewds",
+              "text": "Very niche example here, that can be easily circumvented<p>Also seems problematic to approach this from a purely capitalistic and consumerist angle. There is a lot of opportunity here besides just launching the next AI unicorn.",
+              "createdAt": "2022-11-24T03:15:03.000Z",
+              "comments": []
+            },
+            {
+              "id": 33727543,
+              "user": "jimbob45",
+              "text": "Banknote printing is primarily protected against on the hardware level of printers, no? With the nigh-invisible unique watermark left by every printer, there’s virtually no way you’d get away with it. My guess is that the Photoshop filter exists mostly as a barrier against the crime of convenience.",
+              "createdAt": "2022-11-24T03:33:32.000Z",
+              "comments": [
+                {
+                  "id": 33727562,
+                  "user": "bloaf",
+                  "text": "My point is that there is precedent for governments requiring companies to implement restrictions on what images can be handled by their software.<p>As I explained: This kind of mandated restriction is looming over AI.  Companies are trying to get out in front of these restrictions so they can implement them on their own terms.",
+                  "createdAt": "2022-11-24T03:38:03.000Z",
+                  "comments": [
+                    {
+                      "id": 33728121,
+                      "user": "simion314",
+                      "text": "&gt;My point is that there is precedent for governments requiring companies to implement restrictions on what images can be handled by their software<p>But images of boobs are still legal. So this NSFW filter seems to be much more above then the law asks. Is the issue is that even if you do not train with CP you might get the model so output something that some random person will get offended and label it as CP? I assume that other companies can focus on NSFW and have their lawyers figure this out,  IMo would be cool that someone sues the governments and make them reveal facts about their concern that CP of fake or cartoon people is dangerous&quot; , I think they could  focus on saving real children then cartoon ones.",
+                      "createdAt": "2022-11-24T05:44:00.000Z",
+                      "comments": []
+                    }
+                  ]
+                },
+                {
+                  "id": 33727797,
+                  "user": "nomel",
+                  "text": "It’s possible that the end game is hardware in GPUs, to detect whatever they want to prevent, before it’s displayed.",
+                  "createdAt": "2022-11-24T04:28:30.000Z",
+                  "comments": []
+                }
+              ]
+            },
+            {
+              "id": 33727517,
+              "user": "dougmwne",
+              "text": "I am not clicking that link because no one should take the risk of you proving your point of what horrors could pop out of one of these models.<p>I will say that while the government backlash is inevitable just like it was with encryption, these image generation models are so easy to train on consumer hardware that the cat is hopelessly out of the bag. It might as well be thoughtcrime.",
+              "createdAt": "2022-11-24T03:28:35.000Z",
+              "comments": [
+                {
+                  "id": 33727554,
+                  "user": "llui85",
+                  "text": "Link doesn&#x27;t show any model output - it&#x27;s an screenshot of photoshop refusing to edit a banknote.",
+                  "createdAt": "2022-11-24T03:36:26.000Z",
+                  "comments": [
+                    {
+                      "id": 33727722,
+                      "user": "bongobingo1",
+                      "text": "Or it&#x27;s an output of &quot;blank adobe photoshop with dialog refusing to edit bank note, full screen, windows vista, 4k, artstation, greg rutkowski, dramatic lighting&quot;.",
+                      "createdAt": "2022-11-24T04:14:22.000Z",
+                      "comments": []
+                    }
+                  ]
+                },
+                {
+                  "id": 33727920,
+                  "user": "titanomachy",
+                  "text": "I agree, that was the riskiest click I&#x27;ve made in a while.",
+                  "createdAt": "2022-11-24T04:52:56.000Z",
+                  "comments": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 33727081,
+          "user": "minimaxir",
+          "text": "In practice, it&#x27;s unclear how well avoiding training on NSFW images will work: the original LAION-400M dataset used for both SD versions did filter out some of the NSFW stuff, and it appears SD 2.0 filters out a bit more. The use of OpenCLIP in SD 2.0 may also prevent some leakage of NSFW textual concepts compared to OpenAI&#x27;s CLIP.<p>It will, however, definitely not affect the more-common use case of anime women with very large breasts. And people will be able to finetune SD 2.0 on NSFW images anyways.",
+          "createdAt": "2022-11-24T02:05:08.000Z",
+          "comments": [
+            {
+              "id": 33727395,
+              "user": "kmeisthax",
+              "text": "The main reason why Stable Diffusion is worried about NSFW is that people will use it to generate disgusting amounts of CSAM. If LAION-5B or OpenAI&#x27;s CLIP have ever seen CSAM - and given how these datasets are literally just scraped off the Internet, <i>they have</i> - then they&#x27;re technically distributing it. Imagine the &quot;AI is just copying bits of other people&#x27;s art&quot; argument, except instead of statutory damages of up to $150,000 per infringement, we&#x27;re talking about time in pound-me-in-the-ass prison.<p>At least if people have to finetune the model on that shit, then you can argue that it&#x27;s not your fault because someone had to do extra steps to put stuff in there.",
+              "createdAt": "2022-11-24T03:03:00.000Z",
+              "comments": [
+                {
+                  "id": 33728252,
+                  "user": "evouga",
+                  "text": "So I definitely see an issue with Stable Diffusion synthesizing CP in response to innocuous queries (in terms of optics—-the actual harm this would cause is unclear).<p>That said, part of the problem with the general ignorance about machine learning and how it works is that there will be totally unreasonable demands for technical solutions to social problems. “Just make it impossible to generate CP” I’m sure will succeed just as effectively as “just make it impossible to Google for CP.”",
+                  "createdAt": "2022-11-24T06:12:58.000Z",
+                  "comments": []
+                },
+                {
+                  "id": 33727771,
+                  "user": "SXX",
+                  "text": "&gt; If LAION-5B or OpenAI&#x27;s CLIP have ever seen CSAM<p>Diffusion model dont need any CSAM in training dataset to generate CSAM. All it&#x27;s need is any random NSFW content alongside with any safe content that includes children.",
+                  "createdAt": "2022-11-24T04:22:44.000Z",
+                  "comments": []
+                },
+                {
+                  "id": 33727608,
+                  "user": "fastball",
+                  "text": "Is artificially generated CSAM that doesn&#x27;t actually involve children in its production not an improvement over the status quo?",
+                  "createdAt": "2022-11-24T03:48:58.000Z",
+                  "comments": [
+                    {
+                      "id": 33728535,
+                      "user": "TaylorAlexander",
+                      "text": "I have no answer to this but I have seen people mention that artificial CSAM is illegal in the USA, so the question of whether it is better or not is somewhat overshadowed by the very large market where it is illegal.",
+                      "createdAt": "2022-11-24T07:09:29.000Z",
+                      "comments": []
+                    },
+                    {
+                      "id": 33728682,
+                      "user": "Hamuko",
+                      "text": "&quot;Artificially-generated CSAM&quot; is a misnomer, since it involves no actual sexual abuse. It&#x27;s &quot;simulated child pornography&quot;, a category that would include for example paintings.",
+                      "createdAt": "2022-11-24T07:34:44.000Z",
+                      "comments": [
+                        {
+                          "id": 33728779,
+                          "user": "just-ok",
+                          "text": "Not exactly, since the abuse needed to actually happen for the derivative images to be possible to generate.",
+                          "createdAt": "2022-11-24T07:50:52.000Z",
+                          "comments": [
+                            {
+                              "id": 33728791,
+                              "user": "Hamuko",
+                              "text": "Is Stable Diffusion only able to generate images of things that have actually happened?",
+                              "createdAt": "2022-11-24T07:52:43.000Z",
+                              "comments": []
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": 33728318,
+                      "user": "PartiallyTyped",
+                      "text": "Reminds me of flooding a market with fake rhino horn. Idk whether it worked though.",
+                      "createdAt": "2022-11-24T06:24:36.000Z",
+                      "comments": []
+                    },
+                    {
+                      "id": 33727893,
+                      "user": "kyletns",
+                      "text": "lol there&#x27;s a piping hot take",
+                      "createdAt": "2022-11-24T04:46:38.000Z",
+                      "comments": []
+                    }
+                  ]
+                },
+                {
+                  "id": 33727726,
+                  "user": "charcircuit",
+                  "text": "&gt;then they&#x27;re technically distributing it.<p>The model does not contain the images themselves though. I think it would not be classified as that.",
+                  "createdAt": "2022-11-24T04:15:06.000Z",
+                  "comments": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 33727103,
+          "user": "satvikpendem",
+          "text": "They reportedly did so to stop people from generating CSAM [0].<p>[0] <a href=\"https:&#x2F;&#x2F;old.reddit.com&#x2F;r&#x2F;StableDiffusion&#x2F;comments&#x2F;y9ga5s&#x2F;stability_ais_take_on_stable_diffusion_15_and_the&#x2F;it5kkic&#x2F;?context=99\" rel=\"nofollow\">https:&#x2F;&#x2F;old.reddit.com&#x2F;r&#x2F;StableDiffusion&#x2F;comments&#x2F;y9ga5s&#x2F;sta...</a>",
+          "createdAt": "2022-11-24T02:09:13.000Z",
+          "comments": [
+            {
+              "id": 33727344,
+              "user": "datalopers",
+              "text": "They’ve ensured the only way to create CSAM is through old-fashioned child exploitation, meanwhile all perfectly humane art and photography is at risk of AI replacement.<p>This is a huge missed opportunity to actually help society.",
+              "createdAt": "2022-11-24T02:52:10.000Z",
+              "comments": [
+                {
+                  "id": 33727579,
+                  "user": "braingenious",
+                  "text": "LMFAO<p>What do you propose? The FBI releases a CSAM data set for devs to use for “training”?<p>Would you be the one to create the model? Would you run a business that sells synthetic CSAM?",
+                  "createdAt": "2022-11-24T03:40:44.000Z",
+                  "comments": [
+                    {
+                      "id": 33727681,
+                      "user": "snek_case",
+                      "text": "Stable diffusion is able to draw images of bears wearing spacesuits and penguins playing golf. I don&#x27;t think it actually needs that kind of input to generate it. It&#x27;s clearly able to generalize outside of the training set. So... Seems it should be possible to generate that kind of data without people being harmed.<p>That being said, this is a question for sociologists&#x2F;psychologists IMO. Would giving people with these kinds of tendencies that kind of material make them more or less likely to cause harm? Is there a way to answer that question without harming anybody?<p>In the mean time, stay away from 4chan.",
+                      "createdAt": "2022-11-24T04:06:24.000Z",
+                      "comments": []
+                    },
+                    {
+                      "id": 33727634,
+                      "user": "datalopers",
+                      "text": "Without the changes they made to Stable Diffusion, it was already able to generate CP. That&#x27;s why they restricted it from doing so. It did not have child pornography in the training set, but it did have plenty of normal adult nudity, adult pornography, and plenty of fully clothed children, and was able to extrapolate.<p>Anyway, one obvious application: FBI could run a darknet honeypot site selling AI-generated child porn. Eliminate the actual problem without endangering children.",
+                      "createdAt": "2022-11-24T03:53:07.000Z",
+                      "comments": [
+                        {
+                          "id": 33727712,
+                          "user": "braingenious",
+                          "createdAt": "2022-11-24T04:11:44.000Z",
+                          "comments": []
+                        }
+                      ]
+                    },
+                    {
+                      "id": 33727794,
+                      "user": "sroussey",
+                      "text": "Well, Microsoft and others have this model for recognizing CSAM, trained on those CSAM images.",
+                      "createdAt": "2022-11-24T04:28:22.000Z",
+                      "comments": [
+                        {
+                          "id": 33728325,
+                          "user": "PartiallyTyped",
+                          "text": "Apple, and meta have as well.<p>Apparently Facebook has a huge problem with distribution through messenger.",
+                          "createdAt": "2022-11-24T06:26:42.000Z",
+                          "comments": []
+                        },
+                        {
+                          "id": 33727804,
+                          "user": "braingenious",
+                          "createdAt": "2022-11-24T04:29:20.000Z",
+                          "comments": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 33727135,
+              "user": "Waterluvian",
+              "text": "I regularly skimmed 4Chan’s &#x2F;b&#x2F; to get a frame of reference for fringe internet culture. But I’ve had to stop because the CSAM they generate by the hundreds per hour is just freakishly and horrifyingly high fidelity.<p>There’s a lot of important social questions to ask about the future of pornography, but I’m sure not going to be the one to touch that with a thousand foot pole.",
+              "createdAt": "2022-11-24T02:15:02.000Z",
+              "comments": []
+            },
+            {
+              "id": 33728234,
+              "user": "GaryPalmer",
+              "text": "What is the point of making it &quot;as hard as possible&quot; for people?<p>This not a game release. It doesn&#x27;t matter if it&#x27;s cracked tommorow or in a year. On open source no less, it&#x27;s going to happen sooner rather than later.<p>As disgusting as it is but somebody is going to feed CP to an A.I. Model and that&#x27;s just the reality of it. It&#x27;s just going to happen one way or another and it&#x27;s not any of these A.I. Companies fault.",
+              "createdAt": "2022-11-24T06:10:03.000Z",
+              "comments": [
+                {
+                  "id": 33728327,
+                  "user": "satvikpendem",
+                  "text": "Plausible deniability for governments. It&#x27;s like DRM for Netflix-like streaming platforms. If they don&#x27;t add DRM and their content owners&#x27; content gets pirated, they could argued in court that Netflix didn&#x27;t do everything in their power to stop such piracy. So too here for Stability AI, they&#x27;ve said this is their reasoning before.",
+                  "createdAt": "2022-11-24T06:27:06.000Z",
+                  "comments": []
+                }
+              ]
+            },
+            {
+              "id": 33727159,
+              "user": "throwup",
+              "text": "Do pixels have human rights now?",
+              "createdAt": "2022-11-24T02:19:11.000Z",
+              "comments": [
+                {
+                  "id": 33727770,
+                  "user": "syockit",
+                  "text": "They don&#x27;t. The training dataset though, may have been obtained through human rights violation. The problem is when the novelty starts to wear out. Then they will start to look for fresh training data which may again incur more human rights violation. If you can ensure that no new training data are obtained that way, then I guess it&#x27;s okay? (Personally, I don&#x27;t condone it)",
+                  "createdAt": "2022-11-24T04:22:30.000Z",
+                  "comments": [
+                    {
+                      "id": 33728054,
+                      "user": "Zuiii",
+                      "text": "&gt; The problem is when the novelty starts to wear out.<p>Isn&#x27;t the main feature of stable diffusion is that it doesn&#x27;t?",
+                      "createdAt": "2022-11-24T05:29:29.000Z",
+                      "comments": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 33727436,
+              "user": "trafficante",
+              "text": "Nixon: (muttering) Jesus Christ<p>I swear every time I find myself thinking “Hey, stop being so cynical and jaded all the time”, I stumble across something like this.",
+              "createdAt": "2022-11-24T03:13:06.000Z",
+              "comments": []
+            },
+            {
+              "id": 33727120,
+              "user": "Gigachad",
+              "text": "Now that&#x27;s a can of worms I don&#x27;t think anyone wants to open.",
+              "createdAt": "2022-11-24T02:12:10.000Z",
+              "comments": [
+                {
+                  "id": 33727172,
+                  "user": "mysterydip",
+                  "text": "Some do, that&#x27;s the problem.",
+                  "createdAt": "2022-11-24T02:21:07.000Z",
+                  "comments": [
+                    {
+                      "id": 33727953,
+                      "user": "randyrand",
+                      "text": "Artist have been drawing people of all ages having sex for literally thousands of years. Why should I care about that?",
+                      "createdAt": "2022-11-24T05:02:38.000Z",
+                      "comments": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 33727043,
+          "user": "argella",
+          "text": "Bummer. AI porn is fun.",
+          "createdAt": "2022-11-24T01:59:10.000Z",
+          "comments": [
+            {
+              "id": 33727101,
+              "user": "Gigachad",
+              "text": "The future is probably models trained almost exclusively on porn.",
+              "createdAt": "2022-11-24T02:08:37.000Z",
+              "comments": [
+                {
+                  "id": 33727637,
+                  "user": "tempthrowaway11",
+                  "text": "They’re already out there, although they’re hard to find via Google - people are doing wild things like “merging” hentai models with models trained on real life porn to get realistic poses and lighting with impossible anatomy.<p>The scary thing is that you can then train it further with things like DreamBooth to start producing porn of celebrities… or, even more worrying, people you know.<p>Seriously folks, we are within a year or less of this being <i>trivial</i>. It’s already possible with a lot of work today.",
+                  "createdAt": "2022-11-24T03:53:33.000Z",
+                  "comments": [
+                    {
+                      "id": 33728197,
+                      "user": "Gigachad",
+                      "text": "I have no idea how it works but I have seen people talking about models trained to draw furry art. And I assume no one spent the millions on AWS to train a full model from scratch.",
+                      "createdAt": "2022-11-24T06:01:57.000Z",
+                      "comments": []
+                    }
+                  ]
+                },
+                {
+                  "id": 33727551,
+                  "user": "joshspankit",
+                  "text": "Porn has driven many tech advances. I predict that models trained on specific porn genres will appear as soon as training a good model is doable for under $5000. They’ll get here much quicker if we get video to that mark first.",
+                  "createdAt": "2022-11-24T03:35:15.000Z",
+                  "comments": [
+                    {
+                      "id": 33727693,
+                      "user": "snek_case",
+                      "text": "You could probably already get people to pay for a subscription to generate images. Wouldn&#x27;t be surprised if someone is already working on it.",
+                      "createdAt": "2022-11-24T04:08:26.000Z",
+                      "comments": []
+                    },
+                    {
+                      "id": 33728185,
+                      "user": "the_shivers",
+                      "text": "What tech advances would those be?",
+                      "createdAt": "2022-11-24T05:58:55.000Z",
+                      "comments": [
+                        {
+                          "id": 33728337,
+                          "user": "fragmede",
+                          "text": "print magazine, cinema, VHS, Internet",
+                          "createdAt": "2022-11-24T06:29:52.000Z",
+                          "comments": []
+                        }
+                      ]
+                    },
+                    {
+                      "id": 33727790,
+                      "user": "moron4hire",
+                      "text": "&gt; Porn has driven many tech advances.<p>This is an urban myth.",
+                      "createdAt": "2022-11-24T04:27:20.000Z",
+                      "comments": [
+                        {
+                          "id": 33727944,
+                          "user": "Godel_unicode",
+                          "text": "Which happens to be true.",
+                          "createdAt": "2022-11-24T04:59:52.000Z",
+                          "comments": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": 33727996,
+                  "user": "version_five",
+                  "text": "No. The whole point of these models is that they combine information across domains to be able to create new images. If you trained something just on, say baseball, you could only generate the normal things that happen in baseball. If you wanted to generate a picture of a bear surfing around the bases after hitting a home run, you&#x27;d need a model that also had bears and surfing in the training data, and enough other stuff to understand the relationships involved in positioning everything and changing poses.",
+                  "createdAt": "2022-11-24T05:14:01.000Z",
+                  "comments": []
+                }
+              ]
+            },
+            {
+              "id": 33727062,
+              "createdAt": "2022-11-24T02:02:48.000Z",
+              "comments": []
+            }
+          ]
+        },
+        {
+          "id": 33727218,
+          "user": "kristopolous",
+          "text": "Did they exclude celebrities,  politicians, and religious and political symbols?<p>Deceitful extremists and vengeful criminals fabricating lies seem to be a far more serious problem than fantasy porno.",
+          "createdAt": "2022-11-24T02:28:10.000Z",
+          "comments": [
+            {
+              "id": 33728135,
+              "user": "pkdpic",
+              "text": "That&#x27;s a really interesting point, and it makes me realize that the Nancy Reagan &#x27;what constitutes porn&#x27; question is obviously super old and problematic.<p>Also lexica.art is swarming with celebrity fantasy porn that just has a thin stylistic filter of paintings from the 19th century. And a plethora of furry daddies that you can&#x27;t not love.<p>I get why these models should be curated but I also like that the sketchy porn possibilities keep them feeling un-padded &#x2F; interesting &#x2F; dangerous.<p>Then again this all is probably really dangerous so maybe that&#x27;s silly.",
+              "createdAt": "2022-11-24T05:48:38.000Z",
+              "comments": []
+            }
+          ]
+        },
+        {
+          "id": 33727710,
+          "user": "myaccount9786",
+          "text": "The easiest way to combat this is to put your model behind an API and filter queries (midjourney, OpenAI) or just not make it available (Google). The tradeoff is that you&#x27;re paying for everyone&#x27;s compute.<p>I guess SD is betting on saving $ on compute being more important in this space than the ability to gatekeep certain queries. And the tradeoff is that you need to do nsfw filtering in your released model.<p>It will be interesting to see who&#x27;s right in 2 years.",
+          "createdAt": "2022-11-24T04:11:33.000Z",
+          "comments": [
+            {
+              "id": 33727757,
+              "user": "techsin101",
+              "text": "that would suck immensely for various downsides",
+              "createdAt": "2022-11-24T04:20:14.000Z",
+              "comments": []
+            }
+          ]
+        },
+        {
+          "id": 33727146,
+          "user": "cma",
+          "text": "(Edit: it may have removed that wording now: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;stablediffusion&#x2F;commit&#x2F;ca86da3a30c4e080d4db8c25fca73de843663cb4\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;stablediffusion&#x2F;commit&#x2F;ca86d...</a> )<p>They can force model upgrades too:<p>&gt; The New AI Model Licenses Have a Legal Loophole (OpenRAIL-M of Stable Diffusion)<p><a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=W5M-dvzpzSQ\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=W5M-dvzpzSQ</a>",
+          "createdAt": "2022-11-24T02:17:11.000Z",
+          "comments": [
+            {
+              "id": 33727187,
+              "user": "josephcsible",
+              "text": "I don&#x27;t understand why so many people call Stable Diffusion open source.",
+              "createdAt": "2022-11-24T02:22:59.000Z",
+              "comments": [
+                {
+                  "id": 33727778,
+                  "user": "xkapastel",
+                  "text": "Why do you think it is not open source? The model weights, model architecture, and dataset are all available.",
+                  "createdAt": "2022-11-24T04:24:00.000Z",
+                  "comments": [
+                    {
+                      "id": 33728057,
+                      "user": "josephcsible",
+                      "text": "Open source is more than just everything being available. It also depends on the license, and the one Stable Diffusion uses doesn&#x27;t qualify, for multiple reasons, including the one mentioned upthread.",
+                      "createdAt": "2022-11-24T05:29:37.000Z",
+                      "comments": []
+                    },
+                    {
+                      "id": 33727871,
+                      "user": "charcircuit",
+                      "text": "Read the license of the model: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;stablediffusion&#x2F;blob&#x2F;main&#x2F;LICENSE-MODEL\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;stablediffusion&#x2F;blob&#x2F;main&#x2F;LI...</a><p>5. and 7. make it not open source",
+                      "createdAt": "2022-11-24T04:41:00.000Z",
+                      "comments": [
+                        {
+                          "id": 33728409,
+                          "user": "xkapastel",
+                          "text": "I don&#x27;t see how it contradicts the open source definition at <a href=\"https:&#x2F;&#x2F;opensource.org&#x2F;osd\" rel=\"nofollow\">https:&#x2F;&#x2F;opensource.org&#x2F;osd</a>, could you point it out for me?",
+                          "createdAt": "2022-11-24T06:43:46.000Z",
+                          "comments": [
+                            {
+                              "id": 33728439,
+                              "user": "josephcsible",
+                              "text": "For the most blatant violation, look at point 6 of the OSD and attachment A of the license.",
+                              "createdAt": "2022-11-24T06:49:55.000Z",
+                              "comments": []
+                            },
+                            {
+                              "id": 33728565,
+                              "createdAt": "2022-11-24T07:13:56.000Z",
+                              "comments": []
+                            }
+                          ]
+                        },
+                        {
+                          "id": 33728033,
+                          "user": "simlevesque",
+                          "text": "Seems like it is open source, just not free software.",
+                          "createdAt": "2022-11-24T05:24:18.000Z",
+                          "comments": [
+                            {
+                              "id": 33728060,
+                              "user": "josephcsible",
+                              "text": "It&#x27;s not free software or open source. Check the Open Source Definition: <a href=\"https:&#x2F;&#x2F;opensource.org&#x2F;osd\" rel=\"nofollow\">https:&#x2F;&#x2F;opensource.org&#x2F;osd</a>",
+                              "createdAt": "2022-11-24T05:30:05.000Z",
+                              "comments": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": 33727686,
+                  "user": "myaccount9786",
+                  "text": "You can download the model weights and run them offline. At least, you could in v1.4. I assume this is still possible on v2.0?",
+                  "createdAt": "2022-11-24T04:07:25.000Z",
+                  "comments": [
+                    {
+                      "id": 33727698,
+                      "user": "schoen",
+                      "text": "Right, but the model weights are arguably not the &quot;source code&quot;, and the license gives the users fewer rights than open source licenses do.<p><a href=\"https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;The_Open_Source_Definition\" rel=\"nofollow\">https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;The_Open_Source_Definition</a>",
+                      "createdAt": "2022-11-24T04:09:28.000Z",
+                      "comments": [
+                        {
+                          "id": 33727766,
+                          "user": "myaccount9786",
+                          "text": "I think the controls in this space are such a shit show right now that being &quot;open model&quot; is practically equivalent to a WTFPL.<p>If you&#x27;re trying to build an app based on SD, <i>then</i> not being open source matters. But seems like the majority of use cases are just &quot;I want to run the model locally&quot;. And at that point HF can&#x27;t stop me from just ripping the Wi-Fi card out of my computer.",
+                          "createdAt": "2022-11-24T04:21:07.000Z",
+                          "comments": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 33727177,
+              "user": "emadm",
+              "text": "Actually the license is not the same as the prior one to remove this",
+              "createdAt": "2022-11-24T02:21:44.000Z",
+              "comments": []
+            },
+            {
+              "id": 33727239,
+              "user": "cma",
+              "text": "Someone seeming to be emad below says the license was changed (the post got flagged for some reason):<p><a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=33727177\" rel=\"nofollow\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=33727177</a><p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;stablediffusion&#x2F;commit&#x2F;ca86da3a30c4e080d4db8c25fca73de843663cb4\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;stablediffusion&#x2F;commit&#x2F;ca86d...</a>",
+              "createdAt": "2022-11-24T02:30:27.000Z",
+              "comments": []
+            }
+          ]
+        },
+        {
+          "id": 33727112,
+          "user": "throwup",
+          "text": "You can generate all the bloody violent gore you like, but god forbid anybody see a human body in its natural state",
+          "createdAt": "2022-11-24T02:10:35.000Z",
+          "comments": [
+            {
+              "id": 33727407,
+              "user": "dang",
+              "text": " &quot;<i>Avoid generic tangents.</i>&quot;<p><a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;newsguidelines.html\" rel=\"nofollow\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;newsguidelines.html</a>",
+              "createdAt": "2022-11-24T03:06:03.000Z",
+              "comments": []
+            },
+            {
+              "id": 33727363,
+              "user": "echelon",
+              "text": "There is worry about generating illegal content. If the model understands multiple concepts, it can combine them.",
+              "createdAt": "2022-11-24T02:55:01.000Z",
+              "comments": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33728506,
+      "user": "NKosmatos",
+      "text": "Wow, just wow!<p>Newbie question, why can’t someone just take a pre-trained model&#x2F;network with all the settings&#x2F;weights&#x2F;whatever and run it on a different configuration (at a heavily reduced speed)?<p>Isn’t it like a Blender&#x2F;3D studio&#x2F;Autocad file, where you can take the original 3D model and then render it using your own hardware? With my single GOU it will take days to raytrace a big scene, whereas someone with multiple higher speced GPUs will need a few minutes.",
+      "createdAt": "2022-11-24T07:00:49.000Z",
+      "comments": [
+        {
+          "id": 33728568,
+          "user": "TaylorAlexander",
+          "text": "It’s not totally clear what you are asking. The models are trained on something like an NVIDIA A100 which is a super high end machine learning processor, but inference can be run on a home GPU. So this is a “different configuration”.<p>But I think maybe you mean, can they make a model which normally needs a lot of RAM run more slowly on a machine that only has a little RAM?<p>It sounds like there are some tricks to allow the use of smaller amounts of ram by making specific algorithmic tweaks, so if a model normally needs 12GB of VRAM then, depending on the model, it may be possible to modify the algorithm to use 1&#x2F;2 the RAM for example. But I don’t think it’s the same as other rendering tasks where you can use arbitrarily less compute and just run it longer.<p>Maybe I’m wrong though.",
+          "createdAt": "2022-11-24T07:14:25.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727914,
+      "user": "sorenjan",
+      "text": "I&#x27;ve seen references to merging models together to be able to generate new kinds of imagery or styles, how does that work? I think you use Dreambooth to make specialized models, and I think I got an idea about how that basically assigns a name to a vector in the latent space that represents the thing you want to generate new imagery of, but can you generate multiple models and blend them together?<p>Edit: Looks like AUTOMATIC1111 can merge three checkpoints. I still don&#x27;t know how it works technically, but I guess that&#x27;s how it&#x27;s done?<p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;AUTOMATIC1111&#x2F;stable-diffusion-webui\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;AUTOMATIC1111&#x2F;stable-diffusion-webui</a>",
+      "createdAt": "2022-11-24T04:50:58.000Z",
+      "comments": [
+        {
+          "id": 33728189,
+          "user": "corysama",
+          "text": "It’s my understanding that, amazingly enough, blending the models is done by literally performing a trivial linear blend of the raw numbers in the model files.<p>Someone even figured out they could get great compression of specialized model files by first subtracting the base model from the specialized model (using plain arithmetic) before zipping it.  Of course, you need the same base file handy when you go to reverse the process.",
+          "createdAt": "2022-11-24T05:59:44.000Z",
+          "comments": [
+            {
+              "id": 33728280,
+              "user": "eoerl",
+              "text": "It is not typically possible to blend models like that, since the training process is (lateral) order insensitive, as far as the model goes.",
+              "createdAt": "2022-11-24T06:16:48.000Z",
+              "comments": []
+            },
+            {
+              "id": 33728288,
+              "createdAt": "2022-11-24T06:18:30.000Z",
+              "comments": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33728462,
+      "user": "imran-khan",
+      "text": "To put things in perspective, the dataset it&#x27;s trained on is ~240TB and Stability has over ~4000 Nvidia A100 (which is much faster than a 1080ti). Without those ingredients, you&#x27;re highly unlikely to get a model that&#x27;s worth using (it&#x27;ll produce mostly useless outputs).<p>That argument also makes little sense when you consider that the model is a couple gigabytes itself, it can&#x27;t memorize 240TB of data, so it &quot;learned&quot;.<p>But if you want to create custom versions of SD, you can always try out dreambooth: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;XavierXiao&#x2F;Dreambooth-Stable-Diffusion\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;XavierXiao&#x2F;Dreambooth-Stable-Diffusion</a>, that one is actually feasible without spending millions of dollars on GPUs.",
+      "createdAt": "2022-11-24T06:52:42.000Z",
+      "comments": []
+    },
+    {
+      "id": 33728683,
+      "user": "kennyloginz",
+      "text": "This reminds me a bit of the rash of Thomas Kinkaid storefronts during the 90s.<p>Nothing personal against the work, I think it’s brilliant, and cheap.    Just like a Kinkaid",
+      "createdAt": "2022-11-24T07:34:48.000Z",
+      "comments": []
+    },
+    {
+      "id": 33728150,
+      "user": "radu_floricica",
+      "text": "Speaking of business models for AI, and the fact that stable diffusion is anti-trained for porn. Somebody with an old terra byte image porn collection right now: &quot;Hold my beer, my time has come!&quot;",
+      "createdAt": "2022-11-24T05:52:01.000Z",
+      "comments": []
+    },
+    {
+      "id": 33728546,
+      "user": "s1k3s",
+      "text": "Is there any place where we can learn more about all these AI tools that keep popping up, that is not marketing speak? Also, I see the words &#x27;open&#x27; and &#x27;open source&#x27; and yet they all require me to sign up to some service, join some beta program, buy credits etc. Are they open source?",
+      "createdAt": "2022-11-24T07:11:12.000Z",
+      "comments": [
+        {
+          "id": 33728578,
+          "user": "this_is_not_you",
+          "text": "Did you miss the first part of the article?<p>&gt; It is our pleasure to announce the open-source release of Stable Diffusion Version 2.[0]<p>&gt; The original Stable Diffusion V1 led by CompVis changed the nature of open source AI models and spawned hundreds of other models and innovations all over the world. It had one of the fastest climbs to 10K Github stars of any software, rocketing through 33K stars in less than two months.<p>[0] <a href=\"https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;stablediffusion\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;Stability-AI&#x2F;stablediffusion</a>",
+          "createdAt": "2022-11-24T07:16:06.000Z",
+          "comments": [
+            {
+              "id": 33728608,
+              "user": "s1k3s",
+              "text": "I did. Thank you!",
+              "createdAt": "2022-11-24T07:21:36.000Z",
+              "comments": []
+            }
+          ]
+        },
+        {
+          "id": 33728558,
+          "user": "Liquix",
+          "text": "Yes, it is open source. Visit the repo linked in the article and follow the setup instructions - no signup required",
+          "createdAt": "2022-11-24T07:13:12.000Z",
+          "comments": []
+        },
+        {
+          "id": 33728550,
+          "user": "aero-glide2",
+          "text": "You can run it locally, you don&#x27;t need to use their service",
+          "createdAt": "2022-11-24T07:11:50.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727931,
+      "user": "coldblues",
+      "text": "I just thought about this, so bare in mind that I don&#x27;t know much of the technical implications of this, but:<p>Couldn&#x27;t we train a very good model by distributing the dataset along with the computing power using something similar to folding@home?",
+      "createdAt": "2022-11-24T04:56:06.000Z",
+      "comments": [
+        {
+          "id": 33727967,
+          "user": "eugenhotaj",
+          "text": "The network communication overhead would be way too high to make this useful. At least for current methods of training large models.",
+          "createdAt": "2022-11-24T05:05:58.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727952,
+          "user": "ftufek",
+          "text": "You would likely be limited by the communication latency between nodes, unless you come up with some unique model architecture or training method. Most of these large scale models are trained on GPUs using very high speed interconnects.",
+          "createdAt": "2022-11-24T05:02:29.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727934,
+          "user": "iosjunkie",
+          "text": "stop trying to build skynet",
+          "createdAt": "2022-11-24T04:56:53.000Z",
+          "comments": [
+            {
+              "id": 33728371,
+              "user": "Bilal_io",
+              "text": "Can&#x27;t stop something that&#x27;s already finished.<p>- Skynet",
+              "createdAt": "2022-11-24T06:36:37.000Z",
+              "comments": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33727464,
+      "user": "88stacks",
+      "text": "Awesome, I’ve put stable diffusion on an api to train a model for anyone to use for free. I’m adding 2.0 to it as we speak! <a href=\"https:&#x2F;&#x2F;88stacks.com\" rel=\"nofollow\">https:&#x2F;&#x2F;88stacks.com</a>",
+      "createdAt": "2022-11-24T03:20:13.000Z",
+      "comments": [
+        {
+          "id": 33727650,
+          "user": "dimaor",
+          "text": "How is this free? Is it possible to download the checkpoints?<p>I&#x27;m asking because I&#x27;m running SD locally but my GPU is not good enough to train new checkpoints and while I get the time to work on improve I wanted to use this API in order to generate some models for an illustration book I am working on.",
+          "createdAt": "2022-11-24T03:56:41.000Z",
+          "comments": [
+            {
+              "id": 33727863,
+              "user": "88stacks",
+              "text": "It’s free because it’s on my research cluster, not in the cloud and I want to share it. For faster training it will be paid with other features,  but to train a basic model will always be free. Im adding download of checkpoints now.",
+              "createdAt": "2022-11-24T04:39:33.000Z",
+              "comments": []
+            },
+            {
+              "id": 33727867,
+              "user": "nickthegreek",
+              "text": "Check out fast-dreambooth colab. I use that to freely train checkpoints that can be downloaded.",
+              "createdAt": "2022-11-24T04:40:06.000Z",
+              "comments": []
+            }
+          ]
+        },
+        {
+          "id": 33727537,
+          "user": "pilaf",
+          "text": "&gt; to sue for free<p>Typo of freudian slip?<p>Just kidding of course, nice project!",
+          "createdAt": "2022-11-24T03:33:03.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727611,
+          "user": "julienmarie",
+          "text": "Interesting concept!",
+          "createdAt": "2022-11-24T03:49:22.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33728042,
+      "user": "acidburnNSA",
+      "text": "Awesome. I&#x27;m installing on Ubuntu 22.04 right now.<p>Ran into a few errors with the default instructions related to CUDA version mismatches with my nvidia driver. Now I&#x27;m trying without conda at all. Made a venv. I upgraded to the latest that Ubuntu provides and then downloaded and installed the appropriate CUDA from [1].<p>That got me farther. Then ran into the fact that the xformers binaries I had in my earlier attempts is now incompatible with my current drivers and CUDA, so rebuiding that one. I&#x27;m in the 30-minute compile, but did the `pip install ninja` as recommended by [2] and it&#x27;s running on a few of my 32 threads now. Ope! Done in 5 mins. Test info from `python -m xformers.info` looks good.<p>Damn still hitting CUDA out of memory issues. I knew I should have bought a bigger GPU back in 2017. Everyone says I have to downgrade pytorch to 1.12.1 for this to not happen. But oh dang that was compiled with a different cuda, oh groan. Maybe I should get conda to work afterall.<p>`torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 30.00 MiB (GPU 0; 5.93 GiB total capacity; 5.62 GiB already allocated; 15.44 MiB free; 5.67 GiB reserved in total by PyTorch) If reserved memory is &gt;&gt; allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF`<p>Guess I better go read those docs... to be continued.<p>[1] <a href=\"https:&#x2F;&#x2F;developer.nvidia.com&#x2F;cuda-downloads?target_os=Linux&amp;target_arch=x86_64&amp;Distribution=Ubuntu&amp;target_version=22.04&amp;target_type=deb_local\" rel=\"nofollow\">https:&#x2F;&#x2F;developer.nvidia.com&#x2F;cuda-downloads?target_os=Linux&amp;...</a><p>[2] <a href=\"https:&#x2F;&#x2F;github.com&#x2F;facebookresearch&#x2F;xformers\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;facebookresearch&#x2F;xformers</a>",
+      "createdAt": "2022-11-24T05:25:27.000Z",
+      "comments": [
+        {
+          "id": 33728747,
+          "user": "jetbooster",
+          "text": "Thanks for reminding me why I shouldn&#x27;t go to my computer right now and try getting this working with my 2070!",
+          "createdAt": "2022-11-24T07:46:09.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33728447,
+      "user": "imran_khan",
+      "text": "trained on is ~240TB and Stability has over ~4000 Nvidia A100 (which is much faster than a 1080ti). Without those ingredients, you&#x27;re highly unlikely to get a model that&#x27;s worth using (it&#x27;ll produce mostly useless outputs).<p>That argument also makes little sense when you consider that the model is a couple gigabytes itself, it can&#x27;t memorize 240TB of data, so it &quot;learned&quot;.<p>But if you want to create custom versions of SD, you can always try out dreambooth: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;XavierXiao&#x2F;Dreambooth-Stable-Diffusion\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;XavierXiao&#x2F;Dreambooth-Stable-Diffusion</a>, that one is actually feasible without spending millions of dollars on GPUs.",
+      "createdAt": "2022-11-24T06:51:11.000Z",
+      "comments": []
+    },
+    {
+      "id": 33727247,
+      "user": "WatchDog",
+      "text": "Are the GPU memory requirements different for this release?<p>Is now it possible to generate higher resolution images with less memory?",
+      "createdAt": "2022-11-24T02:31:15.000Z",
+      "comments": [
+        {
+          "id": 33727740,
+          "user": "mugivarra69",
+          "text": "dont thinkso, ran on my macbook pro, same footprint. idk cuda side.",
+          "createdAt": "2022-11-24T04:17:12.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727837,
+      "user": "fnordpiglet",
+      "text": "The upscaler is the enhanced zoom and room extrapolation from blade runner. Now that’s cool.",
+      "createdAt": "2022-11-24T04:34:37.000Z",
+      "comments": []
+    },
+    {
+      "id": 33727534,
+      "user": "lxe",
+      "text": "I love the graph of GH stars over time. Gives you somewhat of a sense of how fast this space is moving.",
+      "createdAt": "2022-11-24T03:32:43.000Z",
+      "comments": []
+    },
+    {
+      "id": 33728547,
+      "user": "nbzso",
+      "text": "The crimes against the creative people are getting better and better.\nWhat a time to live, when your entire career burns to dust just because.<p>I hope AI gets these programmers jobs soon.<p>Then we all can go to the woods and have a good life, finally.",
+      "createdAt": "2022-11-24T07:11:18.000Z",
+      "comments": [
+        {
+          "id": 33728606,
+          "user": "rcoveson",
+          "text": "You hope that AI gets the jobs of AI programmers soon? I urge you to reconsider the implications of that.",
+          "createdAt": "2022-11-24T07:21:01.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33728445,
+      "user": "imran_khan",
+      "text": "To put things in perspective, the dataset it&#x27;s trained on is ~240TB and Stability has over ~4000 Nvidia A100 (which is much faster than a 1080ti). Without those ingredients, you&#x27;re highly unlikely to get a model that&#x27;s worth using (it&#x27;ll produce mostly useless outputs).<p>That argument also makes little sense when you consider that the model is a couple gigabytes itself, it can&#x27;t memorize 240TB of data, so it &quot;learned&quot;.<p>But if you want to create custom versions of SD, you can always try out dreambooth: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;XavierXiao&#x2F;Dreambooth-Stable-Diffusion\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;XavierXiao&#x2F;Dreambooth-Stable-Diffusion</a>, that one is actually feasible without spending millions of dollars on GPUs.",
+      "createdAt": "2022-11-24T06:50:44.000Z",
+      "comments": []
+    },
+    {
+      "id": 33727553,
+      "user": "dzink",
+      "text": "The upscaler link on this page <a href=\"https:&#x2F;&#x2F;huggingface.co&#x2F;stabilityai&#x2F;stable-diffusion-x4-upscaler\" rel=\"nofollow\">https:&#x2F;&#x2F;huggingface.co&#x2F;stabilityai&#x2F;stable-diffusion-x4-upsca...</a> is broken. Here is a working link <a href=\"https:&#x2F;&#x2F;huggingface.co&#x2F;stabilityai&#x2F;stable-diffusion-x4-upscaler&#x2F;blob&#x2F;main&#x2F;x4-upscaler-ema.ckpt\" rel=\"nofollow\">https:&#x2F;&#x2F;huggingface.co&#x2F;stabilityai&#x2F;stable-diffusion-x4-upsca...</a>",
+      "createdAt": "2022-11-24T03:35:38.000Z",
+      "comments": []
+    },
+    {
+      "id": 33728433,
+      "user": "dzink",
+      "text": "How do you install this version? Do you merge it with latent-diffusion?",
+      "createdAt": "2022-11-24T06:48:19.000Z",
+      "comments": []
+    },
+    {
+      "id": 33727622,
+      "user": "1024core",
+      "text": "What&#x27;s the bare minimum hardware required to generate images with this model? Can I do something with a 8GB 980? Probably not..? What about CPU only?",
+      "createdAt": "2022-11-24T03:51:51.000Z",
+      "comments": [
+        {
+          "id": 33727781,
+          "user": "kiratp",
+          "text": "1.4 runs on iPhones. I’m sure we will rapidly see similar for 2.0<p><a href=\"https:&#x2F;&#x2F;apps.apple.com&#x2F;app&#x2F;id6444050820\" rel=\"nofollow\">https:&#x2F;&#x2F;apps.apple.com&#x2F;app&#x2F;id6444050820</a>",
+          "createdAt": "2022-11-24T04:24:49.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727738,
+          "user": "mugivarra69",
+          "text": "not that gpu, cpu yes need to wait longer however.",
+          "createdAt": "2022-11-24T04:16:43.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727422,
+      "user": "dzink",
+      "text": "This Thanksgiving, I would like to extend a very warm Thank You to the Stable Diffusion team!<p>Side note: The 4x upscaler model is showing as unavailable if you follow the hugging face link to it.",
+      "createdAt": "2022-11-24T03:10:15.000Z",
+      "comments": []
+    },
+    {
+      "id": 33727233,
+      "user": "knicholes",
+      "text": "Does anyone have a good source for all sorts of prompts for image generation?",
+      "createdAt": "2022-11-24T02:29:51.000Z",
+      "comments": [
+        {
+          "id": 33727267,
+          "user": "mromanuk",
+          "text": "Have you seen lexica.art? There are a few others, but I don’t remember the URLs",
+          "createdAt": "2022-11-24T02:36:42.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727261,
+          "user": "gedy",
+          "text": "<a href=\"https:&#x2F;&#x2F;lexica.art\" rel=\"nofollow\">https:&#x2F;&#x2F;lexica.art</a>",
+          "createdAt": "2022-11-24T02:34:33.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727459,
+          "user": "asicsp",
+          "text": "<a href=\"https:&#x2F;&#x2F;publicprompts.art&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;publicprompts.art&#x2F;</a> is amazing",
+          "createdAt": "2022-11-24T03:18:50.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727786,
+          "user": "jasfi",
+          "text": "InventAI: <a href=\"https:&#x2F;&#x2F;inventai.xyz\" rel=\"nofollow\">https:&#x2F;&#x2F;inventai.xyz</a> is being developed, will help a lot with prompt engineering.",
+          "createdAt": "2022-11-24T04:25:53.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727400,
+      "user": "nl",
+      "text": "Highlights:<p>768x768 native models (v1.x maxed out at 512x512)<p>a built-in 4x upscaler: &quot;Combined with our text-to-image models, Stable Diffusion 2.0 can now generate images with resolutions of 2048x2048–or even higher.&quot;<p>Depth-to-Image Diffusion Model:  &quot;infers the depth of an input image, and then generates new images using both the text and depth information.&quot; Depth-to-Image can offer all sorts of new creative applications, delivering transformations that look radically different from the original but which still preserve the coherence and depth of that image (see the demo gif if you haven&#x27;t looked)<p>Better inpainting model<p>Trained with a stronger NSFW filter on training data.<p>For me the depth-to-image model is a huge highlight and something I wasn&#x27;t expecting. The NSFW filter is a nothing (it&#x27;s trivially easy to fine-tune the model on porn if you want, and porn collections are surprisingly easy to come by...).<p>The higher resolution features are interesting. HuggingFace has got the 1.x models working for inference in under 1G of VRAM, and if those optimizations can be preserved it opens up a bunch of interesting possibilities.",
+      "createdAt": "2022-11-24T03:04:22.000Z",
+      "comments": [
+        {
+          "id": 33727711,
+          "user": "tluyben2",
+          "text": "&gt; it&#x27;s trivially easy to fine-tune the model on porn if you want, and porn collections are surprisingly easy to come by<p>Not really surprised they did this, but be sure some communities will have it fine tuned on porn now-ish. So probably they did it for legal reasons in case illegal materials are generated and they are real companies&#x2F;people with their names on the release?",
+          "createdAt": "2022-11-24T04:11:42.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727093,
+      "user": "satvikpendem",
+      "text": "Looks good. I&#x27;ve gotten bored with AI image generation these days however, after using a lot of SD the past few months. I suppose that&#x27;s the hedonic treadmill in action.",
+      "createdAt": "2022-11-24T02:06:42.000Z",
+      "comments": [
+        {
+          "id": 33728061,
+          "user": "quickthrower2",
+          "text": "Another thing to take for granted eh!",
+          "createdAt": "2022-11-24T05:30:14.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727714,
+      "user": "Sugimot0",
+      "text": "Amy word on AMD support?",
+      "createdAt": "2022-11-24T04:12:02.000Z",
+      "comments": [
+        {
+          "id": 33728765,
+          "user": "CapsAdmin",
+          "text": "The previous version works fine and has performance on par with NVIDIA. I&#x27;m on Linux using the ROCm platform.<p>There are some specialized third party performance optimizations you might miss out on though, but nothing major IMO.",
+          "createdAt": "2022-11-24T07:48:51.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727733,
+          "user": "mugivarra69",
+          "text": "just use rocm",
+          "createdAt": "2022-11-24T04:16:11.000Z",
+          "comments": [
+            {
+              "id": 33727788,
+              "user": "jacooper",
+              "text": "Which has crap support it self.",
+              "createdAt": "2022-11-24T04:26:50.000Z",
+              "comments": [
+                {
+                  "id": 33727947,
+                  "user": "mugivarra69",
+                  "text": "sure.",
+                  "createdAt": "2022-11-24T05:00:38.000Z",
+                  "comments": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33727302,
+      "user": "wyldfire",
+      "text": "This one&#x27;s publicly downloadable?  I think I must&#x27;ve missed 1.5. it had been postponed for a while (for good reasons discussed throughout threads here) and I didn&#x27;t notice whether it had been released.",
+      "createdAt": "2022-11-24T02:43:41.000Z",
+      "comments": [
+        {
+          "id": 33727312,
+          "user": "minimaxir",
+          "text": "1.5 was released, although it was not dramatically better than 1.4 (outside of better inpainting) so it didn&#x27;t get much buzz.<p><a href=\"https:&#x2F;&#x2F;huggingface.co&#x2F;runwayml&#x2F;stable-diffusion-v1-5\" rel=\"nofollow\">https:&#x2F;&#x2F;huggingface.co&#x2F;runwayml&#x2F;stable-diffusion-v1-5</a>",
+          "createdAt": "2022-11-24T02:46:42.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727294,
+      "user": "wyldfire",
+      "text": "depth2img looks really interesting. I was thinking that someone should train an art model like SD on 3d models+textures. This isn&#x27;t quite that but it seems like it gets some of that effect.",
+      "createdAt": "2022-11-24T02:41:58.000Z",
+      "comments": []
+    },
+    {
+      "id": 33727674,
+      "user": "charcircuit",
+      "text": "I dislike how they call their model open source even though there are restrictions on how you can use the model. The ability to use code however you want and not have to worry about if all the code you are using is compatible with your use case is a key part of open source.",
+      "createdAt": "2022-11-24T04:03:16.000Z",
+      "comments": [
+        {
+          "id": 33728346,
+          "user": "josephcsible",
+          "text": "I don&#x27;t know why you&#x27;re being downvoted. The model&#x27;s license is unambiguously noncompliant with the Open Source Definition, yet they falsely claim it to be open source anyway. That&#x27;s just as misleading as calling a product full of HFCS &quot;sugar free&quot; and saying it&#x27;s okay because by &quot;sugar&quot;, you just mean cane sugar.",
+          "createdAt": "2022-11-24T06:30:59.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727609,
+      "user": "vsskanth",
+      "text": "Can this transform an image into a vector illustration ?",
+      "createdAt": "2022-11-24T03:49:01.000Z",
+      "comments": [
+        {
+          "id": 33728137,
+          "user": "speedgoose",
+          "text": "img2img can change the style of an image so you can make it look like a vector illustration but it will still be a bitmap.",
+          "createdAt": "2022-11-24T05:49:04.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33727747,
+      "user": "techsin101",
+      "text": "is there a tool that uses to create UX&#x2F;UI designs. It&#x27;d be really cool to get inspirations...",
+      "createdAt": "2022-11-24T04:18:39.000Z",
+      "comments": [
+        {
+          "id": 33727841,
+          "user": "codsane",
+          "text": "I would love that…I’ve heard of this use case for AI described many times but I’ve yet to find anyone doing it! Copilot is great, but for more creative&#x2F;frontend work it seems like there should be something right?<p>Stable Diffusion is <i>amazing</i> at generating art. Something similar but specialized in UI could be too. Maybe one could make a custom model, but with my lack of design knowledge I’m not even sure where to start…<p>It would surely save my monkey brain from pouring many more hours into looking at existing websites&#x2F;UI libraries&#x2F;Dribble and drawing inspiration (copying) from them.",
+          "createdAt": "2022-11-24T04:36:20.000Z",
+          "comments": []
+        },
+        {
+          "id": 33727971,
+          "user": "Godel_unicode",
+          "text": "Microsoft Designer is supposedly this, although I’m still waiting on admission to the beta.",
+          "createdAt": "2022-11-24T05:07:11.000Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": 33728333,
+      "user": "xzghfat",
+      "text": "remark",
+      "createdAt": "2022-11-24T06:28:42.000Z",
+      "comments": []
+    },
+    {
+      "id": 33727108,
+      "user": "natch",
+      "text": "&gt; greatly improves the quality of the generated images compared to earlier V1 releases<p>That’s great!",
+      "createdAt": "2022-11-24T02:09:58.000Z",
+      "comments": [
+        {
+          "id": 33727153,
+          "user": "minimaxir",
+          "text": "The repo provides a chart with a quantitative measure (FID&#x2F;CLIP score) where the new 2.0 models do indeed have much better results than the earlier 1.5 model.",
+          "createdAt": "2022-11-24T02:18:00.000Z",
+          "comments": [
+            {
+              "id": 33727217,
+              "user": "natch",
+              "text": "Nice, will be interesting to see.",
+              "createdAt": "2022-11-24T02:28:10.000Z",
+              "comments": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33727220,
+      "user": "theylovezmw",
+      "text": "Interesting this is being marketed as a 2.0 release so quickly after the first version was launched.<p>These new updates are quite great but are they so game-changing that it is considered 2.0?",
+      "createdAt": "2022-11-24T02:28:34.000Z",
+      "comments": [
+        {
+          "id": 33727624,
+          "user": "vanshg",
+          "text": "It doesn&#x27;t need to be game-chaning to be considered V2. It just needs to be &quot;the next version&quot;",
+          "createdAt": "2022-11-24T03:52:10.000Z",
+          "comments": []
+        }
+      ]
+    }
+  ]
+}
