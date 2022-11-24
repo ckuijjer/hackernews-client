@@ -26,7 +26,7 @@ The easiest way is to use [Expo Go](https://expo.dev/client) on your phone to op
 1. Install [Node.js](https://nodejs.org/en/)
 1. Clone the git repository
 1. Run `npm install` in the root directory of the project
-1. Run `npx expo start` (use `npx expo start --tunnel` when your phone is not on the same network as your laptop)
+1. Run `npx expo start` (or if your phone is not on the same network as your laptop use `npx expo start --tunnel`)
 1. Use the camera of your phone to scan the QR code in the terminal
 
 You should now see the app running on your phone, try making some changes to the code and see the changes immediately on your phone. You could for example change _src/screens/FrontPageScreen.tsx_ and change the `<Header>` to say _Hacker News_ instead of _Front Page_.
