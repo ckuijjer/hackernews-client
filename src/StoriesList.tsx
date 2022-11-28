@@ -36,12 +36,9 @@ export const StoriesList = ({
       story={item}
       onPress={() =>
         navigation.navigate('Story', {
-          story: {
-            id: item.id,
-            user: item.user,
-            title: item.title,
-            text: item.text,
-          },
+          id: item.id,
+          title: item.title,
+          url: item.url,
         })
       }
     />

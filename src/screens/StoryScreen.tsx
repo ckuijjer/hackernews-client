@@ -28,12 +28,12 @@ const openInBrowser = (url: string) => {
 
 type Props = NativeStackScreenProps<StackParamList, 'Story'>;
 
-export const StoryScreen = ({ route, navigation }: Props) => {
-  const { story } = route.params;
+export const StoryScreen = ({ route }: Props) => {
+  const { id, title, url } = route.params;
 
-  const { data, isLoading, isRefetching, refetch } = useQuery({
-    queryKey: ['item', story.id],
-    queryFn: () => getStory(story.id),
+  let { data, isLoading, isRefetching, refetch } = useQuery({
+    queryKey: ['item', id],
+    queryFn: () => getStory(id),
   });
 
   return (
@@ -47,17 +47,19 @@ export const StoryScreen = ({ route, navigation }: Props) => {
       onRefresh={refetch}
       ListHeaderComponent={() => (
         <ListHeader
-          title={data?.title ?? story.title}
-          user={data?.user ?? story.user}
-          text={data?.text ?? story.text ?? ''}
+          title={data?.title ?? title}
+          user={data?.user}
+          text={data?.text}
           createdAt={data?.createdAt}
-          url={data?.url ?? story.url}
+          url={data?.url ?? url}
           isLoading={isLoading}
         />
       )}
-      ListFooterComponent={() => (isLoading ? null : <SafeAreaPaddingBottom />)}
-      ListEmptyComponent={() =>
-        isLoading ? <Loading style={styles.loadingStyle} /> : null
+      ListFooterComponentStyle={{
+        minHeight: '100%',
+      }}
+      ListFooterComponent={() =>
+        isLoading ? <Loading /> : <SafeAreaPaddingBottom />
       }
       style={styles.container}
     />
@@ -66,10 +68,10 @@ export const StoryScreen = ({ route, navigation }: Props) => {
 
 type ListHeaderProps = {
   title: string;
-  user: string;
-  createdAt: Date;
-  text: string;
   url: string;
+  user?: string;
+  createdAt?: Date;
+  text?: string;
   isLoading: boolean;
 };
 
@@ -98,18 +100,22 @@ const ListHeader = ({
       <Pressable onPress={() => openInBrowser(url)}>
         <Header>{title}</Header>
       </Pressable>
-      <View style={styles.metadataContainer}>
-        <Text style={styles.metadata}>
-          by {user}
-          {humanReadableTimeAgo}
-        </Text>
-      </View>
-      {text && (
-        <View style={styles.textContainer}>
-          <RenderHtml source={{ html: text }} contentWidth={width} />
-        </View>
+      {!isLoading && (
+        <>
+          <View style={styles.metadataContainer}>
+            <Text style={styles.metadata}>
+              by {user}
+              {humanReadableTimeAgo}
+            </Text>
+          </View>
+          {text && (
+            <View style={styles.textContainer}>
+              <RenderHtml source={{ html: text }} contentWidth={width} />
+            </View>
+          )}
+          <View style={styles.separator} />
+        </>
       )}
-      {!isLoading && <View style={styles.separator} />}
     </View>
   );
 };
@@ -162,8 +168,5 @@ const styles = StyleSheet.create({
     color: PlatformColor('secondaryLabel'),
     fontSize: 15,
     lineHeight: 20,
-  },
-  loadingStyle: {
-    backgroundColor: PlatformColor('systemBackground'),
   },
 });

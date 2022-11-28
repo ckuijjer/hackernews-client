@@ -15,9 +15,7 @@ import type { Story } from './src/types';
 
 export type StackParamList = {
   FrontPage: undefined;
-  Story: {
-    story: Omit<Story, 'createdAt|comments'>;
-  };
+  Story: Pick<Story, 'id' | 'title' | 'url'>;
 };
 
 const Stack = createNativeStackNavigator<StackParamList>();
