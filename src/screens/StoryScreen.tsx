@@ -31,7 +31,7 @@ type Props = NativeStackScreenProps<StackParamList, 'Story'>;
 export const StoryScreen = ({ route }: Props) => {
   const { id, title, url } = route.params;
 
-  let { data, isLoading, isRefetching, refetch } = useQuery({
+  const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['item', id],
     queryFn: () => getStory(id),
   });
