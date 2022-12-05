@@ -1,13 +1,14 @@
 import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  PlatformColor,
   FlatList,
   GestureResponderEvent,
+  PlatformColor,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Story } from './types';
 import { timeAgo } from './timeAgo';
@@ -15,22 +16,25 @@ import { Icon } from './Icon';
 import { StackParamList } from '../App';
 import { SafeAreaPaddingBottom } from './SafeAreaPaddingBottom';
 import { Loading } from './Loading';
+import { Header } from './Header';
 
 type StoriesListProps = {
   stories: Story[] | undefined;
   isLoading: boolean;
   navigation: NativeStackNavigationProp<StackParamList, 'FrontPage'>;
+  title: string;
+  onRefresh: (() => void) | null | undefined;
+  refreshing: boolean | null | undefined;
 };
 
 export const StoriesList = ({
   stories,
   isLoading,
   navigation,
+  title,
+  onRefresh,
+  refreshing,
 }: StoriesListProps) => {
-  if (isLoading) {
-    return <Loading />;
-  }
-
   const renderItem = ({ item }: { item: Story }) => (
     <Item
       story={item}
@@ -45,14 +49,23 @@ export const StoriesList = ({
   );
 
   return (
-    <View style={styles.listView}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <FlatList
         data={stories}
         renderItem={renderItem}
         keyExtractor={(item) => '' + item.id}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
+        ListHeaderComponent={() => <Header>{title}</Header>}
+        ListFooterComponentStyle={{
+          minHeight: '100%',
+        }}
+        ListFooterComponent={() =>
+          isLoading ? <Loading /> : <SafeAreaPaddingBottom />
+        }
+        style={styles.container}
       />
-      <SafeAreaPaddingBottom />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -79,7 +92,7 @@ const Item = ({ story, onPress }: ItemProps) => {
 };
 
 const styles = StyleSheet.create({
-  listView: {
+  container: {
     flex: 1,
     backgroundColor: PlatformColor('systemBackground'),
   },
