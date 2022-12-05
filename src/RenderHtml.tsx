@@ -41,6 +41,7 @@ export const RenderHtml = (props: RenderHTMLProps) => {
       tagsStyles={tagStyles}
       baseStyle={baseStyle}
       enableExperimentalMarginCollapsing
+      defaultTextProps={{ selectable: true }}
       {...props}
     />
   );
