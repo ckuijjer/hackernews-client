@@ -1,7 +1,17 @@
 import { LogBox } from 'react-native';
+import Constants from 'expo-constants';
 
-LogBox.ignoreAllLogs();
+const ignoreErrorAndWarningNotifications = () => {
+  LogBox.ignoreAllLogs();
 
-console.log = () => {};
-console.warn = () => {};
-console.error = () => {};
+  // hide warning messages in the console
+  console.log = () => {};
+  console.warn = () => {};
+  console.error = () => {};
+};
+
+export const configureLogging = () => {
+  if (Constants.expoConfig?.extra?.ignoreErrorAndWarningNotifications) {
+    ignoreErrorAndWarningNotifications();
+  }
+};

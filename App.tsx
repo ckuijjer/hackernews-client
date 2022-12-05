@@ -12,12 +12,14 @@ import { StatusBar } from 'expo-status-bar';
 import { FrontPageScreen } from './src/screens/FrontPageScreen';
 import { StoryScreen } from './src/screens/StoryScreen';
 import type { Story } from './src/types';
-import {} from './src/logger';
+import { configureLogging } from './src/logger';
 
 export type StackParamList = {
   FrontPage: undefined;
   Story: Pick<Story, 'id' | 'title' | 'url'>;
 };
+
+configureLogging();
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
