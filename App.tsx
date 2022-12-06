@@ -32,7 +32,11 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationContainer theme={theme}>
-        <Stack.Navigator screenOptions={{ fullScreenGestureEnabled: true }}>
+        <Stack.Navigator
+          screenOptions={{
+            fullScreenGestureEnabled: true,
+          }}
+        >
           <Stack.Screen
             name="FrontPage"
             component={FrontPageScreen}

@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react';
 import {
   FlatList,
   GestureResponderEvent,
@@ -6,7 +7,9 @@ import {
   StyleSheet,
   Text,
   View,
+  Animated,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -35,9 +38,19 @@ export const StoriesList = ({
   onRefresh,
   refreshing,
 }: StoriesListProps) => {
+  const [activeItem, setActiveItem] = useState<number | undefined>();
+
+  useFocusEffect(
+    useCallback(() => {
+      setActiveItem(undefined);
+    }, []),
+  );
+
   const renderItem = ({ item }: { item: Story }) => (
     <Item
       story={item}
+      isActive={activeItem === item.id}
+      onPressIn={() => setActiveItem(item.id)}
       onPress={() =>
         navigation.navigate('Story', {
           id: item.id,
@@ -71,12 +84,18 @@ export const StoriesList = ({
 
 type ItemProps = {
   story: Story;
+  onPressIn: (event: GestureResponderEvent) => void;
   onPress: (event: GestureResponderEvent) => void;
+  isActive: boolean;
 };
 
-const Item = ({ story, onPress }: ItemProps) => {
+const Item = ({ story, onPress, onPressIn, isActive }: ItemProps) => {
   return (
-    <Pressable style={styles.itemContainer} onPress={onPress}>
+    <Pressable
+      style={[styles.itemContainer, isActive && styles.itemContainerActive]}
+      onPressIn={onPressIn}
+      onPress={onPress}
+    >
       <View style={styles.item}>
         <View style={styles.itemTitleContainer}>
           <Text style={styles.title}>{story.title}</Text>
@@ -100,6 +119,9 @@ const styles = StyleSheet.create({
     backgroundColor: PlatformColor('systemBackground'),
     minHeight: 60,
     flexDirection: 'row',
+  },
+  itemContainerActive: {
+    backgroundColor: PlatformColor('secondarySystemBackground'),
   },
   metadataContainer: {
     paddingHorizontal: 8,
