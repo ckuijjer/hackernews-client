@@ -9,7 +9,7 @@ import {
   View,
   Animated,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigationState } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -40,6 +40,10 @@ export const StoriesList = ({
 }: StoriesListProps) => {
   const [activeItem, setActiveItem] = useState<number | undefined>();
 
+  useNavigationState((state) => {
+    console.log({ state });
+  });
+
   useFocusEffect(
     useCallback(() => {
       setActiveItem(undefined);
@@ -51,13 +55,16 @@ export const StoriesList = ({
       story={item}
       isActive={activeItem === item.id}
       onPressIn={() => setActiveItem(item.id)}
-      onPress={() =>
+      onPressOut={() => setActiveItem(undefined)}
+      onPress={() => {
+        setActiveItem(item.id);
+
         navigation.navigate('Story', {
           id: item.id,
           title: item.title,
           url: item.url,
-        })
-      }
+        });
+      }}
     />
   );
 
@@ -85,15 +92,23 @@ export const StoriesList = ({
 type ItemProps = {
   story: Story;
   onPressIn: (event: GestureResponderEvent) => void;
+  onPressOut: (event: GestureResponderEvent) => void;
   onPress: (event: GestureResponderEvent) => void;
   isActive: boolean;
 };
 
-const Item = ({ story, onPress, onPressIn, isActive }: ItemProps) => {
+const Item = ({
+  story,
+  onPress,
+  onPressIn,
+  onPressOut,
+  isActive,
+}: ItemProps) => {
   return (
     <Pressable
       style={[styles.itemContainer, isActive && styles.itemContainerActive]}
       onPressIn={onPressIn}
+      onPressOut={onPressOut}
       onPress={onPress}
     >
       <View style={styles.item}>
