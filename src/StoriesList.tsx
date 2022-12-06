@@ -38,11 +38,8 @@ export const StoriesList = ({
   onRefresh,
   refreshing,
 }: StoriesListProps) => {
+  const [isScrolling, setIsScrolling] = useState(false);
   const [activeItem, setActiveItem] = useState<number | undefined>();
-
-  useNavigationState((state) => {
-    console.log({ state });
-  });
 
   useFocusEffect(
     useCallback(() => {
@@ -54,11 +51,16 @@ export const StoriesList = ({
     <Item
       story={item}
       isActive={activeItem === item.id}
-      onPressIn={() => setActiveItem(item.id)}
-      onPressOut={() => setActiveItem(undefined)}
+      onPressIn={() => {
+        if (!isScrolling) {
+          setActiveItem(item.id);
+        }
+      }}
+      onPressOut={() => {
+        setActiveItem(undefined);
+      }}
       onPress={() => {
         setActiveItem(item.id);
-
         navigation.navigate('Story', {
           id: item.id,
           title: item.title,
@@ -84,6 +86,15 @@ export const StoriesList = ({
           isLoading ? <Loading /> : <SafeAreaPaddingBottom />
         }
         style={styles.container}
+        onScroll={() => {
+          setIsScrolling(true);
+        }}
+        onScrollBeginDrag={() => {
+          setIsScrolling(true);
+        }}
+        onScrollEndDrag={() => {
+          setIsScrolling(false);
+        }}
       />
     </SafeAreaView>
   );
@@ -107,6 +118,7 @@ const Item = ({
   return (
     <Pressable
       style={[styles.itemContainer, isActive && styles.itemContainerActive]}
+      unstable_pressDelay={50}
       onPressIn={onPressIn}
       onPressOut={onPressOut}
       onPress={onPress}
