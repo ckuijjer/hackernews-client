@@ -9,7 +9,7 @@ import {
   FlatList,
 } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 
 import { RenderHtml } from '../RenderHtml';
 import type { StackParamList } from '../../App';
@@ -26,7 +26,7 @@ const openInBrowser = (url: string) => {
   });
 };
 
-type Props = NativeStackScreenProps<StackParamList, 'Story'>;
+type Props = StackScreenProps<StackParamList, 'Story'>;
 
 export const StoryScreen = ({ route }: Props) => {
   const { id, title, url } = route.params;
