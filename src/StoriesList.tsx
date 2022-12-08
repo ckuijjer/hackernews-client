@@ -7,10 +7,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Animated,
 } from 'react-native';
-import { useFocusEffect, useNavigationState } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Story } from './types';
@@ -24,7 +22,6 @@ import { Header } from './Header';
 type StoriesListProps = {
   stories: Story[] | undefined;
   isLoading: boolean;
-  navigation: NativeStackNavigationProp<StackParamList, 'FrontPage'>;
   title: string;
   onRefresh: (() => void) | null | undefined;
   refreshing: boolean | null | undefined;
@@ -33,11 +30,11 @@ type StoriesListProps = {
 export const StoriesList = ({
   stories,
   isLoading,
-  navigation,
   title,
   onRefresh,
   refreshing,
 }: StoriesListProps) => {
+  const navigation = useNavigation<StackParamList>();
   const [isScrolling, setIsScrolling] = useState(false);
   const [activeItem, setActiveItem] = useState<number | undefined>();
 

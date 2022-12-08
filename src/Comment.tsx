@@ -53,12 +53,6 @@ export const Comment = ({
     );
   };
 
-  const shouldCapture = (gestureState) => {
-    console.log({ gestureState });
-
-    return gestureState.dx > 0;
-  };
-
   return (
     <>
       {hidden ? null : (
@@ -67,9 +61,12 @@ export const Comment = ({
           containerStyle={styles.pressableContainer}
           ref={swipeRef}
           friction={2}
-          enableTrackpadTwoFingerGesture
+          // enabled={false}
           hitSlop={{ left: -20 }} // To have space room for react-navigation's swipe back gesture
-          shouldCapture={shouldCapture}
+          // onGestureEvent={(...args) => console.log('onGestureEvent', ...args)}
+          // onHandlerStateChange={(...args) =>
+          //   console.log('onHandlerStateChange', ...args)
+          // }
         >
           <Pressable onPress={() => setIsCollapsed(!isCollapsed)}>
             <View style={styles.container}>

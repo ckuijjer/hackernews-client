@@ -1,11 +1,11 @@
 import React from 'react';
-import { useColorScheme } from 'react-native';
+import { useColorScheme, useWindowDimensions } from 'react-native';
 import {
   NavigationContainer,
   DefaultTheme,
   DarkTheme,
 } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -22,13 +22,14 @@ export type StackParamList = {
 
 configureLogging();
 
-const Stack = createNativeStackNavigator<StackParamList>();
+const Stack = createStackNavigator<StackParamList>();
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
+  const { width } = useWindowDimensions();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -36,7 +37,8 @@ const App = () => {
         <NavigationContainer theme={theme}>
           <Stack.Navigator
             screenOptions={{
-              fullScreenGestureEnabled: true,
+              cardShadowEnabled: true,
+              gestureResponseDistance: width,
             }}
           >
             <Stack.Screen
@@ -47,7 +49,10 @@ const App = () => {
             <Stack.Screen
               name="Story"
               component={StoryScreen}
-              options={{ title: '' }}
+              options={{
+                title: '',
+                headerBackTitle: 'Back',
+              }}
             />
           </Stack.Navigator>
         </NavigationContainer>
