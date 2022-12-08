@@ -53,17 +53,23 @@ export const Comment = ({
     );
   };
 
+  const shouldCapture = (gestureState) => {
+    console.log({ gestureState });
+
+    return gestureState.dx > 0;
+  };
+
   return (
     <>
       {hidden ? null : (
         <Swipeable
-          // left={null} // Otherwise react-navigation's swipe back gesture doesn't work
           renderRightActions={renderRightActions}
           containerStyle={styles.pressableContainer}
           ref={swipeRef}
           friction={2}
           enableTrackpadTwoFingerGesture
           hitSlop={{ left: -20 }} // To have space room for react-navigation's swipe back gesture
+          shouldCapture={shouldCapture}
         >
           <Pressable onPress={() => setIsCollapsed(!isCollapsed)}>
             <View style={styles.container}>
