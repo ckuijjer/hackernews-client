@@ -8,6 +8,7 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { FrontPageScreen } from './src/screens/FrontPageScreen';
 import { StoryScreen } from './src/screens/StoryScreen';
@@ -31,25 +32,27 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer theme={theme}>
-        <Stack.Navigator
-          screenOptions={{
-            fullScreenGestureEnabled: true,
-          }}
-        >
-          <Stack.Screen
-            name="FrontPage"
-            component={FrontPageScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Story"
-            component={StoryScreen}
-            options={{ title: '' }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-      <StatusBar />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer theme={theme}>
+          <Stack.Navigator
+            screenOptions={{
+              fullScreenGestureEnabled: true,
+            }}
+          >
+            <Stack.Screen
+              name="FrontPage"
+              component={FrontPageScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Story"
+              component={StoryScreen}
+              options={{ title: '' }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+        <StatusBar />
+      </GestureHandlerRootView>
     </QueryClientProvider>
   );
 };

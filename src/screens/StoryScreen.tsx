@@ -148,21 +148,19 @@ const styles = StyleSheet.create({
   listHeader: {
     marginTop: 20,
     marginHorizontal: 20,
-    marginBottom: 8,
   },
   headerContainer: {
     paddingBottom: 12,
   },
   textContainer: {
-    marginBottom: 8,
+    marginBottom: 12,
   },
   separator: {
     borderBottomColor: PlatformColor('separator'),
     borderBottomWidth: StyleSheet.hairlineWidth,
-    marginBottom: 4,
   },
   metadataContainer: {
-    marginBottom: 8,
+    marginBottom: 12,
   },
   metadata: {
     color: PlatformColor('secondaryLabel'),

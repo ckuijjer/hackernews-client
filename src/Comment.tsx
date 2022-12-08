@@ -57,9 +57,13 @@ export const Comment = ({
     <>
       {hidden ? null : (
         <Swipeable
+          // left={null} // Otherwise react-navigation's swipe back gesture doesn't work
           renderRightActions={renderRightActions}
           containerStyle={styles.pressableContainer}
           ref={swipeRef}
+          friction={2}
+          enableTrackpadTwoFingerGesture
+          hitSlop={{ left: -20 }} // To have space room for react-navigation's swipe back gesture
         >
           <Pressable onPress={() => setIsCollapsed(!isCollapsed)}>
             <View style={styles.container}>
