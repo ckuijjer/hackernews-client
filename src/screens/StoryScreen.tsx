@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -14,6 +14,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RenderHtml } from '../RenderHtml';
 import type { StackParamList } from '../../App';
 import { Comment } from '../Comment';
+import { Comment as CommentType } from '../types';
 import { MixedStyleDeclaration } from 'react-native-render-html';
 import { getStory } from '../connectors/hackernews';
 import { useQuery } from '@tanstack/react-query';
@@ -28,6 +29,64 @@ const openInBrowser = (url: string) => {
 
 type Props = StackScreenProps<StackParamList, 'Story'>;
 
+type UICommentType = {
+  comment: Omit<CommentType, 'comments'>;
+  level: number;
+  hidden: boolean;
+  collapsed: boolean;
+  numberOfChildren: number;
+};
+
+const flattenComments = (
+  comments: CommentType[] = [],
+  level: number = 0,
+): UICommentType[] => {
+  const flatComments = comments.flatMap((comment, index) => {
+    const { comments: children, ...rest } = comment;
+
+    const flatChildren = flattenComments(children, level + 1);
+
+    const flatComment: UICommentType = {
+      comment: rest, // comment with children comments removed
+      level,
+      hidden: false,
+      collapsed: false,
+      numberOfChildren: flatChildren.length,
+    };
+
+    return [flatComment, ...flatChildren];
+  });
+
+  return flatComments;
+};
+
+const collapseAndHideComments = (
+  comments: UICommentType[],
+  collapsedComments: boolean[],
+): UICommentType[] => {
+  let collapseLevel: number | undefined = undefined;
+
+  return comments.map((comment, index) => {
+    const collapsed = collapsedComments[index];
+
+    // if we're back at the collapse level, stop collapsing
+    if (collapseLevel === comment.level) {
+      collapseLevel = undefined;
+    }
+
+    // if the comment is collapsed, and its ancestors aren't collapsed, set the collapse level
+    if (collapseLevel === undefined && collapsed) {
+      collapseLevel = comment.level;
+    }
+
+    return {
+      ...comment,
+      collapsed,
+      hidden: collapseLevel !== undefined && comment.level > collapseLevel,
+    };
+  });
+};
+
 export const StoryScreen = ({ route }: Props) => {
   const { id, title, url } = route.params;
 
@@ -36,13 +95,54 @@ export const StoryScreen = ({ route }: Props) => {
     queryFn: () => getStory(id),
   });
 
+  const [collapsedComments, setCollapsedComments] = useState<boolean[]>([]);
+  const [firstViewableComment, setFirstViewableComment] = useState<
+    number | undefined
+  >(undefined);
+
+  useEffect(() => {
+    setCollapsedComments(new Array(data?.comments?.length).fill(false));
+  }, [data]);
+
+  const flatListRef = useRef<FlatList>();
+
+  const handleViewableItemsChanged = useCallback(({ viewableItems }) => {
+    setFirstViewableComment(viewableItems[0].index);
+  }, []);
+
+  const flatComments = flattenComments(data?.comments);
+  const uiComments = collapseAndHideComments(flatComments, collapsedComments);
+
+  const toggleComment = (index: number) => {
+    const newCollapsedComments = [...collapsedComments];
+    newCollapsedComments[index] = !newCollapsedComments[index];
+
+    setCollapsedComments(newCollapsedComments);
+
+    // only scroll if the currentItem starts outside of the viewport
+    if (index === firstViewableComment) {
+      flatListRef?.current?.scrollToIndex({ index, animated: true });
+    }
+  };
+
   return (
     <FlatList
-      data={data?.comments}
-      renderItem={({ item }) => (
-        <Comment comment={item} level={0} key={item.id} hidden={false} />
-      )}
-      keyExtractor={(comment) => '' + comment.id}
+      data={uiComments}
+      ref={flatListRef}
+      renderItem={({ item, index }) => {
+        return (
+          <Comment
+            comment={item.comment}
+            level={item.level}
+            key={item.id}
+            hidden={item.hidden}
+            collapsed={item.collapsed}
+            numberOfChildren={item.numberOfChildren}
+            onAction={() => toggleComment(index)}
+          />
+        );
+      }}
+      keyExtractor={(item) => '' + item.comment.id}
       refreshing={isRefetching}
       onRefresh={refetch}
       ListHeaderComponent={() => (
@@ -62,6 +162,7 @@ export const StoryScreen = ({ route }: Props) => {
         isLoading ? <Loading /> : <SafeAreaPaddingBottom />
       }
       style={styles.container}
+      onViewableItemsChanged={handleViewableItemsChanged}
     />
   );
 };

@@ -20,34 +20,36 @@ import { Icon } from './Icon';
 const PADDING_HORIZONTAL = 20;
 const LEVEL_WIDTH = 8;
 
-const getNumberOfChildren = (comment: CommentType): number =>
-  comment.comments.map(getNumberOfChildren).reduce((acc, cur) => acc + cur, 1);
-
 type CommentProps = {
   comment: CommentType;
   level: number;
   hidden: boolean;
+  collapsed: boolean;
+  numberOfChildren: number;
+  onAction: () => void;
 };
 
 export const Comment = ({
   comment,
   level = 0,
   hidden = false,
+  collapsed = false,
+  numberOfChildren = 0,
+  onAction = () => {},
 }: CommentProps) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const { width } = useWindowDimensions();
   const swipeRef = useRef<Swipeable>();
 
   const commentTextWidth = width - 2 * PADDING_HORIZONTAL - level * LEVEL_WIDTH;
-  const numberOfChildren = getNumberOfChildren(comment);
 
   const renderRightActions = (progress) => {
     return (
       <CollapseAction
         progress={progress}
+        isCollapsed={collapsed}
         onAction={() => {
           swipeRef?.current?.close();
-          setIsCollapsed(true);
+          onAction();
         }}
       />
     );
@@ -68,7 +70,7 @@ export const Comment = ({
           //   console.log('onHandlerStateChange', ...args)
           // }
         >
-          <Pressable onPress={() => setIsCollapsed(!isCollapsed)}>
+          <Pressable onPress={onAction}>
             <View style={styles.container}>
               <CommentLevelIndicator level={level} />
               <View
@@ -76,7 +78,7 @@ export const Comment = ({
               >
                 <View style={styles.metadataContainer}>
                   <Text style={styles.metadata}>{comment.user}</Text>
-                  {isCollapsed ? (
+                  {collapsed ? (
                     <Icon name="chatbubble-outline">+{numberOfChildren}</Icon>
                   ) : (
                     <Icon name="time-outline">
@@ -84,7 +86,7 @@ export const Comment = ({
                     </Icon>
                   )}
                 </View>
-                {!isCollapsed && (
+                {!collapsed && (
                   <RenderHtml
                     source={{ html: comment.text ?? '' }}
                     contentWidth={commentTextWidth}
@@ -95,23 +97,17 @@ export const Comment = ({
           </Pressable>
         </Swipeable>
       )}
-      {comment.comments.map((childComment) => (
-        <Comment
-          comment={childComment}
-          level={level + 1}
-          key={childComment.id}
-          hidden={isCollapsed || hidden}
-        />
-      ))}
     </>
   );
 };
 
 const CollapseAction = ({
   progress,
+  isCollapsed,
   onAction,
 }: {
   progress: Animated.AnimatedInterpolation<number>;
+  isCollapsed: boolean;
   onAction: () => void;
 }) => {
   const trans = progress.interpolate({
@@ -122,6 +118,8 @@ const CollapseAction = ({
   if (progress.__getValue() > 2) {
     onAction();
   }
+
+  const text = isCollapsed ? 'Uncollapse' : 'Collapse';
 
   return (
     <Animated.View
@@ -134,7 +132,7 @@ const CollapseAction = ({
           color="#fff"
           style={styles.actionIcon}
         />
-        <Text style={styles.actionText}>Collapse</Text>
+        <Text style={styles.actionText}>{text}</Text>
       </Pressable>
     </Animated.View>
   );
