@@ -20,6 +20,7 @@ import { getStory } from '../connectors/hackernews';
 import { useQuery } from '@tanstack/react-query';
 import { SafeAreaPaddingBottom } from '../SafeAreaPaddingBottom';
 import { Loading } from '../Loading';
+import { FloatingButton } from '../FloatingButton';
 
 const openInBrowser = (url: string) => {
   WebBrowser.openBrowserAsync(url, {
@@ -96,9 +97,7 @@ export const StoryScreen = ({ route }: Props) => {
   });
 
   const [collapsedComments, setCollapsedComments] = useState<boolean[]>([]);
-  const [firstViewableComment, setFirstViewableComment] = useState<
-    number | undefined
-  >(undefined);
+  const [firstViewableComment, setFirstViewableComment] = useState<number>(0);
 
   useEffect(() => {
     setCollapsedComments(new Array(data?.comments?.length).fill(false));
@@ -126,44 +125,63 @@ export const StoryScreen = ({ route }: Props) => {
   };
 
   return (
-    <FlatList
-      data={uiComments}
-      ref={flatListRef}
-      renderItem={({ item, index }) => {
-        return (
-          <Comment
-            comment={item.comment}
-            level={item.level}
-            key={item.id}
-            hidden={item.hidden}
-            collapsed={item.collapsed}
-            numberOfChildren={item.numberOfChildren}
-            onAction={() => toggleComment(index)}
+    <>
+      <FlatList
+        data={uiComments}
+        ref={flatListRef}
+        renderItem={({ item, index }) => {
+          return (
+            <Comment
+              comment={item.comment}
+              level={item.level}
+              key={item.id}
+              hidden={item.hidden}
+              collapsed={item.collapsed}
+              numberOfChildren={item.numberOfChildren}
+              onAction={() => toggleComment(index)}
+            />
+          );
+        }}
+        keyExtractor={(item) => '' + item.comment.id}
+        refreshing={isRefetching}
+        onRefresh={refetch}
+        ListHeaderComponent={() => (
+          <ListHeader
+            title={data?.title ?? title}
+            user={data?.user}
+            text={data?.text}
+            createdAt={data?.createdAt}
+            url={data?.url ?? url}
+            isLoading={isLoading}
           />
-        );
-      }}
-      keyExtractor={(item) => '' + item.comment.id}
-      refreshing={isRefetching}
-      onRefresh={refetch}
-      ListHeaderComponent={() => (
-        <ListHeader
-          title={data?.title ?? title}
-          user={data?.user}
-          text={data?.text}
-          createdAt={data?.createdAt}
-          url={data?.url ?? url}
-          isLoading={isLoading}
-        />
-      )}
-      ListFooterComponentStyle={{
-        minHeight: '100%',
-      }}
-      ListFooterComponent={() =>
-        isLoading ? <Loading /> : <SafeAreaPaddingBottom />
-      }
-      style={styles.container}
-      onViewableItemsChanged={handleViewableItemsChanged}
-    />
+        )}
+        ListFooterComponentStyle={{
+          minHeight: '100%',
+        }}
+        ListFooterComponent={() =>
+          isLoading ? <Loading /> : <SafeAreaPaddingBottom />
+        }
+        style={styles.container}
+        onViewableItemsChanged={handleViewableItemsChanged}
+      />
+      <FloatingButton
+        onPress={() => {
+          const nextAtRootLevel = uiComments.findIndex(
+            (comment, index) =>
+              index > firstViewableComment &&
+              comment.level <= uiComments[firstViewableComment].level,
+          );
+          console.log({ firstViewableComment, nextAtRootLevel });
+
+          if (nextAtRootLevel) {
+            flatListRef?.current?.scrollToIndex({
+              index: nextAtRootLevel,
+              animated: true,
+            });
+          }
+        }}
+      />
+    </>
   );
 };
 
