@@ -109,6 +109,10 @@ export const StoryScreen = ({ route }: Props) => {
     setFirstViewableComment(viewableItems[0].index);
   }, []);
 
+  const handleScrollToIndexFailed = (error) => {
+    // console.error(error);
+  };
+
   const flatComments = flattenComments(data?.comments);
   const uiComments = collapseAndHideComments(flatComments, collapsedComments);
 
@@ -163,15 +167,14 @@ export const StoryScreen = ({ route }: Props) => {
         }
         style={styles.container}
         onViewableItemsChanged={handleViewableItemsChanged}
+        onScrollToIndexFailed={handleScrollToIndexFailed}
       />
       <FloatingButton
         onPress={() => {
           const nextAtRootLevel = uiComments.findIndex(
             (comment, index) =>
-              index > firstViewableComment &&
-              comment.level <= uiComments[firstViewableComment].level,
+              index > firstViewableComment && comment.level === 0,
           );
-          console.log({ firstViewableComment, nextAtRootLevel });
 
           if (nextAtRootLevel) {
             flatListRef?.current?.scrollToIndex({

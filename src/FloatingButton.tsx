@@ -10,6 +10,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 const NAVIGATION_BAR_HEIGHT = 44;
 const BUTTON_SIZE = 44;
@@ -49,14 +50,22 @@ export const FloatingButton = ({ onPress = () => {} }) => {
       <Animated.View
         style={{
           transform: [{ translateX: pan.x }, { translateY: pan.y }],
+          backgroundColor: '#f9f',
         }}
         {...panResponder.panHandlers}
       >
-        <Pressable style={styles.button} onPress={onPress}>
+        <Pressable onPress={onPress}>
+          <Ionicons
+            name="ellipse"
+            size={BUTTON_SIZE}
+            color={PlatformColor('systemBackground')}
+            style={styles.icon}
+          />
           <Ionicons
             name="chevron-down-circle-outline"
             size={BUTTON_SIZE}
             color={PlatformColor('link')}
+            style={styles.icon}
           />
         </Pressable>
       </Animated.View>
@@ -67,9 +76,14 @@ export const FloatingButton = ({ onPress = () => {} }) => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
+    backgroundColor: '#f9f',
+    top: 0,
+    left: 0,
+    zIndex: 1,
   },
-  button: {
-    backgroundColor: PlatformColor('systemBackground'),
-    borderRadius: BUTTON_SIZE / 2,
+  icon: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
   },
 });
