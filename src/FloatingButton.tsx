@@ -20,8 +20,8 @@ export const FloatingButton = ({ onPress = () => {} }) => {
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  // TODO: understand why I need positionRef and pan
-  const positionRef = useRef({
+  // TODO: understand why I need position and pan
+  const position = useRef({
     x: BUTTON_MARGIN,
     y:
       height -
@@ -32,9 +32,9 @@ export const FloatingButton = ({ onPress = () => {} }) => {
       NAVIGATION_BAR_HEIGHT,
   });
 
-  const pan = useRef(new Animated.ValueXY(positionRef.current)).current;
+  const pan = useRef(new Animated.ValueXY(position.current)).current;
   pan.addListener((value) => {
-    positionRef.current = value;
+    position.current = value;
   });
 
   const panResponder = useRef(
@@ -42,8 +42,8 @@ export const FloatingButton = ({ onPress = () => {} }) => {
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         pan.setOffset({
-          x: positionRef.current.x,
-          y: positionRef.current.y,
+          x: position.current.x,
+          y: position.current.y,
         });
       },
       onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
