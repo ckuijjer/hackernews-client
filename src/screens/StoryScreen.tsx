@@ -116,6 +116,7 @@ export const StoryScreen = ({ route }: Props) => {
   const flatComments = flattenComments(data?.comments);
   const uiComments = collapseAndHideComments(flatComments, collapsedComments);
 
+  // TODO: logic needs to be more complex than this
   const toggleComment = (index: number) => {
     const newCollapsedComments = [...collapsedComments];
     newCollapsedComments[index] = !newCollapsedComments[index];
@@ -167,6 +168,7 @@ export const StoryScreen = ({ route }: Props) => {
         }
         style={styles.container}
         onViewableItemsChanged={handleViewableItemsChanged}
+        viewabilityConfig={{ viewAreaCoveragePercentThreshold: 1 }}
         onScrollToIndexFailed={handleScrollToIndexFailed}
       />
       <FloatingButton

@@ -22,7 +22,7 @@ export const FloatingButton = ({ onPress = () => {} }) => {
 
   // TODO: understand why I need position and pan
   const position = useRef({
-    x: BUTTON_MARGIN,
+    x: BUTTON_MARGIN, // defaults somewhere bottom left of the screen
     y:
       height -
       insets.top -
