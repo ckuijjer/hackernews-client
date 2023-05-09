@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   Pressable,
@@ -10,7 +10,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-// import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+// // import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 const NAVIGATION_BAR_HEIGHT = 44;
 const BUTTON_SIZE = 44;
@@ -20,39 +20,45 @@ export const FloatingButton = ({ onPress = () => {} }) => {
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  const pan = useRef(
-    new Animated.ValueXY({
-      x: BUTTON_MARGIN,
-      y:
-        height -
-        insets.top -
-        insets.bottom -
-        BUTTON_SIZE -
-        BUTTON_MARGIN -
-        NAVIGATION_BAR_HEIGHT,
-    }),
-  ).current;
+  // TODO: understand why I need positionRef and pan
+  const positionRef = useRef({
+    x: BUTTON_MARGIN,
+    y:
+      height -
+      insets.top -
+      insets.bottom -
+      BUTTON_SIZE -
+      BUTTON_MARGIN -
+      NAVIGATION_BAR_HEIGHT,
+  });
+
+  const pan = useRef(new Animated.ValueXY(positionRef.current)).current;
+  pan.addListener((value) => {
+    positionRef.current = value;
+  });
 
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        pan.setOffset({
+          x: positionRef.current.x,
+          y: positionRef.current.y,
+        });
+      },
       onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
         useNativeDriver: false,
       }),
-      onPanResponderRelease: () => {
-        pan.extractOffset();
-      },
     }),
   ).current;
 
   return (
     <View style={styles.container}>
       <Animated.View
-        style={{
-          transform: [{ translateX: pan.x }, { translateY: pan.y }],
-          backgroundColor: '#f9f',
-        }}
         {...panResponder.panHandlers}
+        style={{
+          transform: pan.getTranslateTransform(),
+        }}
       >
         <Pressable onPress={onPress}>
           <Ionicons
@@ -76,9 +82,10 @@ export const FloatingButton = ({ onPress = () => {} }) => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    backgroundColor: '#f9f',
     top: 0,
     left: 0,
+    bottom: 0,
+    right: 0,
     zIndex: 1,
   },
   icon: {
