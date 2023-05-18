@@ -30,6 +30,18 @@
       },
       "ignoreErrorAndWarningNotifications": false
     },
-    "jsEngine": "hermes"
+    "jsEngine": "hermes",
+    "plugins": ["sentry-expo"],
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "casper-kuijjer",
+            "project": "hackernews-client"
+          }
+        }
+      ]
+    }
   }
 }

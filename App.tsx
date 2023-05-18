@@ -9,6 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as Sentry from 'sentry-expo';
 
 import { FrontPageScreen } from './src/screens/FrontPageScreen';
 import { StoryScreen } from './src/screens/StoryScreen';
@@ -25,6 +26,12 @@ configureLogging();
 const Stack = createStackNavigator<StackParamList>();
 
 const queryClient = new QueryClient();
+
+Sentry.init({
+  dsn: 'https://f1a0d36f911a454983bef785fb775170@o4505205662416896.ingest.sentry.io/4505205673033728',
+  enableInExpoDevelopment: true,
+  debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+});
 
 const App = () => {
   const colorScheme = useColorScheme();
