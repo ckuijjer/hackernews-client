@@ -110,7 +110,7 @@ export const StoryScreen = ({ route }: Props) => {
   }, []);
 
   const handleScrollToIndexFailed = (error) => {
-    // console.error(error);
+    console.error(error);
   };
 
   const flatComments = flattenComments(data?.comments);
@@ -173,9 +173,21 @@ export const StoryScreen = ({ route }: Props) => {
       />
       <FloatingButton
         onPress={() => {
+          console.log('floating button pressed');
           const nextAtRootLevel = uiComments.findIndex(
             (comment, index) =>
               index > firstViewableComment && comment.level === 0,
+          );
+
+          console.log(
+            `firstViewableComment: index ${firstViewableComment} text: ${(
+              uiComments[firstViewableComment]?.comment?.text ?? ''
+            ).slice(0, 50)}`,
+          );
+          console.log(
+            `nextAtRootLevel: index ${nextAtRootLevel} text: ${(
+              uiComments[nextAtRootLevel]?.comment?.text ?? ''
+            ).slice(0, 50)}`,
           );
 
           if (nextAtRootLevel) {
