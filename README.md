@@ -13,9 +13,7 @@ Install [Expo Go](https://expo.dev/client) on your phone and afterwards use the 
 
 ### QR Code for iOS
 
-<img src="./qr-code-iOS.svg" width="200" />
-
-[![](./qr-code-iOS.svg)](exp://u.expo.dev/update/846fb9a6-21ba-4668-adc3-fc6181eaccae)
+[<img src="./qr-code-iOS.svg" width="200" />](exp://u.expo.dev/update/846fb9a6-21ba-4668-adc3-fc6181eaccae)
 
 ### QR Code for Android
 
