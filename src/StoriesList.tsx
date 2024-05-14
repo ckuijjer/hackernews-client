@@ -125,9 +125,9 @@ const Item = ({
           <Text style={styles.title}>{story.title}</Text>
         </View>
         <View style={styles.metadataContainer}>
-          <Icon name="time-outline">{timeAgo(story.createdAt)}</Icon>
-          <Icon name="arrow-up-sharp">{story.score}</Icon>
-          <Icon name="chatbubble-outline">{story.numberOfComments}</Icon>
+          <Icon name="clock">{timeAgo(story.createdAt)}</Icon>
+          <Icon name="arrow.up">{story.score}</Icon>
+          <Icon name="bubble">{story.numberOfComments}</Icon>
         </View>
       </View>
     </Pressable>

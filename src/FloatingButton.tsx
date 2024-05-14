@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import { SymbolView } from 'expo-symbols';
 import {
   Pressable,
   StyleSheet,
@@ -61,16 +61,14 @@ export const FloatingButton = ({ onPress = () => {} }) => {
         }}
       >
         <Pressable onPress={onPress}>
-          <Ionicons
-            name="ellipse"
+          <SymbolView
+            name="circle.fill"
             size={BUTTON_SIZE}
-            color={PlatformColor('systemBackground')}
-            style={styles.icon}
+            style={styles.iconBackground}
           />
-          <Ionicons
-            name="chevron-down-circle-outline"
+          <SymbolView
+            name="chevron.down.circle"
             size={BUTTON_SIZE}
-            color={PlatformColor('link')}
             style={styles.icon}
           />
         </Pressable>
@@ -86,9 +84,16 @@ const styles = StyleSheet.create({
     left: 0,
     zIndex: 1,
   },
+  iconBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    tintColor: PlatformColor('systemBackground'),
+  },
   icon: {
     position: 'absolute',
     top: 0,
     left: 0,
+    tintColor: PlatformColor('link'),
   },
 });

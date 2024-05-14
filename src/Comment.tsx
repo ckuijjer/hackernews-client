@@ -8,7 +8,7 @@ import {
   PlatformColor,
   Animated,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { SymbolView } from 'expo-symbols';
 import { Swipeable } from 'react-native-gesture-handler';
 
 import { RenderHtml } from './RenderHtml';
@@ -79,11 +79,9 @@ export const Comment = ({
                 <View style={styles.metadataContainer}>
                   <Text style={styles.metadata}>{comment.user}</Text>
                   {collapsed ? (
-                    <Icon name="chatbubble-outline">+{numberOfChildren}</Icon>
+                    <Icon name="bubble">+{numberOfChildren}</Icon>
                   ) : (
-                    <Icon name="time-outline">
-                      {timeAgo(comment.createdAt)}
-                    </Icon>
+                    <Icon name="clock">{timeAgo(comment.createdAt)}</Icon>
                   )}
                 </View>
                 {!collapsed && (
@@ -126,10 +124,10 @@ const CollapseAction = ({
       style={[styles.actionsContainer, { transform: [{ translateX: trans }] }]}
     >
       <Pressable onPress={onAction} style={styles.action}>
-        <Ionicons
-          name="contract"
+        <SymbolView
+          name="arrow.down.right.and.arrow.up.left"
           size={24}
-          color="#fff"
+          tintColor="#fff"
           style={styles.actionIcon}
         />
         <Text style={styles.actionText}>{text}</Text>
@@ -173,7 +171,7 @@ const styles = StyleSheet.create({
     width: 96,
   },
   actionIcon: {
-    // padding: 8,
+    marginBottom: 4,
   },
   actionText: {
     color: '#fff',

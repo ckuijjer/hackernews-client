@@ -1,19 +1,26 @@
 import { Text, StyleSheet, PlatformColor } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { SymbolView, SFSymbol } from 'expo-symbols';
+
 import React from 'react';
 
-type IconProps = { name: string; children?: React.ReactNode };
+type IconProps = { name: SFSymbol; children?: React.ReactNode };
 
 export const Icon = ({ name, children }: IconProps) => {
   return (
     <Text style={styles.text}>
-      <Ionicons name={name} size={15} color={PlatformColor('secondaryLabel')} />{' '}
+      <SymbolView name={name} style={styles.symbol} type="monochrome" />
       {children}
     </Text>
   );
 };
 
 const styles = StyleSheet.create({
+  symbol: {
+    tintColor: PlatformColor('secondaryLabel'),
+    width: 12,
+    height: 12,
+    marginRight: 2,
+  },
   text: {
     color: PlatformColor('secondaryLabel'),
     fontSize: 15,
