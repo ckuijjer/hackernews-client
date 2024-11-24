@@ -47,7 +47,6 @@ npx expo install expo@latest
 
 and then to upgrade the code to use the new version of the SDK use
 
-````bash
+```bash
 npx expo install --fix
 ```
-````
