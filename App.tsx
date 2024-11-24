@@ -13,8 +13,8 @@ import * as Sentry from '@sentry/react-native';
 
 import { FrontPageScreen } from './src/screens/FrontPageScreen';
 import { StoryScreen } from './src/screens/StoryScreen';
-import type { Story } from './src/types';
-import { configureLogging } from './src/logger';
+import type { Story } from './src/connectors/types';
+import { configureLogging } from './src/utils/logger';
 
 export type StackParamList = {
   FrontPage: undefined;

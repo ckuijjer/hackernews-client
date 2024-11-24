@@ -14,7 +14,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RenderHtml } from '../RenderHtml';
 import type { StackParamList } from '../../App';
 import { Comment } from '../Comment';
-import { Comment as CommentType } from '../types';
+import { Comment as CommentType } from '../connectors/types';
 import { MixedStyleDeclaration } from 'react-native-render-html';
 import { getStory } from '../connectors/hackernews';
 import { useQuery } from '@tanstack/react-query';

@@ -4,7 +4,7 @@ import InnerRenderHtml, {
   RenderHTMLProps,
 } from 'react-native-render-html';
 
-import { openInBrowser } from './openInBrowser';
+import { openInBrowser } from './utils/openInBrowser';
 
 const renderersProps = {
   a: {

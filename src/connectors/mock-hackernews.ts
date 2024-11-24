@@ -1,7 +1,7 @@
 import frontPageData from '../../data/frontpage.json';
 import storyData from '../../data/story-33726816.json';
 
-import { Story, Comment } from '../types';
+import { Story, Comment } from './types';
 
 export const getFrontPage = async () =>
   frontPageData.map((story) => mapStory(story));

@@ -13,13 +13,15 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ckuijjer.hackernewsclient"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.ckuijjer.hackernewsclient"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,6 +41,7 @@
           "project": "hackernews-client"
         }
       ]
-    ]
+    ],
+    "newArchEnabled": true
   }
 }

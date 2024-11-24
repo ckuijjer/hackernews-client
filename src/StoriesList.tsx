@@ -11,8 +11,8 @@ import {
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Story } from './types';
-import { timeAgo } from './timeAgo';
+import { Story } from './connectors/types';
+import { timeAgo } from './utils/timeAgo';
 import { Icon } from './Icon';
 import { StackParamList } from '../App';
 import { SafeAreaPaddingBottom } from './SafeAreaPaddingBottom';

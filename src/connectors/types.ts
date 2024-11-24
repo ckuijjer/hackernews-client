@@ -17,3 +17,5 @@ export type Comment = {
   createdAt: Date;
   comments: Comment[];
 };
+
+export type Item = Story | Comment;

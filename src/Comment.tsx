@@ -12,8 +12,8 @@ import { SymbolView } from 'expo-symbols';
 import { Swipeable } from 'react-native-gesture-handler';
 
 import { RenderHtml } from './RenderHtml';
-import { Comment as CommentType } from './types';
-import { timeAgo } from './timeAgo';
+import { Comment as CommentType } from './connectors/types';
+import { timeAgo } from './utils/timeAgo';
 import { CommentLevelIndicator } from './CommentLevelIndicator';
 import { Icon } from './Icon';
 

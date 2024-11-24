@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, get } from 'firebase/database';
-import { Story, Comment } from '../types';
+import { Story, Comment } from './types';
 
 const app = initializeApp({
   databaseURL: 'https://hacker-news.firebaseio.com',

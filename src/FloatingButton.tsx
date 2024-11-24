@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { SymbolView } from 'expo-symbols';
 import {
   Pressable,
@@ -31,6 +31,8 @@ export const FloatingButton = ({ onPress = () => {} }) => {
       BUTTON_MARGIN -
       NAVIGATION_BAR_HEIGHT,
   });
+
+  console.log('position', position.current);
 
   const pan = useRef(new Animated.ValueXY(position.current)).current;
   pan.addListener((value) => {
