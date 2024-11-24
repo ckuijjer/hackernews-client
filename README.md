@@ -4,8 +4,8 @@
 
 hackernews-client is a simple App for [Hacker News](https://news.ycombinator.com/).
 
-* It's build in [React Native](https://reactnative.dev/) using [Expo](https://expo.dev).
-* It uses [TanStack Query](https://tanstack.com/query/v4) and the [Firebase JavaScript SDK](https://firebase.google.com/docs/web/setup#add-sdk-and-initialize) to get the front page, stories, and comments from the official [Hacker News API](https://github.com/HackerNews/API).
+- It's build in [React Native](https://reactnative.dev/) using [Expo](https://expo.dev).
+- It uses [TanStack Query](https://tanstack.com/query/v4) and the [Firebase JavaScript SDK](https://firebase.google.com/docs/web/setup#add-sdk-and-initialize) to get the front page, stories, and comments from the official [Hacker News API](https://github.com/HackerNews/API).
 
 ## How to get the App running on your phone
 
@@ -36,3 +36,18 @@ It's also possible to run the app in the [iOS Simulator](https://docs.expo.dev/w
 ## Example Hacker News API responses
 
 See [example-hackernews-api-requests.http](./example-hackernews-api-requests.http) for example responses from the Hacker News API. You can use the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension for Visual Studio Code to run the requests.
+
+## Upgrading Expo
+
+To upgrade Expo to the latest version run
+
+```bash
+npx expo install expo@latest
+```
+
+and then to upgrade the code to use the new version of the SDK use
+
+````bash
+npx expo install --fix
+```
+````
