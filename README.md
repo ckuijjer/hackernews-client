@@ -25,7 +25,7 @@ The easiest way is to use [Expo Go](https://expo.dev/client) on your phone to op
 
 1. Install [Node.js](https://nodejs.org/en/)
 1. Clone the git repository
-1. Run `npm install` in the root directory of the project
+1. Run `npm install --legacy-peer-deps` in the root directory of the project
 1. Run `npx expo start` (or if your phone is not on the same network as your laptop use `npx expo start --tunnel`)
 1. Use the camera of your phone to scan the QR code in the terminal
 
