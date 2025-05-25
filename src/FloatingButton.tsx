@@ -1,16 +1,18 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { SymbolView } from 'expo-symbols';
 import {
-  Pressable,
   StyleSheet,
   View,
-  PanResponder,
   PlatformColor,
-  Animated,
   useWindowDimensions,
 } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-// // import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 const NAVIGATION_BAR_HEIGHT = 44;
 const BUTTON_SIZE = 44;
@@ -20,8 +22,9 @@ export const FloatingButton = ({ onPress = () => {} }) => {
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  // TODO: understand why I need position and pan
-  const position = useRef({
+  const isPressed = useSharedValue(false);
+
+  const initialPosition = {
     x: BUTTON_MARGIN, // defaults somewhere bottom left of the screen
     y:
       height -
@@ -30,39 +33,54 @@ export const FloatingButton = ({ onPress = () => {} }) => {
       BUTTON_SIZE -
       BUTTON_MARGIN -
       NAVIGATION_BAR_HEIGHT,
+  };
+
+  const offset = useSharedValue(initialPosition);
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: offset.value.x },
+        { translateY: offset.value.y },
+        { scale: withSpring(isPressed.value ? 1.2 : 1) },
+      ],
+    };
   });
 
-  console.log('position', position.current);
+  const start = useSharedValue(initialPosition);
 
-  const pan = useRef(new Animated.ValueXY(position.current)).current;
-  pan.addListener((value) => {
-    position.current = value;
+  const panGesture = Gesture.Pan()
+    .onBegin(() => {
+      isPressed.value = true;
+    })
+    .onUpdate((e) => {
+      offset.value = {
+        x: e.translationX + start.value.x,
+        y: e.translationY + start.value.y,
+      };
+    })
+    .onEnd(() => {
+      start.value = {
+        x: offset.value.x,
+        y: offset.value.y,
+      };
+    })
+    .onFinalize(() => {
+      isPressed.value = false;
+    });
+
+  const tapGesture = Gesture.Tap().onEnd((event, success) => {
+    console.log('Tapped!', { event, success });
+    console.log('onPress', onPress);
+    // onPress();
   });
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => {
-        pan.setOffset({
-          x: position.current.x,
-          y: position.current.y,
-        });
-      },
-      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
-        useNativeDriver: false,
-      }),
-    }),
-  ).current;
+  const combinedGesture = Gesture.Exclusive(panGesture, tapGesture);
 
   return (
     <View style={styles.container}>
-      <Animated.View
-        {...panResponder.panHandlers}
-        style={{
-          transform: pan.getTranslateTransform(),
-        }}
-      >
-        <Pressable onPress={onPress}>
+      <GestureDetector gesture={combinedGesture}>
+        <Animated.View style={[styles.iconContainer, animatedStyles]}>
           <SymbolView
             name="circle.fill"
             size={BUTTON_SIZE}
@@ -73,8 +91,8 @@ export const FloatingButton = ({ onPress = () => {} }) => {
             size={BUTTON_SIZE}
             style={styles.icon}
           />
-        </Pressable>
-      </Animated.View>
+        </Animated.View>
+      </GestureDetector>
     </View>
   );
 };
@@ -84,7 +102,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
+    right: 0,
+    bottom: 0,
     zIndex: 1,
+    pointerEvents: 'box-none',
+  },
+  iconContainer: {
+    width: BUTTON_SIZE,
+    height: BUTTON_SIZE,
   },
   iconBackground: {
     position: 'absolute',

@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import {
-  Pressable,
   StyleSheet,
   View,
   Text,
@@ -8,7 +7,11 @@ import {
   PlatformColor,
   FlatList,
 } from 'react-native';
-import * as WebBrowser from 'expo-web-browser';
+import {
+  Pressable,
+  GestureDetector,
+  Gesture,
+} from 'react-native-gesture-handler';
 import { StackScreenProps } from '@react-navigation/stack';
 
 import { RenderHtml } from '../RenderHtml';
@@ -21,12 +24,7 @@ import { useQuery } from '@tanstack/react-query';
 import { SafeAreaPaddingBottom } from '../SafeAreaPaddingBottom';
 import { Loading } from '../Loading';
 import { FloatingButton } from '../FloatingButton';
-
-const openInBrowser = (url: string) => {
-  WebBrowser.openBrowserAsync(url, {
-    presentationStyle: WebBrowser.WebBrowserPresentationStyle.FULL_SCREEN,
-  });
-};
+import { openInBrowser } from '../utils/openInBrowser';
 
 type Props = StackScreenProps<StackParamList, 'Story'>;
 
@@ -129,73 +127,77 @@ export const StoryScreen = ({ route }: Props) => {
     }
   };
 
+  const native = Gesture.Native();
+
   return (
     <>
-      <FlatList
-        data={uiComments}
-        ref={flatListRef}
-        renderItem={({ item, index }) => {
-          return (
-            <Comment
-              comment={item.comment}
-              level={item.level}
-              key={item.id}
-              hidden={item.hidden}
-              collapsed={item.collapsed}
-              numberOfChildren={item.numberOfChildren}
-              onAction={() => toggleComment(index)}
+      <GestureDetector gesture={native}>
+        <FlatList
+          data={uiComments}
+          ref={flatListRef}
+          renderItem={({ item, index }) => {
+            return (
+              <Comment
+                comment={item.comment}
+                level={item.level}
+                key={item.id}
+                hidden={item.hidden}
+                collapsed={item.collapsed}
+                numberOfChildren={item.numberOfChildren}
+                onAction={() => toggleComment(index)}
+              />
+            );
+          }}
+          keyExtractor={(item) => '' + item.comment.id}
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          ListHeaderComponent={() => (
+            <ListHeader
+              title={data?.title ?? title}
+              user={data?.user}
+              text={data?.text}
+              createdAt={data?.createdAt}
+              url={data?.url ?? url}
+              isLoading={isLoading}
             />
-          );
-        }}
-        keyExtractor={(item) => '' + item.comment.id}
-        refreshing={isRefetching}
-        onRefresh={refetch}
-        ListHeaderComponent={() => (
-          <ListHeader
-            title={data?.title ?? title}
-            user={data?.user}
-            text={data?.text}
-            createdAt={data?.createdAt}
-            url={data?.url ?? url}
-            isLoading={isLoading}
-          />
-        )}
-        ListFooterComponentStyle={{
-          minHeight: '100%',
-        }}
-        ListFooterComponent={() =>
-          isLoading ? <Loading /> : <SafeAreaPaddingBottom />
-        }
-        style={styles.container}
-        onViewableItemsChanged={handleViewableItemsChanged}
-        viewabilityConfig={{ viewAreaCoveragePercentThreshold: 1 }}
-        onScrollToIndexFailed={handleScrollToIndexFailed}
-      />
+          )}
+          ListFooterComponentStyle={{
+            minHeight: '100%',
+          }}
+          ListFooterComponent={() =>
+            isLoading ? <Loading /> : <SafeAreaPaddingBottom />
+          }
+          style={styles.container}
+          onViewableItemsChanged={handleViewableItemsChanged}
+          viewabilityConfig={{ viewAreaCoveragePercentThreshold: 1 }}
+          onScrollToIndexFailed={handleScrollToIndexFailed}
+        />
+      </GestureDetector>
       <FloatingButton
         onPress={() => {
           console.log('floating button pressed');
-          const nextAtRootLevel = uiComments.findIndex(
-            (comment, index) =>
-              index > firstViewableComment && comment.level === 0,
-          );
+          // const nextAtRootLevel = uiComments.findIndex(
+          //   (comment, index) =>
+          //     index > firstViewableComment && comment.level === 0,
+          // );
 
-          console.log(
-            `firstViewableComment: index ${firstViewableComment} text: ${(
-              uiComments[firstViewableComment]?.comment?.text ?? ''
-            ).slice(0, 50)}`,
-          );
-          console.log(
-            `nextAtRootLevel: index ${nextAtRootLevel} text: ${(
-              uiComments[nextAtRootLevel]?.comment?.text ?? ''
-            ).slice(0, 50)}`,
-          );
+          // console.log(
+          //   `firstViewableComment: index ${firstViewableComment} text: ${(
+          //     uiComments[firstViewableComment]?.comment?.text ?? ''
+          //   ).slice(0, 50)}`,
+          // );
+          // console.log(
+          //   `nextAtRootLevel: index ${nextAtRootLevel} text: ${(
+          //     uiComments[nextAtRootLevel]?.comment?.text ?? ''
+          //   ).slice(0, 50)}`,
+          // );
 
-          if (nextAtRootLevel) {
-            flatListRef?.current?.scrollToIndex({
-              index: nextAtRootLevel,
-              animated: true,
-            });
-          }
+          // if (nextAtRootLevel) {
+          //   flatListRef?.current?.scrollToIndex({
+          //     index: nextAtRootLevel,
+          //     animated: true,
+          //   });
+          // }
         }}
       />
     </>

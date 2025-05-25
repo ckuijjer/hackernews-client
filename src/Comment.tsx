@@ -1,15 +1,20 @@
 import React, { useState, useRef } from 'react';
 import {
-  Pressable,
   Text,
   StyleSheet,
   View,
   useWindowDimensions,
   PlatformColor,
-  Animated,
 } from 'react-native';
 import { SymbolView } from 'expo-symbols';
-import { Swipeable } from 'react-native-gesture-handler';
+import { Pressable } from 'react-native-gesture-handler';
+import Swipeable, {
+  SwipeableMethods,
+} from 'react-native-gesture-handler/ReanimatedSwipeable';
+import Reanimated, {
+  SharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 
 import { RenderHtml } from './RenderHtml';
 import { Comment as CommentType } from './connectors/types';
@@ -19,6 +24,7 @@ import { Icon } from './Icon';
 
 const PADDING_HORIZONTAL = 20;
 const LEVEL_WIDTH = 8;
+const SWIPEABLE_ACTIONS_WIDTH = 96;
 
 type CommentProps = {
   comment: CommentType;
@@ -38,19 +44,21 @@ export const Comment = ({
   onAction = () => {},
 }: CommentProps) => {
   const { width } = useWindowDimensions();
-  const swipeRef = useRef<Swipeable>();
 
   const commentTextWidth = width - 2 * PADDING_HORIZONTAL - level * LEVEL_WIDTH;
 
-  const renderRightActions = (progress) => {
+  const renderRightActions = (
+    progress: SharedValue<number>,
+    drag: SharedValue<number>,
+    swipeableMethods: SwipeableMethods,
+  ) => {
     return (
       <CollapseAction
         progress={progress}
+        drag={drag}
+        swipeableMethods={swipeableMethods}
         isCollapsed={collapsed}
-        onAction={() => {
-          swipeRef?.current?.close();
-          onAction();
-        }}
+        onAction={onAction}
       />
     );
   };
@@ -61,14 +69,10 @@ export const Comment = ({
         <Swipeable
           renderRightActions={renderRightActions}
           containerStyle={styles.pressableContainer}
-          ref={swipeRef}
           friction={2}
-          // enabled={false}
+          rightThreshold={40}
+          overshootFriction={8}
           hitSlop={{ left: -20 }} // To have space room for react-navigation's swipe back gesture
-          // onGestureEvent={(...args) => console.log('onGestureEvent', ...args)}
-          // onHandlerStateChange={(...args) =>
-          //   console.log('onHandlerStateChange', ...args)
-          // }
         >
           <Pressable onPress={onAction}>
             <View style={styles.container}>
@@ -101,29 +105,33 @@ export const Comment = ({
 
 const CollapseAction = ({
   progress,
+  drag,
+  swipeableMethods,
   isCollapsed,
   onAction,
 }: {
-  progress: Animated.AnimatedInterpolation<number>;
+  progress: SharedValue<number>;
+  drag: SharedValue<number>;
+  swipeableMethods: SwipeableMethods;
   isCollapsed: boolean;
   onAction: () => void;
 }) => {
-  const trans = progress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [96, 0],
+  const styleAnimation = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: drag.value + SWIPEABLE_ACTIONS_WIDTH }],
+    };
   });
-
-  if (progress.__getValue() > 2) {
-    onAction();
-  }
 
   const text = isCollapsed ? 'Uncollapse' : 'Collapse';
 
+  const handlePress = () => {
+    swipeableMethods.close();
+    onAction();
+  };
+
   return (
-    <Animated.View
-      style={[styles.actionsContainer, { transform: [{ translateX: trans }] }]}
-    >
-      <Pressable onPress={onAction} style={styles.action}>
+    <Reanimated.View style={[styles.actionsContainer, styleAnimation]}>
+      <Pressable onPress={handlePress} style={styles.action}>
         <SymbolView
           name="arrow.down.right.and.arrow.up.left"
           size={24}
@@ -132,7 +140,7 @@ const CollapseAction = ({
         />
         <Text style={styles.actionText}>{text}</Text>
       </Pressable>
-    </Animated.View>
+    </Reanimated.View>
   );
 };
 
@@ -161,14 +169,13 @@ const styles = StyleSheet.create({
   },
   actionsContainer: {
     flexDirection: 'row',
-    // backgroundColor: PlatformColor('link'),
   },
   action: {
     padding: 12,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: PlatformColor('link'),
-    width: 96,
+    width: SWIPEABLE_ACTIONS_WIDTH,
   },
   actionIcon: {
     marginBottom: 4,

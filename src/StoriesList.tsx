@@ -1,13 +1,12 @@
 import { useState, useCallback } from 'react';
+import { FlatList, PlatformColor, StyleSheet, Text, View } from 'react-native';
 import {
-  FlatList,
-  GestureResponderEvent,
-  PlatformColor,
   Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+  GestureDetector,
+  Gesture,
+} from 'react-native-gesture-handler';
+import { PressableEvent } from 'react-native-gesture-handler/lib/typescript/components/Pressable/PressableProps';
+
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -35,7 +34,6 @@ export const StoriesList = ({
   refreshing,
 }: StoriesListProps) => {
   const navigation = useNavigation<StackParamList>();
-  const [isScrolling, setIsScrolling] = useState(false);
   const [activeItem, setActiveItem] = useState<number | undefined>();
 
   useFocusEffect(
@@ -49,9 +47,7 @@ export const StoriesList = ({
       story={item}
       isActive={activeItem === item.id}
       onPressIn={() => {
-        if (!isScrolling) {
-          setActiveItem(item.id);
-        }
+        setActiveItem(item.id);
       }}
       onPressOut={() => {
         setActiveItem(undefined);
@@ -67,50 +63,45 @@ export const StoriesList = ({
     />
   );
 
+  const native = Gesture.Native();
+
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <FlatList
-        data={stories}
-        renderItem={renderItem}
-        keyExtractor={(item) => '' + item.id}
-        onRefresh={onRefresh}
-        refreshing={refreshing}
-        ListHeaderComponent={() => <Header>{title}</Header>}
-        ListFooterComponentStyle={{
-          minHeight: '100%',
-        }}
-        ListFooterComponent={() =>
-          isLoading ? <Loading /> : <SafeAreaPaddingBottom />
-        }
-        style={styles.container}
-        onScroll={() => {
-          setIsScrolling(true);
-        }}
-        onScrollBeginDrag={() => {
-          setIsScrolling(true);
-        }}
-        onScrollEndDrag={() => {
-          setIsScrolling(false);
-        }}
-      />
+      <GestureDetector gesture={native}>
+        <FlatList
+          data={stories}
+          renderItem={renderItem}
+          keyExtractor={(item) => '' + item.id}
+          onRefresh={onRefresh}
+          refreshing={refreshing}
+          ListHeaderComponent={() => <Header>{title}</Header>}
+          ListFooterComponentStyle={{
+            minHeight: '100%',
+          }}
+          ListFooterComponent={() =>
+            isLoading ? <Loading /> : <SafeAreaPaddingBottom />
+          }
+          style={styles.container}
+        />
+      </GestureDetector>
     </SafeAreaView>
   );
 };
 
 type ItemProps = {
   story: Story;
-  onPressIn: (event: GestureResponderEvent) => void;
-  onPressOut: (event: GestureResponderEvent) => void;
-  onPress: (event: GestureResponderEvent) => void;
+  onPressIn: (event: PressableEvent) => void;
+  onPressOut: (event: PressableEvent) => void;
+  onPress: (event: PressableEvent) => void;
   isActive: boolean;
 };
 
 const Item = ({
   story,
-  onPress,
+  isActive,
   onPressIn,
   onPressOut,
-  isActive,
+  onPress,
 }: ItemProps) => {
   return (
     <Pressable
