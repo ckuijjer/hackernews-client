@@ -33,15 +33,7 @@
       "ignoreErrorAndWarningNotifications": false
     },
     "jsEngine": "hermes",
-    "plugins": [
-      [
-        "@sentry/react-native/expo",
-        {
-          "organization": "casper-kuijjer",
-          "project": "hackernews-client"
-        }
-      ]
-    ],
+    "plugins": ["expo-web-browser"],
     "newArchEnabled": true
   }
 }
