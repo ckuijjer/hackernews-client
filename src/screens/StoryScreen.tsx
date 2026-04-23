@@ -103,13 +103,20 @@ export const StoryScreen = ({ route }: Props) => {
     setCollapsedComments(new Array(data?.comments?.length).fill(false));
   }, [data]);
 
-  const flatListRef = useRef<FlatList>();
+  const flatListRef = useRef<FlatList<UICommentType> | null>(null);
 
-  const handleViewableItemsChanged = useCallback(({ viewableItems }) => {
-    setFirstViewableComment(viewableItems[0].index);
-  }, []);
+  const handleViewableItemsChanged = useCallback(
+    ({
+      viewableItems,
+    }: {
+      viewableItems: Array<{ index: number | null }>;
+    }) => {
+      setFirstViewableComment(viewableItems[0]?.index ?? 0);
+    },
+    [],
+  );
 
-  const handleScrollToIndexFailed = (error) => {
+  const handleScrollToIndexFailed = (error: { index: number }) => {
     console.error(error);
   };
 
@@ -139,7 +146,6 @@ export const StoryScreen = ({ route }: Props) => {
             <Comment
               comment={item.comment}
               level={item.level}
-              key={item.id}
               hidden={item.hidden}
               collapsed={item.collapsed}
               numberOfChildren={item.numberOfChildren}
@@ -190,7 +196,7 @@ export const StoryScreen = ({ route }: Props) => {
             ).slice(0, 50)}`,
           );
 
-          if (nextAtRootLevel) {
+          if (nextAtRootLevel >= 0) {
             flatListRef?.current?.scrollToIndex({
               index: nextAtRootLevel,
               animated: true,

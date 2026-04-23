@@ -21,7 +21,7 @@ const PADDING_HORIZONTAL = 20;
 const LEVEL_WIDTH = 8;
 
 type CommentProps = {
-  comment: CommentType;
+  comment: Omit<CommentType, 'comments'>;
   level: number;
   hidden: boolean;
   collapsed: boolean;
@@ -38,11 +38,13 @@ export const Comment = ({
   onAction = () => {},
 }: CommentProps) => {
   const { width } = useWindowDimensions();
-  const swipeRef = useRef<Swipeable>();
+  const swipeRef = useRef<Swipeable | null>(null);
 
   const commentTextWidth = width - 2 * PADDING_HORIZONTAL - level * LEVEL_WIDTH;
 
-  const renderRightActions = (progress) => {
+  const renderRightActions = (
+    progress: Animated.AnimatedInterpolation<number>,
+  ) => {
     return (
       <CollapseAction
         progress={progress}
@@ -112,10 +114,6 @@ const CollapseAction = ({
     inputRange: [0, 1],
     outputRange: [96, 0],
   });
-
-  if (progress.__getValue() > 2) {
-    onAction();
-  }
 
   const text = isCollapsed ? 'Uncollapse' : 'Collapse';
 

@@ -6,20 +6,19 @@ import { Story, Comment } from './types';
 export const getFrontPage = async () =>
   frontPageData.map((story) => mapStory(story));
 
-const mapStory = (story): Story => ({
+const mapStory = (story: any): Story => ({
   ...story,
   createdAt: new Date(story.createdAt),
+  comments: story.comments?.map((comment: any) => mapComment(comment)),
 });
 
 export const getStory = async () => {
   const story = mapStory(storyData);
-  story.comments = storyData.comments?.map((comment) => mapComment(comment));
-
   return story;
 };
 
-const mapComment = (comment): Comment => ({
+const mapComment = (comment: any): Comment => ({
   ...comment,
   createdAt: new Date(comment.createdAt),
-  comments: comment.comments?.map((comment) => mapComment(comment)),
+  comments: comment.comments?.map((comment: any) => mapComment(comment)) ?? [],
 });

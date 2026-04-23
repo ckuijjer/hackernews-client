@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Story } from './connectors/types';
 import { timeAgo } from './utils/timeAgo';
@@ -34,7 +35,7 @@ export const StoriesList = ({
   onRefresh,
   refreshing,
 }: StoriesListProps) => {
-  const navigation = useNavigation<StackParamList>();
+  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const [isScrolling, setIsScrolling] = useState(false);
   const [activeItem, setActiveItem] = useState<number | undefined>();
 
