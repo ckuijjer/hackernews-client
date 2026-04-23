@@ -5,6 +5,10 @@ on:
       - qr-code-iOS.svg
       - qr-code-android.svg
 
+concurrency:
+  group: update-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   update:
     name: EAS Update
@@ -78,6 +82,7 @@ jobs:
 
           git config user.name "🤖 ${{ env.CI_COMMIT_AUTHOR }}"
           git config user.email "🤖 ${{ env.CI_COMMIT_EMAIL }}"
+          git pull --rebase --autostash origin "${{ github.ref_name }}"
           git add qr-code-iOS.svg qr-code-android.svg
           git commit -m "🤖: Update QR Codes"
-          git push
+          git push origin HEAD:"${{ github.ref_name }}"
